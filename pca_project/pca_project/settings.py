@@ -123,3 +123,6 @@ STATICFILES_DIRS = [
         os.path.join(BASE_DIR, "myApp",'www')
     ]
 STATIC_URL = '/www/'
+
+
+LOGIN_REDIRECT_URL = '/'

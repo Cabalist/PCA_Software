@@ -20,7 +20,7 @@ from myApp import views as pca_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^auth/', include('registration.backends.default.urls')),
+    url(r'^auth/', include('registration.backends.simple.urls')),
 
     #landing page
     url(r'^$', pca_views.landing,name="index"),
