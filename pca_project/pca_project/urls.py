@@ -16,7 +16,13 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+from myApp import views as pca_views
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^auth/', include('registration.backends.default.urls')),
+
+    #landing page
+    url(r'^$', pca_views.landing,name="index"),
+    
 ]
