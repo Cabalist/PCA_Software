@@ -16,13 +16,16 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from myApp import views as pca_views
+from myApp import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^auth/', include('registration.backends.simple.urls')),
 
     #landing page
-    url(r'^$', pca_views.landing,name="index"),
+    url(r'^$', views.landing,name="index"),
+
+    #profile SPA entry point
+    url(r'^users/(?P<userName>[\w\-]+)/$',views.profileViewer),
     
 ]
