@@ -1,5 +1,9 @@
-{% extends 'profileBase.html' %}
+{% extends 'profile.html' %}
 
-{% block content %}
-Hello Session
+{% block navbar-right %}
+<ul class="nav navbar-nav navbar-right">
+  <li>
+    <a href="/auth/logout">Logout</a>
+  </li>
+</ul>
 {% endblock %}
