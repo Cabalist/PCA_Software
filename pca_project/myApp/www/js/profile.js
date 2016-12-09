@@ -3,8 +3,8 @@ var myApp = angular.module('userApp', ['ui.router','ui.bootstrap']);
 
 myApp.config(function($stateProvider){
     $stateProvider
-        .state('home', {
+        .state('profile', {
 	    url: "/",
-	    templateUrl: '/www/partials/users.home.html'
+	    templateUrl: '/www/partials/profile.html'
 	});
 });
