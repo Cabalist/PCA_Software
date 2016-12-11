@@ -26,6 +26,6 @@ urlpatterns = [
     url(r'^$', views.landing,name="index"),
 
     #profile SPA entry point
-    url(r'^users/(?P<userName>[\w\-]+)/$',views.profileViewer),
+    url(r'^profile/$',views.profileViewer),
     
 ]

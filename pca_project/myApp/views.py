@@ -10,11 +10,8 @@ def landing(request):
 
     return html
                         
-def profileViewer(request, userName):
-    #check if username exists...
-    #get userID from userName
-
-    context = { 'userName': userName, 'userId':1}
+def profileViewer(request):
+    
     html = ""
     if request.user.is_authenticated():
         html = render(request,'profileSession.html')
