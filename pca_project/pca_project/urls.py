@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from myApp import views
+from myApp import views , api
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -27,5 +27,9 @@ urlpatterns = [
 
     #profile SPA entry point
     url(r'^profile/$',views.profileViewer),
+
+
+    #REST API
+    url(r'^api/rest/userRoles/(?P<advId>\d+)$', api.userRoles),
     
 ]
