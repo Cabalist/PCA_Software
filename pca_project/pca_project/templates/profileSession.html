@@ -7,3 +7,9 @@
   </li>
 </ul>
 {% endblock %}
+
+
+{% block js-vars %}
+<input type="hidden" value={{ user.pk }} id="userId" />
+<input type="hidden" value="{{ user.get_username }}" id="userName" />
+{% endblock %}

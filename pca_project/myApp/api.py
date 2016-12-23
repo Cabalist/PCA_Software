@@ -19,9 +19,9 @@ def userRoles(request,userId=None):
                     
                 else:
                     #add new organization
-                    results.append({'organization':{'id':org.id,'name':org.name},'roles':[role.id]})
+                    results.append({'organization':{'id':org.id,'name':org.name,'logo':org.logo},'roles':[role.role]})
                     
             else:
-                results.append({'organization':{'id':org.id,'name':org.name},'roles':[role.id]})
+                results.append({'organization':{'id':org.id,'name':org.name,'logo':org.logo},'roles':[role.role]})
 
         return JsonResponse(results, safe=False)
