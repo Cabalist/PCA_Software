@@ -6,4 +6,22 @@ from myApp.models import UserOrganizationRoleRel
 @csrf_exempt
 def userRoles(request,userId=None):
     if request.method=='GET':
-        return JsonResponse(total, safe=False)
+        roles = UserOrganizationRoleRel.objects.filter(user = userId).order_by('organization')
+        results = []
+
+        for role in roles.all():
+            org = role.organization
+            #check if organiztion is already in results list
+            if len(results):
+                if results[len(results)-1]["organization"]["id"] == org.id:
+                    #append new roles to listed org
+                    results[len(results)-1]["roles"].append(role.role)
+                    
+                else:
+                    #add new organization
+                    results.append({'organization':{'id':org.id,'name':org.name},'roles':[role.id]})
+                    
+            else:
+                results.append({'organization':{'id':org.id,'name':org.name},'roles':[role.id]})
+
+        return JsonResponse(results, safe=False)

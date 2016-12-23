@@ -30,6 +30,6 @@ urlpatterns = [
 
 
     #REST API
-    url(r'^api/rest/userRoles/(?P<advId>\d+)$', api.userRoles),
+    url(r'^api/rest/userRoles/(?P<userId>\d+)$', api.userRoles),
     
 ]
