@@ -1,7 +1,12 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from rest_framework.parsers import JSONParser
+from django.contrib.auth.models import User
 
-from myApp.models import UserOrganizationRoleRel
+from myApp.models import UserOrgJoinRequest, UserOrganizationRoleRel, Organization
+from myApp.serializers import *
+from datetime import datetime
+import pytz
 
 @csrf_exempt
 def userRoles(request,userId=None):
@@ -25,3 +30,23 @@ def userRoles(request,userId=None):
                 results.append({'organization':{'id':org.id,'name':org.name,'logo':org.logo},'roles':[role.role]})
 
         return JsonResponse(results, safe=False)
+
+
+@csrf_exempt
+def joinOrgRequest(request,orgId=None):
+    if request.method=='POST':
+        data = JSONParser().parse(request)
+        userId = data["userId"]
+        user = User.objects.get(pk=int(data["userId"]))
+        
+        org = Organization.objects.get(id = data["orgId"])
+
+        time  = datetime.now(pytz.timezone('US/Pacific'))
+        #If advStatus = active, need to unset previous active.
+        
+        request = UserOrgJoinRequest(user=user,organization=org,requestDate = time,status=0)
+        request.save()
+
+        serialized = UserOrgJoinRequestSerializer(request)
+        
+        return JsonResponse(serialized.data, safe=False)

@@ -31,14 +31,24 @@
       </li>
       
     </ul>
-    
+    <br>
     <ul class="list-group">
       <li class="list-group-item clearfix">
 	<span class="pull-left">
 	  <i class="glyphicon glyphicon-plus"></i>
+	  <select class="selectpicker" id="orgList">
+	    <optgroup label="Oregon">
+	      <option value=1>Portland Clean Air</option>
+	    </optgroup>
+	    <optgroup label="California">
+	      <option value=2>Earth First</option>
+	    </optgroup>
+	  </select>
+	  
+	  
 	</span>
 	<span class="pull-right">
-	  JOIN
+	  <button type="button" class="btn btn-default" ng-click="joinClick()">Join</button>
 	</span>
       </li>
     </ul>

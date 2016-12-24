@@ -31,5 +31,6 @@ urlpatterns = [
 
     #REST API
     url(r'^api/rest/userRoles/(?P<userId>\d+)$', api.userRoles),
+    url(r'^api/rest/joinOrgRequest/(?P<orgId>\d+)$', api.joinOrgRequest),
     
 ]
