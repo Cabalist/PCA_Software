@@ -68,4 +68,17 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
 	    });
 	}
     };
+
+    $scope.getOrgName = function(orgId){
+	for (var i = 0; i < $scope.orgList.length; i++){
+	    var locationOrgs = $scope.orgList[i].orgs;
+
+	    for (var p = 0; p < locationOrgs.length; p++){
+		var org = locationOrgs[p];
+		if(org.id == orgId){
+		    return org.name;
+		}
+	    }
+	}
+    }
 }]);
