@@ -19,7 +19,8 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
     $scope.orgList = [];
     
     $http.get('/api/rest/userRoles/' + $scope.userId).then(function(data){
-	$scope.userOrgs = data.data;
+	$scope.userOrgs = data.data.roles;
+	$scope.userPendingOrgs = data.data.pending;
     });
 
     $http.get('/api/rest/orgList').then(function(data){

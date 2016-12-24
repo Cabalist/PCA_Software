@@ -12,24 +12,31 @@ import pytz
 def userRoles(request,userId=None):
     if request.method=='GET':
         roles = UserOrganizationRoleRel.objects.filter(user = userId).order_by('organization')
-        results = []
+        roleResults = []
 
         for role in roles.all():
             org = role.organization
             #check if organiztion is already in results list
-            if len(results):
-                if results[len(results)-1]["organization"]["id"] == org.id:
+            if len(roleResults):
+                if roleResults[len(roleResults)-1]["organization"]["id"] == org.id:
                     #append new roles to listed org
-                    results[len(results)-1]["roles"].append(role.role)
+                    roleResults[len(roleResults)-1]["roles"].append(role.role)
                     
                 else:
                     #add new organization
-                    results.append({'organization':{'id':org.id,'name':org.name,'logo':org.logo},'roles':[role.role]})
+                    roleResults.append({'organization':{'id':org.id,'name':org.name,'logo':org.logo},'roles':[role.role]})
                     
             else:
-                results.append({'organization':{'id':org.id,'name':org.name,'logo':org.logo},'roles':[role.role]})
+                roleResults.append({'organization':{'id':org.id,'name':org.name,'logo':org.logo},'roles':[role.role]})
 
-        return JsonResponse(results, safe=False)
+        #Add pending requests:
+        pending = UserOrgJoinRequest.objects.filter(user = userId).filter(status=0).all()
+        serialized = UserOrgJoinRequestSerializer(pending,many=True)
+
+        finalResult = {"roles":roleResults,"pending":serialized.data}
+
+
+        return JsonResponse(finalResult, safe=False)
 
 
 @csrf_exempt
