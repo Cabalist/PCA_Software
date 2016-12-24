@@ -50,3 +50,21 @@ def joinOrgRequest(request,orgId=None):
         serialized = UserOrgJoinRequestSerializer(request)
         
         return JsonResponse(serialized.data, safe=False)
+
+@csrf_exempt
+def orgList(request):
+    if request.method == "GET":
+        
+        results = []
+        for org in Organization.objects.all().order_by("location"):
+            if len(results)==0: #if there are no items in list, add new item
+
+                results.append({"location":org.location,"orgs":[OrgSerializer(org).data]})
+            else: #if there are items in the list..
+
+                if results[len(results)-1]["location"]==org.location: #if location already exists in results... append new org to that location
+                    results[len(results)-1]["orgs"].append(OrgSerializer(org).data)
+                else:
+                    results.append({"location":org.location,"orgs":[OrgSerializer(org).data]})
+
+        return JsonResponse(results, safe=False)

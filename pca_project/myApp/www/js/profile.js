@@ -10,18 +10,22 @@ myApp.config(function($stateProvider){
 	});
 });
 
-
 myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,$http,$log) {
     $scope.profilePic = '/www/img/blank-profile-picture-973460_960_720.png';
 
     $scope.userId = document.getElementById('userId').value;
     $scope.userOrgs = [];
     $scope.userPendingOrgs = [];
+    $scope.orgList = [];
     
     $http.get('/api/rest/userRoles/' + $scope.userId).then(function(data){
 	$scope.userOrgs = data.data;
     });
 
+    $http.get('/api/rest/orgList').then(function(data){
+	$scope.orgList = data.data;
+    });
+    
     $scope.getRoleName=function(roleNum){
 	if (roleNum==1){
 	    return "Wizard"

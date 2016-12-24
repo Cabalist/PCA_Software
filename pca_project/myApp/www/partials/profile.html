@@ -37,11 +37,8 @@
 	<span class="pull-left">
 	  <i class="glyphicon glyphicon-plus"></i>
 	  <select class="selectpicker" id="orgList">
-	    <optgroup label="Oregon">
-	      <option value=1>Portland Clean Air</option>
-	    </optgroup>
-	    <optgroup label="California">
-	      <option value=2>Earth First</option>
+	    <optgroup label="{{location.location}}" ng-repeat="location in orgList">
+	      <option value="{{org.id}}" ng-repeat="org in location.orgs">{{org.name}}</option>
 	    </optgroup>
 	  </select>	  
 	</span>
