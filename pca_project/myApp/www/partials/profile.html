@@ -43,14 +43,30 @@
 	    <optgroup label="California">
 	      <option value=2>Earth First</option>
 	    </optgroup>
-	  </select>
-	  
-	  
+	  </select>	  
 	</span>
 	<span class="pull-right">
 	  <button type="button" class="btn btn-default" ng-click="joinClick()">Join</button>
 	</span>
       </li>
     </ul>
+
+    <br>
+    <div ng-show="userPendingOrgs.length">
+      <h4>Join Requests:</h4>
+      <ul class="list-group">
+
+	<li class="list-group-item clearfix" ng-repeat="request in userPendingOrgs">
+	  <span class="thumbnail pull-left">
+	    <img ng-src="/www/img/orgLogos/{{ request.organization }}.png" alt=""-->
+	  </span>
+	  <span class="pull-right orgInfo">
+	    <h4><u>{{ request.organization }}</u></h4>
+	  </span>
+	</li>
+	
+      </ul>
+
+    </div>
   </div>
 </div>

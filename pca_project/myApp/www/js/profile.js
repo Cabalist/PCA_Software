@@ -41,7 +41,7 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
 
     function checkIfMembershipPending(orgId){
 	for (var i=0; i<$scope.userPendingOrgs.length;i++){
-	    if($scope.userPendingOrgs[i].organization.id==orgId){
+	    if($scope.userPendingOrgs[i].organization==orgId){
 		return true;
 	    }
 	}
@@ -55,11 +55,11 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
 	if (checkIfMember(newOrgId)){
 	    alert("Already a member");
 	}else if(checkIfMembershipPending(newOrgId)){
-	    alert("Membership pending");
+	    alert("A request to join already exists");
 	}else{
 	    var newRequest = {'userId':$scope.userId,'orgId':newOrgId};
 	    $http.post('/api/rest/joinOrgRequest/'+newOrgId ,JSON.stringify(newRequest)).then(function(data){
-		//add to pending list
+		$scope.userPendingOrgs.push(data.data);
 	    });
 	}
     };
