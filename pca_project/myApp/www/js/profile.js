@@ -7,6 +7,16 @@ myApp.config(function($stateProvider){
 	    url: "/",
 	    templateUrl: '/www/partials/profile.html',
 	    controller: 'ProfileController'
+	})
+        .state('admin',{
+	    url:"/org/:orgId/admin",
+	    templateUrl: '/www/partials/admin.html',
+	    controller: 'AdminController'
+	})
+        .state('canvasser',{
+	    url:"/org/:orgId/canvasser",
+	    templateUrl: '/www/partials/canvasser.html',
+	    controller: 'CanvasserController'
 	});
 });
 
@@ -81,4 +91,29 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
 	    }
 	}
     }
+}]);
+
+
+myApp.controller('AdminController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+    var orgId = $stateParams.orgId;
+    $scope.pendingRequests = [];
+
+    $http.get('/api/rest/joinOrgRequest/' + orgId).then(function(data){
+	$scope.pendingRequests = data.data;
+    });
+    
+    $scope.acceptUserRequest = function(reqId){
+	$log.log(reqId);
+	$log.log("ACCEPT!");
+    }
+
+    $scope.rejectUserRequest = function(reqId){
+	$log.log(reqId);
+	$log.log("REJECT!");
+    }
+    
+}]);
+
+
+myApp.controller('CanvasserController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
 }]);

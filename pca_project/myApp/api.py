@@ -35,12 +35,19 @@ def userRoles(request,userId=None):
 
         finalResult = {"roles":roleResults,"pending":serialized.data}
 
-
         return JsonResponse(finalResult, safe=False)
 
 
 @csrf_exempt
 def joinOrgRequest(request,orgId=None):
+    if request.method=="GET":
+        org = Organization.objects.get(id = orgId)
+        requests = UserOrgJoinRequest.objects.filter(organization=org).filter(status=0).all()
+
+        serialized = UserOrgJoinRequestSerializer(requests,many=True)
+        
+        return JsonResponse(serialized.data, safe=False)
+        
     if request.method=='POST':
         data = JSONParser().parse(request)
         userId = data["userId"]
