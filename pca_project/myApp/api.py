@@ -65,6 +65,26 @@ def joinOrgRequest(request,orgId=None):
         
         return JsonResponse(serialized.data, safe=False)
 
+    if request.method == "PUT":    
+        data = JSONParser().parse(request)
+        reqId = data["id"]
+
+        reqObj = UserOrgJoinRequest.objects.filter(id=data['id']).update(status=data['status'],approvedOrRejectedBy=data['approvedOrRejectedBy'])
+        
+        modifiedObj = UserOrgJoinRequest.objects.get(id=data['id'])
+        serialized = UserOrgJoinRequestSerializer(modifiedObj)
+        
+        if data['status']==1: #need to create role objs
+            user = User.objects.get(pk=int(data["user"]))
+            org = Organization.objects.get(id = data["organization"])
+            
+            time  = datetime.now(pytz.timezone('US/Pacific'))
+
+            newRole = UserOrganizationRoleRel(user=user,organization=org,role=2,join_date=time)
+            newRole.save()
+            
+        return JsonResponse(serialized.data, safe=False)
+        
 @csrf_exempt
 def orgList(request):
     if request.method == "GET":

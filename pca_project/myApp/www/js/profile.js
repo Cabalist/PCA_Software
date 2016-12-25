@@ -39,7 +39,7 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
     
     $scope.getRoleName=function(roleNum){
 	if (roleNum==1){
-	    return "Wizard"
+	    return "Admin"
 	}else if (roleNum==2){
 	    return "Canvasser"
 	}
@@ -97,14 +97,28 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
 myApp.controller('AdminController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     var orgId = $stateParams.orgId;
     $scope.pendingRequests = [];
-
+    $scope.userId = document.getElementById("userId").value;
+    
     $http.get('/api/rest/joinOrgRequest/' + orgId).then(function(data){
 	$scope.pendingRequests = data.data;
     });
+
+    function getUserRequest(reqId){
+	for (var i=0;i<$scope.pendingRequests.length; i++){
+	    if ($scope.pendingRequests[i].id==reqId){
+		return $scope.pendingRequests[i];
+	    }
+	}
+    }
     
     $scope.acceptUserRequest = function(reqId){
-	$log.log(reqId);
-	$log.log("ACCEPT!");
+	var request = getUserRequest(reqId);
+	var reqUpdated = {'id':reqId,'user':request.user,'organization':request.organization,'status':1,'approvedOrRejectedBy':$scope.userId};
+	
+	$http.put('/api/rest/joinOrgRequest/'+orgId ,JSON.stringify(reqUpdated)).then(function(data){
+	    $log.log("OK!");
+	});
+
     }
 
     $scope.rejectUserRequest = function(reqId){

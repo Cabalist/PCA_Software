@@ -19,5 +19,5 @@ class UserOrgJoinRequest(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     requestDate = models.DateTimeField(default=0)
     status = models.IntegerField(default=0) #1 approved, 2 rejected
-    approvedOrRejecteBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="admin", null=True)
+    approvedOrRejectedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="admin", null=True)
     

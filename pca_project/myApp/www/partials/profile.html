@@ -21,7 +21,7 @@
 	  <h4>Roles:</h4>
 	  <ul class="list-inline">
 	    <li ng-repeat="role in org.roles">
-	      <a ui-sref="org/{{ org.organization.id }}/{{ role }}">
+	      <a href="/profile/#/org/{{ org.organization.id }}/{{ getRoleName(role) | lowercase }}">
 		{{ getRoleName(role) }}
 	      </a>
 	    </li>
