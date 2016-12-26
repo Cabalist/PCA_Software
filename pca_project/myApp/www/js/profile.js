@@ -146,16 +146,17 @@ myApp.controller('CanvasserController', ['$scope','$http','$log','$stateParams',
 	    return "active";
 	}
     };
-    $scope.selectForm = function(formIndex){
+  
+    $scope.$on("selectForm",function(event,formIndex){
 	$scope.selectedForm = formIndex;
-    }
-    
+    });
 }]);
 
 myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
-
+    $scope.$emit("selectForm",1);
+    $scope.currentDate = moment().format("MM-DD-YYYY");
 }]);
 
 myApp.controller('Form2Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
-
+    $scope.$emit("selectForm",2);
 }]);

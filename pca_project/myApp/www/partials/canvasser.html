@@ -1,19 +1,18 @@
 <h2>Org Name</h2>
 <h3>Canvasser page</h3>
 <div class="row">
-  <div class="col-lg-4">
+  <div class="col-lg-2">
+
     <h4>Forms:</h4>
     <div class="list-group">
-      <button ui-sref="canvasser.form1" class="btn list-group-item" ng-class="getFormClass(1);" ng-click="selectForm(1)">
+      <button ui-sref="canvasser.form1" class="btn list-group-item" ng-class="getFormClass(1);">
 	Form 1
       </button>
-      <button ui-sref="canvasser.form2" class="btn list-group-item" ng-class="getFormClass(2);" ng-click="selectForm(2)">
+      <button ui-sref="canvasser.form2" class="btn list-group-item" ng-class="getFormClass(2);">
 	Form 2
-      </button>
-      
+      </button>      
     </div>
-
-      
+    
   </div>
   <div class="col-lg-4">
     <ui-view>
