@@ -17,6 +17,16 @@ myApp.config(function($stateProvider){
 	    url:"/org/:orgId/canvasser",
 	    templateUrl: '/www/partials/canvasser.html',
 	    controller: 'CanvasserController'
+	})
+        .state('canvasser.form1',{
+	    url:"/org/:orgId/canvasser/form1",
+	    templateUrl: '/www/partials/forms/form1.html',
+	    controller: 'Form1Controller'
+	})
+        .state('canvasser.form2',{
+	    url:"/org/:orgId/canvasser/form2",
+	    templateUrl: '/www/partials/forms/form2.html',
+	    controller: 'Form2Controller'
 	});
 });
 
@@ -130,4 +140,22 @@ myApp.controller('AdminController', ['$scope','$http','$log','$stateParams', fun
 
 
 myApp.controller('CanvasserController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+    $scope.selectedForm = null;
+    $scope.getFormClass = function(formIndex){	
+	if ( $scope.selectedForm == formIndex){
+	    return "active";
+	}
+    };
+    $scope.selectForm = function(formIndex){
+	$scope.selectedForm = formIndex;
+    }
+    
+}]);
+
+myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+
+}]);
+
+myApp.controller('Form2Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+
 }]);
