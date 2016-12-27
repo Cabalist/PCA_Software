@@ -1,22 +1,22 @@
 <div>
   <h3>Form 1</h3>
   <div class="input-group">
-    <span class="input-group-addon">Date</span>
+    <span class="input-group-addon">Date:</span>
     <input type="text" class="form-control" aria-describedby="Todays Date" ng-model="currentDate">
   </div>
 
   <div class="input-group">
-    <span class="input-group-addon">Name</span>
+    <span class="input-group-addon">Name:</span>
     <input type="text" class="form-control" value="<get user name>">
   </div>
 
   <div class="input-group">
-    <span class="input-group-addon">Canvass hours</span>
+    <span class="input-group-addon">Canvass hours:</span>
     <input class="form-control" type="number" id="canvassHours" value="4">
   </div>
 
     <div class="input-group">
-      <span class="input-group-addon">Other hours</span>
+      <span class="input-group-addon">Other hours:</span>
       <select class="form-control">
 	<option>Training</option>
 	<option>Travel</option>
@@ -31,10 +31,39 @@
   </div>
 
   <br>
-  add stuff here
+
+  Donations:
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="donation in donations">
+     {{ donation.chk }}  - {{ donation.cc }} - {{ donation.money  }}
+    </li>
+  </ul>
+  
+  <div class="input-group">
+    <span class="input-group-addon clearfix">
+      CHK:
+    </span>
+    <input type="text" class="form-control" ng-model="chk">
+    <span class="input-group-addon">
+      CC Face Val:
+    </span>
+    <input type="text" class="form-control" ng-model="cc">
+    <span class="input-group-addon clearfix">
+      $$:
+    </span>
+    <input type="text" class="form-control" ng-model="money">
+    
+    <span class="input-group-btn">
+      <button class="btn" ng-click="addDonation()">
+	<span class="glyphicon glyphicon-plus"></span>
+      </button>
+    </span>
+  </div>
+  
+
 
   <br>
-  <button class="btn btn-primary">Submit!</button>
+  <button class="btn btn-primary" ng-disabled="!donations.length">Submit!</button>
 
   <br>
   <br>

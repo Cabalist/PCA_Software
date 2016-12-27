@@ -155,6 +155,21 @@ myApp.controller('CanvasserController', ['$scope','$http','$log','$stateParams',
 myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.$emit("selectForm",1);
     $scope.currentDate = moment().format("MM-DD-YYYY");
+    $scope.donations = [];
+    $scope.chk = "";
+    $scope.cc ="";
+    $scope.money = "";
+
+    $scope.addDonation = function(){
+	$scope.donations.push({'chk':$scope.chk,'cc': $scope.cc ,'money': $scope.money});
+
+	//clear values
+	$scope.chk = "";
+	$scope.cc ="";
+	$scope.money = "";
+	
+
+    };
 }]);
 
 myApp.controller('Form2Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
