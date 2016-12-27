@@ -17,3 +17,9 @@ class Form1Serializer(serializers.ModelSerializer):
         class Meta:
             model = Form1
             fields = ['id','user','org','date','canvassHours','trf','status']
+
+
+class DonationSerializer(serializers.ModelSerializer):
+   class Meta:
+      model = Donation
+      fields = ['id','form','chk','cc','money']

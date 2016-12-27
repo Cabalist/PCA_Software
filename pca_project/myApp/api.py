@@ -104,23 +104,38 @@ def orgList(request):
         return JsonResponse(results, safe=False)
 
 @csrf_exempt
-def form1(request):
+def donation(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
-        userId = data["userId"]
-        user = User.objects.get(pk=userId)
-        orgId = data["orgId"]
-        org = Organization.objects.get(id=orgId)
-        dateStr = data["date"]
-        date = datetime.strptime(dateStr,"%m-%d-%Y").date()
-        canvassHours = data["canvassHours"]
-        #otherHours = data["otherHours"]
-        trf=data["trf"]
+        formJson = data["form"]
+        chk = data['chk']
+        cc = data['cc']
+        money = data['money']
 
-        newForm = Form1(user=user,org=org,date=date,canvassHours=canvassHours,otherHours=0,trf=trf,status=0)
-        newForm.save()
+        formId = formJson;
+        if type(formJson)==type({}): #if got dictionary instead of formId (need to create form1)
+            userId = formJson["userId"]
+            user = User.objects.get(pk=userId)
+            orgId = formJson["orgId"]
+            org = Organization.objects.get(id=orgId)
+            dateStr = formJson["date"]
+            date = datetime.strptime(dateStr,"%m-%d-%Y").date()
+            canvassHours = formJson["canvassHours"]
+            #otherHours = data["otherHours"]
+            trf=formJson["trf"]
+            
+            newForm = Form1(user=user,org=org,date=date,canvassHours=canvassHours,otherHours=0,trf=trf,status=0)
+            newForm.save()
 
-        serialized = Form1Serializer(newForm)
+            formId = newForm.id
+
+        form = Form1.objects.get(id=formId)
+        newDonation = Donation(form=form,chk=chk,cc=cc,money=money)
+        newDonation.save()
+
+        serialized = DonationSerializer(newDonation)
+        
+        
         return JsonResponse(serialized.data, safe=False)
 
     

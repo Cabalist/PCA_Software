@@ -30,3 +30,8 @@ class Form1(models.Model):
     trf = models.CharField(max_length=32)
     status = models.IntegerField(default=0)
 
+class Donation(models.Model):
+    form = models.ForeignKey(Form1)
+    chk = models.CharField(max_length=12)
+    cc = models.CharField(max_length=12)
+    money = models.FloatField()

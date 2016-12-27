@@ -168,21 +168,30 @@ myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', fun
     
     $scope.addDonation = function(){
 	//if form1 is null, need to create it first
-	if ($scope.form1==null){
-	    var newForm1 = {'userId':$scope.userId,'date':$scope.currentDate,'orgId':$scope.orgId,'canvassHours':$scope.canvassHours,'trf':$scope.trf};
-	    $http.post('/api/rest/form1',JSON.stringify(newForm1)).then(function(data){
-		$scope.form1 = data.data;
-	    });
-	};
+	var form1 = $scope.form1;
+	if (form1==null){
+	    form1 = {'userId':$scope.userId,'date':$scope.currentDate,'orgId':$scope.orgId,'canvassHours':$scope.canvassHours,'trf':$scope.trf};
+	}else{
+	    form1 = $scope.form1.id;
+	}
+	
+	var donation = {'form':form1,'chk': $scope.chk,'cc':$scope.cc,'money':$scope.money};
 
-	$scope.donations.push({'chk':$scope.chk,'cc': $scope.cc ,'money': $scope.money});
+	$http.post('/api/rest/donation',JSON.stringify(donation)).then(function(data){
+	    //need to set $scope.form1
+	    if($scope.form1==null){
+		$scope.form1 = form1;
+		$scope.form1.id=data.data.form;		
+	    }
+
+	    $scope.donations.push(data.data);	    
+	});
 	
 	//clear values
 	$scope.chk = "";
 	$scope.cc ="";
 	$scope.money = "";
     };
-
     
     $scope.submitClick=function(){
 	//put call
