@@ -32,11 +32,9 @@ class Form1(models.Model):
 
     def totalDonations(self):
         return self.donation_set.all().aggregate(models.Sum('money'))['money__sum']
-        
-
 
 class Donation(models.Model):
-    form = models.ForeignKey(Form1)
+    form = models.ForeignKey(Form1,on_delete=models.CASCADE)
     chk = models.CharField(max_length=12)
     cc = models.CharField(max_length=12)
     money = models.FloatField()

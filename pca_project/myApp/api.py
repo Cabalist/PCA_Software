@@ -104,7 +104,24 @@ def orgList(request):
         return JsonResponse(results, safe=False)
 
 @csrf_exempt
-def form1(request,userId=None):
+def form1(request,userId=None,orgId=None):
+    if request.method == "GET":
+        user = User.objects.get(pk=userId)
+        allForm1s = Form1.objects.filter(user=user)
+
+        current = allForm1s.filter(status=0) #There should only be one...
+        history = allForm1s.filter(status=1).all()
+
+        histResult = []
+        for i in history:
+            rDict = Form1Serializer(i).data
+            total = i.totalDonations()
+            rDict["total"] = total
+            histResult.append(rDict)
+            
+        
+        return JsonResponse({'history':histResult},safe=False)
+        
     if request.method == "PUT":
         data = JSONParser().parse(request)
         if len(data.keys()) == 2:
@@ -156,5 +173,3 @@ def donation(request):
         
         
         return JsonResponse(serialized.data, safe=False)
-
-    

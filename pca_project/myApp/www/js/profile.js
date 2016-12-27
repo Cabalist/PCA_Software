@@ -166,6 +166,14 @@ myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', fun
     $scope.money = "";
     $scope.form1 = null;
     $scope.submitHistory=[];
+
+    //get unfinished forms and history
+    $http.get('/api/rest/form1/' + $scope.userId+'/'+$scope.orgId).then(function(data){
+	$scope.submitHistory = data.data.history;
+
+	//populate currentForm1 and donations
+	//$scope.form1 = data.data.current;
+    });
     
     $scope.addDonation = function(){
 	//if form1 is null, need to create it first

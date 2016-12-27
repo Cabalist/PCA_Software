@@ -69,7 +69,7 @@
   <br>
   <h4>History here</h4>
   <ul class="list-group">
-    <li class="list-group-item" ng-repeat="submit in submitHistory">
+    <li class="list-group-item" ng-repeat="submit in submitHistory | orderBy:'-id'  ">
       {{ submit.date }} --- $$$$ {{ submit.total }}
     </li>
   </ul>
