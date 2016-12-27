@@ -30,6 +30,11 @@ class Form1(models.Model):
     trf = models.CharField(max_length=32)
     status = models.IntegerField(default=0)
 
+    def totalDonations(self):
+        return self.donation_set.all().aggregate(models.Sum('money'))['money__sum']
+        
+
+
 class Donation(models.Model):
     form = models.ForeignKey(Form1)
     chk = models.CharField(max_length=12)

@@ -15,26 +15,27 @@
     <input class="form-control" type="number" id="canvassHours" ng-model="canvassHours">
   </div>
 
-    <div class="input-group">
-      <span class="input-group-addon">Other hours:</span>
-      <select class="form-control">
-	<option>Training</option>
-	<option>Travel</option>
-	<option>Admin</option>
-      </select>
-      <input class="form-control" type="number" id="canvassHours" value="0">
+  <div class="input-group">
+    <span class="input-group-addon">Other hours:</span>
+    <select class="form-control">
+      <option>Training</option>
+      <option>Travel</option>
+      <option>Admin</option>
+    </select>
+    <input class="form-control" type="number" id="canvassHours" value="0">
   </div>
-
+  
   <div class="input-group">
     <span class="input-group-addon">TRF:</span>
     <input type="text" class="form-control" placeholder="What's TRF?" ng-value="trf">
   </div>
-
-  <br
-  Donations:
+  
+  <br>
+  <h4>Donations:</h4>
+  
   <ul class="list-group">
     <li class="list-group-item" ng-repeat="donation in donations">
-     {{ donation.chk }}  - {{ donation.cc }} - {{ donation.money  }}
+      {{ donation.chk }}  - {{ donation.cc }} - {{ donation.money  }}
     </li>
   </ul>
   
@@ -60,13 +61,17 @@
   </div>
   
 
-
+  
   <br>
   <button class="btn btn-primary" ng-disabled="!donations.length" ng-click="submitClick()">Submit!</button>
 
   <br>
   <br>
-  History here
-  
+  <h4>History here</h4>
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="submit in submitHistory">
+      {{ submit.date }} --- $$$$ {{ submit.total }}
+    </li>
+  </ul>
 
 </div>

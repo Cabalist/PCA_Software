@@ -104,6 +104,25 @@ def orgList(request):
         return JsonResponse(results, safe=False)
 
 @csrf_exempt
+def form1(request,userId=None):
+    if request.method == "PUT":
+        data = JSONParser().parse(request)
+        if len(data.keys()) == 2:
+            formId = data['id']
+            status = data['status']
+
+            f = Form1.objects.get(id=formId)
+            f.status = status
+            f.save()
+
+            serialized = Form1Serializer(f).data
+            total = f.totalDonations()
+            serialized["total"] = total
+            
+        return JsonResponse(serialized, safe=False)
+        
+        
+@csrf_exempt
 def donation(request):
     if request.method == "POST":
         data = JSONParser().parse(request)

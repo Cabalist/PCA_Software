@@ -165,6 +165,7 @@ myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', fun
     $scope.cc = "";
     $scope.money = "";
     $scope.form1 = null;
+    $scope.submitHistory=[];
     
     $scope.addDonation = function(){
 	//if form1 is null, need to create it first
@@ -194,8 +195,12 @@ myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', fun
     };
     
     $scope.submitClick=function(){
-	//put call
-	$log.log("got it");
+	//Need to change form1 status from 0 to 1 (working to submitted)
+	var formId = $scope.form1.id;
+	var update = {'id':formId,'status':1};
+	$http.put('/api/rest/form1/'+$scope.userId,JSON.stringify(update)).then(function(data){
+	    $scope.submitHistory.push(data.data);
+	});
     };
 }]);
 
