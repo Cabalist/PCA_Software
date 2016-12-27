@@ -21,3 +21,12 @@ class UserOrgJoinRequest(models.Model):
     status = models.IntegerField(default=0) #1 approved, 2 rejected
     approvedOrRejectedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="admin", null=True)
     
+class Form1(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    org = models.ForeignKey(Organization,on_delete = models.CASCADE)
+    date = models.DateField()
+    canvassHours = models.IntegerField()
+    otherHours = models.IntegerField()
+    trf = models.CharField(max_length=32)
+    status = models.IntegerField(default=0)
+

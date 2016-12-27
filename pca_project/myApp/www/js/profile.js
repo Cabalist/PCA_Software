@@ -30,10 +30,14 @@ myApp.config(function($stateProvider){
 	});
 });
 
+myApp.controller('mainController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+    $scope.userId = document.getElementById('userId').value;
+    $scope.userName = document.getElementById('userName').value;
+}]);
+
 myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,$http,$log) {
     $scope.profilePic = '/www/img/blank-profile-picture-973460_960_720.png';
 
-    $scope.userId = document.getElementById('userId').value;
     $scope.userOrgs = [];
     $scope.userPendingOrgs = [];
     $scope.orgList = [];
@@ -106,8 +110,7 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
 
 myApp.controller('AdminController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     var orgId = $stateParams.orgId;
-    $scope.pendingRequests = [];
-    $scope.userId = document.getElementById("userId").value;
+    $scope.pendingRequests = [];    
     
     $http.get('/api/rest/joinOrgRequest/' + orgId).then(function(data){
 	$scope.pendingRequests = data.data;
@@ -128,7 +131,6 @@ myApp.controller('AdminController', ['$scope','$http','$log','$stateParams', fun
 	$http.put('/api/rest/joinOrgRequest/'+orgId ,JSON.stringify(reqUpdated)).then(function(data){
 	    $log.log("OK!");
 	});
-
     }
 
     $scope.rejectUserRequest = function(reqId){
@@ -140,6 +142,7 @@ myApp.controller('AdminController', ['$scope','$http','$log','$stateParams', fun
 
 
 myApp.controller('CanvasserController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+    $scope.orgId = $stateParams.orgId;
     $scope.selectedForm = null;
     $scope.getFormClass = function(formIndex){	
 	if ( $scope.selectedForm == formIndex){
@@ -155,20 +158,35 @@ myApp.controller('CanvasserController', ['$scope','$http','$log','$stateParams',
 myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.$emit("selectForm",1);
     $scope.currentDate = moment().format("MM-DD-YYYY");
+    $scope.canvassHours=4;
+    $scope.trf="";
     $scope.donations = [];
     $scope.chk = "";
-    $scope.cc ="";
+    $scope.cc = "";
     $scope.money = "";
-
+    $scope.form1 = null;
+    
     $scope.addDonation = function(){
-	$scope.donations.push({'chk':$scope.chk,'cc': $scope.cc ,'money': $scope.money});
+	//if form1 is null, need to create it first
+	if ($scope.form1==null){
+	    var newForm1 = {'userId':$scope.userId,'date':$scope.currentDate,'orgId':$scope.orgId,'canvassHours':$scope.canvassHours,'trf':$scope.trf};
+	    $http.post('/api/rest/form1',JSON.stringify(newForm1)).then(function(data){
+		$scope.form1 = data.data;
+	    });
+	};
 
+	$scope.donations.push({'chk':$scope.chk,'cc': $scope.cc ,'money': $scope.money});
+	
 	//clear values
 	$scope.chk = "";
 	$scope.cc ="";
 	$scope.money = "";
-	
+    };
 
+    
+    $scope.submitClick=function(){
+	//put call
+	$log.log("got it");
     };
 }]);
 

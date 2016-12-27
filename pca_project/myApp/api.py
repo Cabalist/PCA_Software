@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
 from django.contrib.auth.models import User
 
-from myApp.models import UserOrgJoinRequest, UserOrganizationRoleRel, Organization
+from myApp.models import UserOrgJoinRequest, UserOrganizationRoleRel, Organization, Form1
 from myApp.serializers import *
 from datetime import datetime
 import pytz
@@ -102,3 +102,25 @@ def orgList(request):
                     results.append({"location":org.location,"orgs":[OrgSerializer(org).data]})
 
         return JsonResponse(results, safe=False)
+
+@csrf_exempt
+def form1(request):
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+        userId = data["userId"]
+        user = User.objects.get(pk=userId)
+        orgId = data["orgId"]
+        org = Organization.objects.get(id=orgId)
+        dateStr = data["date"]
+        date = datetime.strptime(dateStr,"%m-%d-%Y").date()
+        canvassHours = data["canvassHours"]
+        #otherHours = data["otherHours"]
+        trf=data["trf"]
+
+        newForm = Form1(user=user,org=org,date=date,canvassHours=canvassHours,otherHours=0,trf=trf,status=0)
+        newForm.save()
+
+        serialized = Form1Serializer(newForm)
+        return JsonResponse(serialized.data, safe=False)
+
+    

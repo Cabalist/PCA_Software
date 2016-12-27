@@ -12,3 +12,8 @@ class OrgSerializer(serializers.ModelSerializer):
         class Meta:
             model = Organization
             fields= ['id','name','location','description','logo']
+
+class Form1Serializer(serializers.ModelSerializer):
+        class Meta:
+            model = Form1
+            fields = ['id','user','org','date','canvassHours','trf','status']

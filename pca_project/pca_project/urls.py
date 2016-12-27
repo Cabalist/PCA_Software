@@ -33,5 +33,6 @@ urlpatterns = [
     url(r'^api/rest/userRoles/(?P<userId>\d+)$', api.userRoles),
     url(r'^api/rest/orgList$', api.orgList),
     url(r'^api/rest/joinOrgRequest/(?P<orgId>\d+)$', api.joinOrgRequest),
+    url(r'^api/rest/form1$', api.form1),
     
 ]
