@@ -126,4 +126,4 @@ STATICFILES_DIRS = [
 STATIC_URL = '/www/'
 
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/profile/#/'
