@@ -163,10 +163,16 @@ myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', fun
     $scope.donations = [];
     $scope.chk = "";
     $scope.cc = "";
-    $scope.money = "";
+    $scope.money = 0.0;
     $scope.form1 = null;
     $scope.submitHistory=[];
 
+    //validators
+    $scope.isMoneyNumber = function(){
+	var mon = !isNaN($scope.money);
+	return mon;
+    }
+    
     //datepicker things
     $scope.today = function() {
 	$scope.dt = new Date();

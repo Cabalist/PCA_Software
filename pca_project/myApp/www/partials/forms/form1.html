@@ -43,6 +43,7 @@
       {{ donation.chk }}  - {{ donation.cc }} - {{ donation.money  }}
     </li>
   </ul>
+
   
   <div class="input-group">
     <span class="input-group-addon clearfix">
@@ -64,9 +65,15 @@
       </button>
     </span>
   </div>
- 
+  
+  <div role="alert">
+    <span class="error" ng-show="!isMoneyNumber()" ng-hide="isMoneyNumber()">$$ Must be a number!</span>
+  </div>
   <br>
   <button class="btn btn-primary" ng-disabled="!donations.length" ng-click="submitClick()">Submit!</button>
+  
+
+  
 
   <br>
   <br>
