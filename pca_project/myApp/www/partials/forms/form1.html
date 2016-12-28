@@ -1,14 +1,19 @@
 <div>
   <h3>Form 1</h3>
   <div class="input-group">
-    <span class="input-group-addon">Date:</span>
-    <input type="text" class="form-control" aria-describedby="Todays Date" ng-model="currentDate">
-  </div>
-
-  <div class="input-group">
     <span class="input-group-addon">Name:</span>
-    <input type="text" class="form-control" value="{{ userName }}">
+    <input type="text" class="form-control" value="{{ userName }}" disabled>
   </div>
+  
+  <div class="input-group">
+
+  <p class="input-group">
+    <span class="input-group-addon">Date:</span>
+    <input type="text" class="form-control" uib-datepicker-popup ng-model="dt" is-open="popup1.opened" ng-required="true" />
+    <span class="input-group-btn">
+      <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+    </span>
+  </p>
 
   <div class="input-group">
     <span class="input-group-addon">Canvass hours:</span>
@@ -59,9 +64,7 @@
       </button>
     </span>
   </div>
-  
-
-  
+ 
   <br>
   <button class="btn btn-primary" ng-disabled="!donations.length" ng-click="submitClick()">Submit!</button>
 

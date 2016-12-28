@@ -157,7 +157,7 @@ myApp.controller('CanvasserController', ['$scope','$http','$log','$stateParams',
 
 myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.$emit("selectForm",1);
-    $scope.currentDate = moment().format("MM-DD-YYYY");
+    
     $scope.canvassHours=4;
     $scope.trf="";
     $scope.donations = [];
@@ -167,6 +167,18 @@ myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', fun
     $scope.form1 = null;
     $scope.submitHistory=[];
 
+    //datepicker things
+    $scope.today = function() {
+	$scope.dt = new Date();
+    };
+    $scope.today();
+    $scope.popup1 = {
+	opened: false
+    };
+    $scope.open1 = function() {
+	$scope.popup1.opened = true;
+    };
+    
     //get unfinished forms and history
     $http.get('/api/rest/form1/' + $scope.userId+'/'+$scope.orgId).then(function(data){
 	$scope.submitHistory = data.data.history;
@@ -179,7 +191,9 @@ myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', fun
 	//if form1 is null, need to create it first
 	var form1 = $scope.form1;
 	if (form1==null){
-	    form1 = {'userId':$scope.userId,'date':$scope.currentDate,'orgId':$scope.orgId,'canvassHours':$scope.canvassHours,'trf':$scope.trf};
+	    var date = moment($scope.dt).format('MM-DD-YYYY');
+	    
+	    form1 = {'userId':$scope.userId,'date':date,'orgId':$scope.orgId,'canvassHours':$scope.canvassHours,'trf':$scope.trf};
 	}else{
 	    form1 = $scope.form1.id;
 	}
