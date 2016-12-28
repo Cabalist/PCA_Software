@@ -109,7 +109,6 @@ def form1(request,userId=None,orgId=None):
         user = User.objects.get(pk=userId)
         allForm1s = Form1.objects.filter(user=user)
 
-        current = allForm1s.filter(status=0) #There should only be one...
         history = allForm1s.filter(status=1).all()
 
         histResult = []
@@ -118,10 +117,44 @@ def form1(request,userId=None,orgId=None):
             total = i.totalDonations()
             rDict["total"] = total
             histResult.append(rDict)
-            
         
         return JsonResponse({'history':histResult},safe=False)
+
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+        formJson = data["form1"]
+        userId = formJson["userId"]
+        user = User.objects.get(pk=userId)
+        orgId = formJson["orgId"]
+        org = Organization.objects.get(id=orgId)
+        dateStr = formJson["date"]
+        date = datetime.strptime(dateStr,"%m-%d-%Y").date()
+        canvassHours = formJson["canvassHours"]
+        #otherHours = data["otherHours"]
+        trf=formJson["trf"]
+            
+        newForm = Form1(user=user,org=org,date=date,canvassHours=canvassHours,otherHours=0,trf=trf,status=1)
+        newForm.save()
+
+        donationsJson = data["donations"]
+        total = 0
+        for donation in donationsJson:
+            chk = donation['chk']
+            cc = donation['cc']
+            money = donation['money']
+
+            newDonation = Donation(form=newForm,chk=chk,cc=cc,money=money)
+            newDonation.save()
+
+            total+= float(money)
+
+        fDict = Form1Serializer(newForm).data
+        fDict["total"] = total
         
+        return JsonResponse(fDict,safe=False)
+    
+    
+    """  
     if request.method == "PUT":
         data = JSONParser().parse(request)
         if len(data.keys()) == 2:
@@ -137,10 +170,12 @@ def form1(request,userId=None,orgId=None):
             serialized["total"] = total
             
         return JsonResponse(serialized, safe=False)
-        
+    """ 
         
 @csrf_exempt
 def donation(request):
+    pass
+    """
     if request.method == "POST":
         data = JSONParser().parse(request)
         formJson = data["form"]
@@ -173,3 +208,4 @@ def donation(request):
         
         
         return JsonResponse(serialized.data, safe=False)
+    """

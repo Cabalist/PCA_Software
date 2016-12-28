@@ -140,7 +140,6 @@ myApp.controller('AdminController', ['$scope','$http','$log','$stateParams', fun
     
 }]);
 
-
 myApp.controller('CanvasserController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.orgId = $stateParams.orgId;
     $scope.selectedForm = null;
@@ -185,16 +184,15 @@ myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', fun
 	$scope.popup1.opened = true;
     };
     
-    //get unfinished forms and history
+    //get only history. No unfinished forms are stored.
     $http.get('/api/rest/form1/' + $scope.userId+'/'+$scope.orgId).then(function(data){
 	$scope.submitHistory = data.data.history;
-
-	//populate currentForm1 and donations
-	//$scope.form1 = data.data.current;
     });
     
     $scope.addDonation = function(){
+	//No need for this... form1 gets created on 'submitClick'
 	//if form1 is null, need to create it first
+	/*
 	var form1 = $scope.form1;
 	if (form1==null){
 	    var date = moment($scope.dt).format('MM-DD-YYYY');
@@ -203,18 +201,19 @@ myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', fun
 	}else{
 	    form1 = $scope.form1.id;
 	}
+	*/
+	var donation = {'chk': $scope.chk,'cc':$scope.cc,'money':$scope.money};
+	$scope.donations.push(donation);
 	
-	var donation = {'form':form1,'chk': $scope.chk,'cc':$scope.cc,'money':$scope.money};
-
-	$http.post('/api/rest/donation',JSON.stringify(donation)).then(function(data){
+	//TODO REMOVE THIS API CALL
+	/*$http.post('/api/rest/donation',JSON.stringify(donation)).then(function(data){
 	    //need to set $scope.form1
 	    if($scope.form1==null){
 		$scope.form1 = form1;
 		$scope.form1.id=data.data.form;		
 	    }
-
-	    $scope.donations.push(data.data);	    
 	});
+	*/
 	
 	//clear values
 	$scope.chk = "";
@@ -223,11 +222,23 @@ myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', fun
     };
     
     $scope.submitClick=function(){
-	//Need to change form1 status from 0 to 1 (working to submitted)
-	var formId = $scope.form1.id;
-	var update = {'id':formId,'status':1};
-	$http.put('/api/rest/form1/'+$scope.userId,JSON.stringify(update)).then(function(data){
+	var date = moment($scope.dt).format('MM-DD-YYYY');
+	var form1 = {'userId':$scope.userId,'date':date,'orgId':$scope.orgId,'canvassHours':$scope.canvassHours,'trf':$scope.trf};
+	var form1Data = {"form1":form1,"donations":$scope.donations}
+	//var formId = $scope.form1.id;
+	//var update = {'id':formId,'status':1};
+
+	//TODO REMOVE PUT FROM API...
+	/*
+	$http.put('/api/rest/form1/'+$scope.userId,JSON.stringify()).then(function(data){
 	    $scope.submitHistory.push(data.data);
+	});
+	*/
+
+	$http.post('/api/rest/form1/'+$scope.userId,JSON.stringify(form1Data)).then(function(data){
+	    $scope.submitHistory.push(data.data);
+
+	    $scope.donations=[];
 	});
     };
 }]);
