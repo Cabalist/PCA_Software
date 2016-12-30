@@ -125,5 +125,5 @@ STATICFILES_DIRS = [
     ]
 STATIC_URL = '/www/'
 
-
+USER_MEDIA_ROOT= os.path.join(BASE_DIR,'myApp/www/user_media')
 LOGIN_REDIRECT_URL = '/profile/#/'

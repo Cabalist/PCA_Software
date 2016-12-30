@@ -20,6 +20,8 @@ from myApp import views , api
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+
+    url(r'^auth/register/$', views.registration),
     url(r'^auth/', include('registration.backends.simple.urls')),
 
     #landing page
