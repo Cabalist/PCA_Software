@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
 from django.contrib.auth.models import User
 
-from myApp.models import UserOrgJoinRequest, UserOrganizationRoleRel, Organization, Form1
+from myApp.models import UserOrganizationRoleRel, Organization, Form1
 from myApp.serializers import *
 from datetime import datetime
 import pytz
@@ -30,8 +30,8 @@ def userRoles(request,userId=None):
                 roleResults.append({'organization':{'id':org.id,'name':org.name,'logo':org.logo},'roles':[role.role]})
 
         #Add pending requests:
-        pending = UserOrgJoinRequest.objects.filter(user = userId).filter(status=0).all()
-        serialized = UserOrgJoinRequestSerializer(pending,many=True)
+        pending = UserOrganizationRoleRel.objects.filter(user = userId).filter(status=0).all()
+        serialized = UserOrgRoleSerializer(pending,many=True)
 
         finalResult = {"roles":roleResults,"pending":serialized.data}
 
