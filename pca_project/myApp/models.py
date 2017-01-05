@@ -25,7 +25,6 @@ class PayTerms(models.Model):
     description = models.CharField(max_length=512)
     notes = models.CharField(max_length=1024)
 
-
 class Donors(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)  #This refers to recruiter 
     org = models.ForeignKey(Organization,on_delete=models.CASCADE)
@@ -39,7 +38,36 @@ class Donors(models.Model):
     addedOn = models.DateField()
     addedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="addedDonor")
 
+class Donation(models.Model):
+    donor = models.ForeignKey(Donors)
+    payTerms = models.ForeignKey(PayTerms)
+    date = models.DateField()
+    donationType = models.IntegerField() #1 - cash, 2 - creditcard, 3- check
+    value = models.FloatField()
+    recurring = models.BooleanField()
 
+class Check(models.Model):
+    donation = models.ForeignKey(Donation)
+    proccessedBy = models.ForeignKey(settings.AUTH_USER_MODEL)
+    checkNum = models.CharField(max_length=10)
+    checkDate = models.DateField()
+    status = models.IntegerField() #0 - pending proccessing, 1 - success, 2 - fail
+    processedOn = models.DateTimeField()
+    notes = models.CharField(max_length=128)
+
+class CreditCard(models.Model):
+    donation = models.ForeignKey(Donation)
+    last4 = models.IntegerField()
+    nameOnCard = models.CharField(max_length=32)
+
+class CCTransaction(models.Model):
+    creditCard = models.ForeignKey(CreditCard)
+    proccessedBy = models.ForeignKey(settings.AUTH_USER_MODEL)
+    proccessedOn = models.DateTimeField()
+    status = models.IntegerField() #0 - pending processing, 1- success, 2 - fail
+    notes = models.CharField(max_length=128)
+    
+    
 #class UserOrgJoinRequest(models.Model):
 #    user = models.ForeignKey(settings.AUTH_USER_MODEL)
 #    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)

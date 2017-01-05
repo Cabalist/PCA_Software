@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'myApp',
     'rest_framework',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,12 @@ STATIC_URL = '/www/'
 
 USER_MEDIA_ROOT= os.path.join(BASE_DIR,'myApp/www/user_media')
 LOGIN_REDIRECT_URL = '/profile/#/'
+
+
+
+#Graphviz stuff for visualizing models:
+GRAPH_MODELS = {
+    'all_applications':False,
+    #'include_models':['User','Organization','UserOrganizationRoleRel'],
+    'group_models':True,
+}
