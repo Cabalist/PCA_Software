@@ -14,13 +14,13 @@ class UserOrgRoleSerializer(serializers.ModelSerializer):
         model = UserOrganizationRoleRel
         fields= ['id','user','organization','join_date','status','approvedOrRejectedBy']
 
-class Form1Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = Form1
-        fields = ['id','user','org','date','canvassHours','trf','status']
+#class Form1Serializer(serializers.ModelSerializer):
+#    class Meta:
+#        model = Form1
+#        fields = ['id','user','org','date','canvassHours','trf','status']
 
 
-class DonationSerializer(serializers.ModelSerializer):
-   class Meta:
-      model = Donation
-      fields = ['id','form','chk','cc','money']
+#class DonationSerializer(serializers.ModelSerializer):
+#   class Meta:
+#      model = Donation
+#      fields = ['id','form','chk','cc','money']

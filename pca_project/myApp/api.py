@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
 from django.contrib.auth.models import User
 
-from myApp.models import UserOrganizationRoleRel, Organization, Form1
+from myApp.models import UserOrganizationRoleRel, Organization
 from myApp.serializers import *
 from datetime import datetime
 import pytz
@@ -103,6 +103,7 @@ def orgList(request):
 
         return JsonResponse(results, safe=False)
 
+"""
 @csrf_exempt
 def form1(request,userId=None,orgId=None):
     if request.method == "GET":
@@ -154,7 +155,7 @@ def form1(request,userId=None,orgId=None):
         return JsonResponse(fDict,safe=False)
     
     
-    """  
+    """  """
     if request.method == "PUT":
         data = JSONParser().parse(request)
         if len(data.keys()) == 2:
@@ -170,12 +171,12 @@ def form1(request,userId=None,orgId=None):
             serialized["total"] = total
             
         return JsonResponse(serialized, safe=False)
-    """ 
+    """ """ 
         
 @csrf_exempt
 def donation(request):
     pass
-    """
+    """ """
     if request.method == "POST":
         data = JSONParser().parse(request)
         formJson = data["form"]
