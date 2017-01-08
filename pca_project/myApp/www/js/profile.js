@@ -8,25 +8,30 @@ myApp.config(function($stateProvider){
 	    templateUrl: '/www/partials/profile.html',
 	    controller: 'ProfileController'
 	})
-        .state('admin',{
-	    url:"/org/:orgId/admin",
-	    templateUrl: '/www/partials/admin.html',
-	    controller: 'AdminController'
+        .state('bookkeeper',{
+	    url:"/org/:orgId/bookkeeper",
+	    templateUrl: '/www/partials/bookkeeper.html',
+	    controller: 'BookkeeperController'
 	})
-        .state('canvasser',{
-	    url:"/org/:orgId/canvasser",
-	    templateUrl: '/www/partials/canvasser.html',
-	    controller: 'CanvasserController'
+        .state('manager',{
+	    url:"/org/:orgId/manager",
+	    templateUrl: '/www/partials/manager.html',
+	    controller: 'ManagerController'
 	})
-        .state('canvasser.form1',{
-	    url:"/org/:orgId/canvasser/form1",
+        .state('manager.form1',{
+	    url:"/org/:orgId/manager/form1",
 	    templateUrl: '/www/partials/forms/form1.html',
 	    controller: 'Form1Controller'
 	})
-        .state('canvasser.form2',{
-	    url:"/org/:orgId/canvasser/form2",
+        .state('manager.form2',{
+	    url:"/org/:orgId/manager/form2",
 	    templateUrl: '/www/partials/forms/form2.html',
 	    controller: 'Form2Controller'
+	})
+        .state('worker',{
+	    url:"/org/:orgId/worker",
+	    templateUrl: '/www/partials/worker.html',
+	    controller: 'WorkerController'
 	});
 });
 
@@ -53,9 +58,11 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
     
     $scope.getRoleName=function(roleNum){
 	if (roleNum==1){
-	    return "Admin"
+	    return "Worker"
 	}else if (roleNum==2){
-	    return "Canvasser"
+	    return "Manager"
+	}else if (roleNum==3){
+	    return "Bookkeeper"
 	}
     };
 
@@ -108,7 +115,7 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
 }]);
 
 
-myApp.controller('AdminController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+myApp.controller('BookkeeperController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     var orgId = $stateParams.orgId;
     $scope.pendingRequests = [];    
     
@@ -140,7 +147,7 @@ myApp.controller('AdminController', ['$scope','$http','$log','$stateParams', fun
     
 }]);
 
-myApp.controller('CanvasserController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.orgId = $stateParams.orgId;
     $scope.selectedForm = null;
     $scope.getFormClass = function(formIndex){	
@@ -245,4 +252,9 @@ myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', fun
 
 myApp.controller('Form2Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.$emit("selectForm",2);
+}]);
+
+
+myApp.controller('WorkerController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+    $log.log("Hello from Worker Controller");
 }]);

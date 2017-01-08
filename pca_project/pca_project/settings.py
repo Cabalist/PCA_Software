@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'myApp',
     'rest_framework',
-    'django_extensions',
+    #'django_extensions',  --> Needed for dot graph
 ]
 
 MIDDLEWARE = [

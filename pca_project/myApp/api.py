@@ -11,7 +11,8 @@ import pytz
 @csrf_exempt
 def userRoles(request,userId=None):
     if request.method=='GET':
-        roles = UserOrganizationRoleRel.objects.filter(user = userId).order_by('organization')
+        #get current active roles.
+        roles = UserOrganizationRoleRel.objects.filter(user = userId).filter(status=1).order_by('organization')
         roleResults = []
 
         for role in roles.all():
@@ -21,6 +22,7 @@ def userRoles(request,userId=None):
                 if roleResults[len(roleResults)-1]["organization"]["id"] == org.id:
                     #append new roles to listed org
                     roleResults[len(roleResults)-1]["roles"].append(role.role)
+                    roleResults[len(roleResults)-1]["roles"].sort()
                     
                 else:
                     #add new organization
@@ -42,9 +44,9 @@ def userRoles(request,userId=None):
 def joinOrgRequest(request,orgId=None):
     if request.method=="GET":
         org = Organization.objects.get(id = orgId)
-        requests = UserOrgJoinRequest.objects.filter(organization=org).filter(status=0).all()
+        requests = UserOrganizationRoleRel.objects.filter(organization=org).filter(status=0).all()
 
-        serialized = UserOrgJoinRequestSerializer(requests,many=True)
+        serialized = UserOrgRoleSerializer(requests,many=True)
         
         return JsonResponse(serialized.data, safe=False)
         
@@ -55,33 +57,26 @@ def joinOrgRequest(request,orgId=None):
         
         org = Organization.objects.get(id = data["orgId"])
 
-        time  = datetime.now(pytz.timezone('US/Pacific'))
+        now  = datetime.now(pytz.timezone('US/Pacific'))
         #If advStatus = active, need to unset previous active.
         
-        request = UserOrgJoinRequest(user=user,organization=org,requestDate = time,status=0)
+        request = UserOrganizationRoleRel(user=user,organization=org,role=1,request_date=now,status=0)
         request.save()
 
-        serialized = UserOrgJoinRequestSerializer(request)
+        serialized = UserOrgRoleSerializer(request)
         
         return JsonResponse(serialized.data, safe=False)
 
-    if request.method == "PUT":    
+    if request.method == "PUT":
         data = JSONParser().parse(request)
         reqId = data["id"]
+        now  = datetime.now(pytz.timezone('US/Pacific'))
 
-        reqObj = UserOrgJoinRequest.objects.filter(id=data['id']).update(status=data['status'],approvedOrRejectedBy=data['approvedOrRejectedBy'])
-        
-        modifiedObj = UserOrgJoinRequest.objects.get(id=data['id'])
-        serialized = UserOrgJoinRequestSerializer(modifiedObj)
-        
-        if data['status']==1: #need to create role objs
-            user = User.objects.get(pk=int(data["user"]))
-            org = Organization.objects.get(id = data["organization"])
-            
-            time  = datetime.now(pytz.timezone('US/Pacific'))
+        reqObj = UserOrganizationRoleRel.objects.filter(id=data['id']).update(status=data['status'],approvedOrRejectedBy=data['approvedOrRejectedBy'])
 
-            newRole = UserOrganizationRoleRel(user=user,organization=org,role=2,join_date=time)
-            newRole.save()
+        #can't I return the reqObj ?
+        modifiedObj = UserOrganizationRoleRel.objects.get(id=data['id'])
+        serialized = UserOrgRoleSerializer(modifiedObj)
             
         return JsonResponse(serialized.data, safe=False)
         

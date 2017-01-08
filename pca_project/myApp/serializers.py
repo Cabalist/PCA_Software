@@ -12,7 +12,7 @@ class OrgSerializer(serializers.ModelSerializer):
 class UserOrgRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserOrganizationRoleRel
-        fields= ['id','user','organization','join_date','status','approvedOrRejectedBy']
+        fields= ['id','user','organization','request_date','status','approvedOrRejectedBy']
 
 #class Form1Serializer(serializers.ModelSerializer):
 #    class Meta:

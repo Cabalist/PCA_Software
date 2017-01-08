@@ -12,10 +12,11 @@ class UserOrganizationRoleRel(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     role = models.IntegerField()
-    join_date = models.DateField()
-    status = models.IntegerField(default=0) #1 approved, 2 rejected
+    request_date = models.DateTimeField(null=True)
+    status = models.IntegerField(default=0) #0-Waiting for approval, 1-Approved, 2-Rejected
     approvedOrRejectedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="admin",null=True)
-
+    approvedOrRejectDate = models.DateTimeField(null=True)
+    
 class PayTerms(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     org = models.ForeignKey(Organization, on_delete=models.CASCADE)
