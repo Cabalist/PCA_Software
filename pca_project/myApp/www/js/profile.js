@@ -128,15 +128,35 @@ myApp.controller('BookkeeperController', ['$scope','$http','$log','$stateParams'
 myApp.controller('BkprUsrMgmtController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $log.log("Hello from Bookkeeper User Mgmt controller");
 
+    $scope.bookkeepers = [];
+    $scope.managers = [];
+    $scope.workers = [];
+    $scope.pending = [];
     
     //Areas: Bookkeepers, managers, workers, pending requests
     $scope.pendingRequests = [];
-    $http.get('/api/rest/orgUsers/' + $scope.orgId).then(function(data){
-	$scope.pendingRequests = data.data;
+    $http.get('/api/rest/orgUsers/' + $scope.orgId).then(function(data){	
+	for(var i=0;i<data.data.active.length ;i++){
+	    var usrRole = data.data.active[i].role;
+	    if (usrRole==1){
+		$log.log("got 1");
+		$scope.workers.push(data.data.active[i]);
+	    } else if (usrRole==2){
+		$log.log("got 2");
+		$scope.managers.push(data.data.active[i]);
+	    } else if (usrRole==3){
+		$log.log("got 3");
+		$scope.bookkeepers.push(data.data.active[i]);
+	    }
+	}
+	
+	$scope.pending = data.data.pending;
+	//$log.log("Workers:");
+	//$log.log($scope.workers);
+	
     });
-    /*
-    
-    */
+
+
     
     function getUserRequest(reqId){
 	for (var i=0;i<$scope.pendingRequests.length; i++){

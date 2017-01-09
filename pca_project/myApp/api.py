@@ -41,17 +41,18 @@ def userRoles(request,userId=None):
 
 @csrf_exempt
 def orgUsers(request,orgId=None):
-    if request.method=="GET":
-        
+    if request.method=="GET":        
         org = Organization.objects.get(id = orgId)
         query  = UserOrganizationRoleRel.objects.filter(organization=org)
 
         active = query.filter(status=1).all()
+        pending = query.filter(status=0).all()
         
-        
-        serialized = UserOrgRoleSerializer(active,many=True)
-        
-        return JsonResponse(serialized.data, safe=False)
+        activeSerialized = OrgUsersSerializer(active,many=True)
+        pendingSerialized = OrgUsersSerializer(pending,many=True)
+
+        result = {'active':activeSerialized.data,'pending':pendingSerialized.data}
+        return JsonResponse(result, safe=False)
 
     
     if request.method=='POST':
