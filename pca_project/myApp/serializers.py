@@ -12,7 +12,7 @@ class OrgSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['pk','first_name','last_name','email']
+        fields = ['pk','username','first_name','last_name','email']
 
         
 #used in bookkeeper to get all users

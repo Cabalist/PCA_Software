@@ -119,7 +119,6 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
     }
 }]);
 
-
 myApp.controller('BookkeeperController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.orgId = $stateParams.orgId;
     $log.log("hello from Bookkeeper controller");
@@ -139,44 +138,32 @@ myApp.controller('BkprUsrMgmtController', ['$scope','$http','$log','$stateParams
 	for(var i=0;i<data.data.active.length ;i++){
 	    var usrRole = data.data.active[i].role;
 	    if (usrRole==1){
-		$log.log("got 1");
 		$scope.workers.push(data.data.active[i]);
 	    } else if (usrRole==2){
-		$log.log("got 2");
 		$scope.managers.push(data.data.active[i]);
 	    } else if (usrRole==3){
-		$log.log("got 3");
 		$scope.bookkeepers.push(data.data.active[i]);
 	    }
 	}
-	
-	$scope.pending = data.data.pending;
-	//$log.log("Workers:");
-	//$log.log($scope.workers);
-	
+
+	$scope.pending = data.data.pending;	
     });
 
-
-    
-    function getUserRequest(reqId){
-	for (var i=0;i<$scope.pendingRequests.length; i++){
-	    if ($scope.pendingRequests[i].id==reqId){
-		return $scope.pendingRequests[i];
-	    }
-	}
-    }
-    
-    $scope.acceptUserRequest = function(reqId){
-	var request = getUserRequest(reqId);
-	var reqUpdated = {'id':reqId,'user':request.user,'organization':request.organization,'status':1,'approvedOrRejectedBy':$scope.userId};
+    $scope.acceptUserRequest = function(indx){
+	var request = $scope.pending[indx];	
+	var reqUpdated = {'id':request.id,'user':request.userInfo.pk,'organization':request.organization,'status':1,'approvedOrRejectedBy':$scope.userId};
 	
-	$http.put('/api/rest/orgUsers/'+orgId ,JSON.stringify(reqUpdated)).then(function(data){
-	    $log.log("OK!");
+	$http.put('/api/rest/orgUsers/'+$scope.orgId ,JSON.stringify(reqUpdated)).then(function(data){
+	    //Remove from Pending, add to Workers.
+	    $scope.pending.splice(indx,1);
+
+	    $scope.workers.push(data.data);
 	});
+	
     }
 
-    $scope.rejectUserRequest = function(reqId){
-	$log.log(reqId);
+    $scope.rejectUserRequest = function(indx){
+	$log.log(indx);
 	$log.log("REJECT!");
     }
 

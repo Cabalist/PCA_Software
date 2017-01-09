@@ -81,7 +81,7 @@ def orgUsers(request,orgId=None):
 
         #can't I return the reqObj ?
         modifiedObj = UserOrganizationRoleRel.objects.get(id=data['id'])
-        serialized = UserOrgRoleSerializer(modifiedObj)
+        serialized = OrgUsersSerializer(modifiedObj)
             
         return JsonResponse(serialized.data, safe=False)
         
