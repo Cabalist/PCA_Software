@@ -13,18 +13,23 @@ myApp.config(function($stateProvider){
 	    templateUrl: '/www/partials/bookkeeper.html',
 	    controller: 'BookkeeperController'
 	})
+        .state('bookkeeper.userMgmt',{
+	    url:"/userMgmt",
+	    templateUrl: '/www/partials/bookkeeper-userMgmt.html',
+	    controller: 'BkprUsrMgmtController'
+	})
         .state('manager',{
 	    url:"/org/:orgId/manager",
 	    templateUrl: '/www/partials/manager.html',
 	    controller: 'ManagerController'
 	})
         .state('manager.form1',{
-	    url:"/org/:orgId/manager/form1",
+	    url:"/form1",
 	    templateUrl: '/www/partials/forms/form1.html',
 	    controller: 'Form1Controller'
 	})
         .state('manager.form2',{
-	    url:"/org/:orgId/manager/form2",
+	    url:"/form2",
 	    templateUrl: '/www/partials/forms/form2.html',
 	    controller: 'Form2Controller'
 	})
@@ -94,7 +99,7 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
 	    alert("A request to join already exists");
 	}else{
 	    var newRequest = {'userId':$scope.userId,'orgId':newOrgId};
-	    $http.post('/api/rest/joinOrgRequest/'+newOrgId ,JSON.stringify(newRequest)).then(function(data){
+	    $http.post('/api/rest/orgUsers/'+newOrgId ,JSON.stringify(newRequest)).then(function(data){
 		$scope.userPendingOrgs.push(data.data);
 	    });
 	}
@@ -116,13 +121,23 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
 
 
 myApp.controller('BookkeeperController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
-    var orgId = $stateParams.orgId;
-    $scope.pendingRequests = [];    
+    $scope.orgId = $stateParams.orgId;
+    $log.log("hello from Bookkeeper controller");
+}]);
+
+myApp.controller('BkprUsrMgmtController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+    $log.log("Hello from Bookkeeper User Mgmt controller");
+
     
-    $http.get('/api/rest/joinOrgRequest/' + orgId).then(function(data){
+    //Areas: Bookkeepers, managers, workers, pending requests
+    $scope.pendingRequests = [];
+    $http.get('/api/rest/orgUsers/' + $scope.orgId).then(function(data){
 	$scope.pendingRequests = data.data;
     });
-
+    /*
+    
+    */
+    
     function getUserRequest(reqId){
 	for (var i=0;i<$scope.pendingRequests.length; i++){
 	    if ($scope.pendingRequests[i].id==reqId){
@@ -135,7 +150,7 @@ myApp.controller('BookkeeperController', ['$scope','$http','$log','$stateParams'
 	var request = getUserRequest(reqId);
 	var reqUpdated = {'id':reqId,'user':request.user,'organization':request.organization,'status':1,'approvedOrRejectedBy':$scope.userId};
 	
-	$http.put('/api/rest/joinOrgRequest/'+orgId ,JSON.stringify(reqUpdated)).then(function(data){
+	$http.put('/api/rest/orgUsers/'+orgId ,JSON.stringify(reqUpdated)).then(function(data){
 	    $log.log("OK!");
 	});
     }
@@ -144,7 +159,7 @@ myApp.controller('BookkeeperController', ['$scope','$http','$log','$stateParams'
 	$log.log(reqId);
 	$log.log("REJECT!");
     }
-    
+
 }]);
 
 myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
