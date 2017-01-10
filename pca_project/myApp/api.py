@@ -39,6 +39,21 @@ def userRoles(request,userId=None):
 
         return JsonResponse(finalResult, safe=False)
 
+    if request.method=='POST':
+        data = JSONParser().parse(request)
+
+        user = User.objects.get(pk=int(data["userId"]))        
+        org = Organization.objects.get(id = data["orgId"])
+        role = data["role"]
+        acceptedBy = User.objects.get(pk=int(data["acceptedBy"]))
+        now = datetime.now(pytz.timezone('US/Pacific'))
+        
+        request = UserOrganizationRoleRel(user=user,organization=org,role=role,status=1,approvedOrRejectedBy=acceptedBy,approvedOrRejectDate=now)
+        request.save()
+
+        serialized = OrgUsersSerializer(request)
+        return JsonResponse(serialized.data, safe=False)
+    
 @csrf_exempt
 def orgUsers(request,orgId=None):
     if request.method=="GET":        
@@ -53,11 +68,10 @@ def orgUsers(request,orgId=None):
 
         result = {'active':activeSerialized.data,'pending':pendingSerialized.data}
         return JsonResponse(result, safe=False)
-
     
     if request.method=='POST':
+        """This creates 'user join request'..."""
         data = JSONParser().parse(request)
-        userId = data["userId"]
         user = User.objects.get(pk=int(data["userId"]))
         
         org = Organization.objects.get(id = data["orgId"])
@@ -88,7 +102,7 @@ def orgUsers(request,orgId=None):
 @csrf_exempt
 def orgList(request):
     if request.method == "GET":
-        
+        """Returns list of all organizations, friendly for dropdown by region"""
         results = []
         for org in Organization.objects.all().order_by("location"):
             if len(results)==0: #if there are no items in list, add new item

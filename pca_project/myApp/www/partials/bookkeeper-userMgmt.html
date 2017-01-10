@@ -1,49 +1,66 @@
 <div>
   <h4>Bookkeepers:</h4>
   <ul class="list-group">
-    <li class="list-group-item" ng-repeat="bookie in bookkeepers">
+    <li class="list-group-item clearfix" ng-repeat="bookie in bookkeepers">
       <b>{{ bookie.userInfo.first_name}} {{ bookie.userInfo.last_name }} </b>
     </li>
   </ul>
   <hr>
   <h4>Managers:</h4>
   <ul class="list-group">
-    <li class="list-group-item" ng-repeat="manager in managers">
-      <b>{{ manager.userInfo.first_name}} {{ manager.userInfo.last_name }} </b>
+    <li class="list-group-item clearfix" ng-repeat="manager in managers">
+      <span class="pull-left">
+	<b>{{ manager.userInfo.first_name}} {{ manager.userInfo.last_name }} </b>
+      </span>
+      <span class="pull-right">
+	<button class="btn" ng-show="!isBookkeeper({{manager.userInfo.pk}})" data-toggle="tooltip" data-placement="left" title="Add Bookkeeper Permissions" ng-click="addBookkeeperPermissions($index)">
+	  <i class="glyphicon glyphicon-menu-up"></i>
+	</button>
+      </span>
     </li>
   </ul>
+
   <div ng-show="!managers.length" class="alert">
     No Managers.
   </div>
   <hr>
   <h4>Workers:</h4>
   <ul class="list-group">
-    <li class="list-group-item" ng-repeat="worker in workers">
-      <b>{{ worker.userInfo.first_name}} {{ worker.userInfo.last_name }} </b>
+    <li class="list-group-item clearfix" ng-repeat="worker in workers">
+      <span class="pull-left">
+	<b>{{ worker.userInfo.first_name}} {{ worker.userInfo.last_name }} </b>
+      </span>
+      <span class="pull-right">
+	<button ng-show="!isManager({{worker.userInfo.pk}})" class="btn" data-toggle="tooltip" data-placement="left" title="Add Manager Permissions" ng-click="addManagerPermissions($index)">
+	  <i class="glyphicon glyphicon-menu-up"></i>
+	</button>
+      </span>
     </li>
   </ul>
   <div ng-show="!workers.length" class="alert">
     No Workers!
   </div>
-
+  
   <h4>New Worker Join Requests:</h4>
   <ul class="list-group">
-    <li class="list-group-item clearfix vertical-center" ng-repeat="req in pending">
-      <font size="4"><b>{{req.userInfo.username }}</b> | name: <b>{{ req.userInfo.first_name }} {{ req.userInfo.last_name }}</b> | email : <b>{{ req.userInfo.email }}</b></font>
+    <li class="list-group-item clearfix" ng-repeat="req in pending">
+      <span class="pull-left">
+	<b>{{req.userInfo.username }}</b> | name: <b>{{ req.userInfo.first_name }} {{ req.userInfo.last_name }}</b> | email : <b>{{ req.userInfo.email }}</b>
+      </span>
       <span class="pull-right">
-	<button class="btn" ng-click="acceptUserRequest($index)">
+	<button class="btn" data-toggle="tooltip" data-placement="bottom" title="Accept" ng-click="acceptUserRequest($index)">
 	  <span class="glyphicon glyphicon-ok"></span>
 	</button>
-	<button class="btn" ng-click="rejectUserRequest($index)">
+	<button class="btn" data-toggle="tooltip" data=placement="bottom" title="Reject" ng-click="rejectUserRequest($index)">
 	  <span class="glyphicon glyphicon-remove"></span>
 	</button>
-      </span>
-      
+      </span>  
     </li>
-    <div ng-show="!pending.length" class="alert">
-      No new requests
-    </div>
   </ul>
+
+  <div ng-show="!pending.length" class="alert">
+    No new requests
+  </div>
   <hr>
   
   

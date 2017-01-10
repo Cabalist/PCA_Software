@@ -108,7 +108,7 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
     $scope.getOrgName = function(orgId){
 	for (var i = 0; i < $scope.orgList.length; i++){
 	    var locationOrgs = $scope.orgList[i].orgs;
-
+	    
 	    for (var p = 0; p < locationOrgs.length; p++){
 		var org = locationOrgs[p];
 		if(org.id == orgId){
@@ -156,17 +156,60 @@ myApp.controller('BkprUsrMgmtController', ['$scope','$http','$log','$stateParams
 	$http.put('/api/rest/orgUsers/'+$scope.orgId ,JSON.stringify(reqUpdated)).then(function(data){
 	    //Remove from Pending, add to Workers.
 	    $scope.pending.splice(indx,1);
-
+	    
 	    $scope.workers.push(data.data);
-	});
-	
+	});	
     }
-
+    
     $scope.rejectUserRequest = function(indx){
 	$log.log(indx);
 	$log.log("REJECT!");
     }
 
+    $scope.isBookkeeper = function(userId){
+	for(var i=0; i<$scope.bookkeepers.length; i++){
+	    if ($scope.bookkeepers[i].userInfo.pk==userId){
+		return true;
+	    }
+	}
+	return false;
+    }
+    
+    $scope.isManager = function(userId){
+	for(var i=0; i<$scope.managers.length; i++){
+	    if ($scope.managers[i].userInfo.pk==userId){
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    $scope.addBookkeeperPermissions = function(index){
+	var usr = $scope.workers[index];
+	var data = {'userId':usr.userInfo.pk,
+		    'orgId':$scope.orgId,
+		    'role':3,
+		    'acceptedBy':$scope.userId,
+		   };
+	
+	$http.post('/api/rest/userRoles/'+usr.userInfo.pk,JSON.stringify(data)).then(function(data){
+	    $scope.bookkeepers.push(data.data);
+	});
+    }
+    
+    $scope.addManagerPermissions = function(index){
+	var usr = $scope.workers[index];
+	var data = {'userId':usr.userInfo.pk,
+		    'orgId':$scope.orgId,
+		    'role':2,
+		    'acceptedBy':$scope.userId,
+		   };
+	
+	$http.post('/api/rest/userRoles/'+usr.userInfo.pk,JSON.stringify(data)).then(function(data){
+	    $scope.managers.push(data.data);
+	});
+	
+    }
 }]);
 
 myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
