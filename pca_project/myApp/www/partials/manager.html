@@ -5,11 +5,14 @@
 
     <h4>Forms:</h4>
     <div class="list-group">
-      <button ui-sref="manager.form1" class="btn list-group-item" ng-class="getFormClass(1);">
-	Form 1
+      <button ui-sref="manager.donors" class="btn list-group-item" ng-class="isFormActive(1);">
+	Donors Form
       </button>
-      <button ui-sref="manager.form2" class="btn list-group-item" ng-class="getFormClass(2);">
-	Form 2
+      <button ui-sref="manager.form1" class="btn list-group-item" ng-class="isFormActive(2);">
+	Form 1 -- OLD
+      </button>
+      <button ui-sref="manager.form2" class="btn list-group-item" ng-class="isFormActive(3);">
+	Form 2 -- OLD
       </button>      
     </div>
     

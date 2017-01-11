@@ -23,6 +23,11 @@ myApp.config(function($stateProvider){
 	    templateUrl: '/www/partials/manager.html',
 	    controller: 'ManagerController'
 	})
+        .state('manager.donors',{
+	    url:"/donors",
+	    templateUrl: '/www/partials/manager-donors.html',
+	    controller: 'ManagerDonorsController'
+	})
         .state('manager.form1',{
 	    url:"/form1",
 	    templateUrl: '/www/partials/forms/form1.html',
@@ -215,7 +220,7 @@ myApp.controller('BkprUsrMgmtController', ['$scope','$http','$log','$stateParams
 myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.orgId = $stateParams.orgId;
     $scope.selectedForm = null;
-    $scope.getFormClass = function(formIndex){	
+    $scope.isFormActive = function(formIndex){	
 	if ( $scope.selectedForm == formIndex){
 	    return "active";
 	}
@@ -226,8 +231,14 @@ myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', f
     });
 }]);
 
-myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+
+myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.$emit("selectForm",1);
+}]);
+
+
+myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+    $scope.$emit("selectForm",2);
     
     $scope.canvassHours=4;
     $scope.trf="";
@@ -316,7 +327,7 @@ myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', fun
 }]);
 
 myApp.controller('Form2Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
-    $scope.$emit("selectForm",2);
+    $scope.$emit("selectForm",3);
 }]);
 
 
