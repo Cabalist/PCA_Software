@@ -234,8 +234,21 @@ myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', f
 
 myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.$emit("selectForm",1);
-}]);
+    $scope.dt = new Date();
 
+    //datepicker things
+    $scope.today = function() {
+	$scope.dt = new Date();
+    };
+    $scope.today();
+    $scope.popup1 = {
+	opened: false
+    };
+    $scope.open1 = function() {
+	$scope.popup1.opened = true;
+    };
+    
+}]);
 
 myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.$emit("selectForm",2);

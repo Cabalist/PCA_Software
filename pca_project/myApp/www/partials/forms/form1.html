@@ -5,83 +5,84 @@
     <input type="text" class="form-control" value="{{ userName }}" disabled>
   </div>
   
-  <div class="input-group">
 
-  <p class="input-group">
+
+  <div class="input-group">
     <span class="input-group-addon">Date:</span>
     <input type="text" class="form-control" uib-datepicker-popup ng-model="dt" is-open="popup1.opened" ng-required="true" />
     <span class="input-group-btn">
       <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
     </span>
-  </p>
 
-  <div class="input-group">
-    <span class="input-group-addon">Canvass hours:</span>
-    <input class="form-control" type="number" id="canvassHours" ng-model="canvassHours">
-  </div>
 
-  <div class="input-group">
-    <span class="input-group-addon">Other hours:</span>
-    <select class="form-control">
-      <option>Training</option>
-      <option>Travel</option>
-      <option>Admin</option>
-    </select>
-    <input class="form-control" type="number" id="canvassHours" value="0">
-  </div>
-  
-  <div class="input-group">
-    <span class="input-group-addon">TRF:</span>
-    <input type="text" class="form-control" placeholder="What's TRF?" ng-value="trf">
-  </div>
-  
-  <br>
-  <h4>Donations:</h4>
-  
-  <ul class="list-group">
-    <li class="list-group-item" ng-repeat="donation in donations">
-      {{ donation.chk }}  - {{ donation.cc }} - {{ donation.money  }}
-    </li>
-  </ul>
-
-  
-  <div class="input-group">
-    <span class="input-group-addon clearfix">
-      CHK:
-    </span>
-    <input type="text" class="form-control" ng-model="chk">
-    <span class="input-group-addon">
-      CC Face Val:
-    </span>
-    <input type="text" class="form-control" ng-model="cc">
-    <span class="input-group-addon clearfix">
-      $$:
-    </span>
-    <input type="text" class="form-control" ng-model="money">
+    <div class="input-group">
+      <span class="input-group-addon">Canvass hours:</span>
+      <input class="form-control" type="number" id="canvassHours" ng-model="canvassHours">
+    </div>
     
-    <span class="input-group-btn">
-      <button class="btn" ng-click="addDonation()">
-	<span class="glyphicon glyphicon-plus"></span>
-      </button>
-    </span>
-  </div>
-  
-  <div role="alert">
-    <span class="error" ng-show="!isMoneyNumber()" ng-hide="isMoneyNumber()">$$ Must be a number!</span>
-  </div>
-  <br>
-  <button class="btn btn-primary" ng-disabled="!donations.length" ng-click="submitClick()">Submit!</button>
-  
+    <div class="input-group">
+      <span class="input-group-addon">Other hours:</span>
+      <select class="form-control">
+	<option>Training</option>
+	<option>Travel</option>
+	<option>Admin</option>
+      </select>
+      <input class="form-control" type="number" id="canvassHours" value="0">
+    </div>
+    
+    <div class="input-group">
+      <span class="input-group-addon">TRF:</span>
+      <input type="text" class="form-control" placeholder="What's TRF?" ng-value="trf">
+    </div>
+    
+    <br>
+    <h4>Donations:</h4>
+    
+    <ul class="list-group">
+      <li class="list-group-item" ng-repeat="donation in donations">
+	{{ donation.chk }}  - {{ donation.cc }} - {{ donation.money  }}
+      </li>
+    </ul>
+    
+    
+    <div class="input-group">
+      <span class="input-group-addon clearfix">
+	CHK:
+      </span>
+      <input type="text" class="form-control" ng-model="chk">
+      <span class="input-group-addon">
+	CC Face Val:
+      </span>
+      <input type="text" class="form-control" ng-model="cc">
+      <span class="input-group-addon clearfix">
+	$$:
+      </span>
+      <input type="text" class="form-control" ng-model="money">
+      
+      <span class="input-group-btn">
+	<button class="btn" ng-click="addDonation()">
+	  <span class="glyphicon glyphicon-plus"></span>
+	</button>
+      </span>
+    </div>
+    
+    <div role="alert">
+      <span class="error" ng-show="!isMoneyNumber()" ng-hide="isMoneyNumber()">$$ Must be a number!</span>
+    </div>
+    <br>
+    <button class="btn btn-primary" ng-disabled="!donations.length" ng-click="submitClick()">Submit!</button>
+    
+    
+    
+    
+    <br>
+    <br>
+    <h4>History here</h4>
+    <ul class="list-group">
+      <li class="list-group-item" ng-repeat="submit in submitHistory | orderBy:'-id'  ">
+	{{ submit.date }} --- $$$$ {{ submit.total }}
+      </li>
+    </ul>
+    
 
   
-
-  <br>
-  <br>
-  <h4>History here</h4>
-  <ul class="list-group">
-    <li class="list-group-item" ng-repeat="submit in submitHistory | orderBy:'-id'  ">
-      {{ submit.date }} --- $$$$ {{ submit.total }}
-    </li>
-  </ul>
-
-</div>

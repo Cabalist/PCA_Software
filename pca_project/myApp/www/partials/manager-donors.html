@@ -1,1 +1,60 @@
-Hello from Donors Management 
+<div>
+  <h3>Donors Form</h3>
+  <div class="input-group">
+    <span class="input-group-addon">Recruiter:</span>
+    <select class="form-control">
+      <option></option>
+      <option>Alex</option>
+      <option>Greg</option>
+      <option>Don</option>
+    </select>
+  </div>
+  
+  <div class="input-group">
+    <span class="input-group-addon">Date:</span>
+    <input type="text" class="form-control" uib-datepicker-popup ng-model="dt" is-open="popup1.opened" ng-required="true" />
+    <span class="input-group-btn">
+      <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+    </span>
+  </div>
+  
+  
+  <hr>
+  
+  <div class="input-group">
+    <span class="input-group-addon">Name:</span>
+    <input type="text" class="form-control" />
+  </div>
+  
+  <div class="input-group">
+    <span class="input-group-addon">Address:</span>
+    <input type="text" class="form-control" />
+  </div>
+
+  <div class="input-group">
+    <span class="input-group-addon">City:</span>
+    <input type="text" class="form-control" />
+    <span class="input-group-addon">State:</span>
+    <input type="text" class="form-control" />
+    <span class="input-group-addon">Zip:</span>
+    <input type="text" class="form-control" />
+  </div>
+
+  <div class="input-group">
+    <span class="input-group-addon">email:</span>
+    <input type="text" class="form-control" />
+  </div>
+
+  <div class="input-group">
+    <span class="input-group-addon">phone:</span>
+    <input type="text" class="form-control" />
+    <span class="input-group-addon">Over 18?:</span>
+    <div class="form-control">
+      <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked> Yes
+      <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> No
+    </div>
+
+  </div>
+
+  
+</div>
