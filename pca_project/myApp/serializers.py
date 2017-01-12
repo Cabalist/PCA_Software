@@ -28,6 +28,11 @@ class UserOrgRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserOrganizationRoleRel
         fields= ['id','user','organization','request_date','status','approvedOrRejectedBy']
+
+class DonationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Donation
+        fields= ['id','donor','donationType','value','addedOn']
         
 #class Form1Serializer(serializers.ModelSerializer):
 #    class Meta:

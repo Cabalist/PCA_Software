@@ -133,10 +133,48 @@ def orgWorkers(request,orgId=None):
 @csrf_exempt
 def donation(request,orgId=None):
     if request.method == "POST":
-        data = JSONParser().parse(request)
-        print(data)
+        #POST INPUT:
+        #{donor:{},donation:{}}
+        #Where donor can be an ID of an existing donor, or a new donor.
 
-        return JsonResponse({'test':[]}, safe=False)
+        
+        data = JSONParser().parse(request)
+        donor = data["donor"]
+        donation = data["donation"]
+        
+        donorObj = None
+        now = datetime.now(pytz.timezone('US/Pacific'))
+        addedBy = User.objects.get(pk=request.user.id)
+        #if got donor description
+        if hasattr(donor,'id'):
+            donorObj = Donor.objects.get(id=donor['id'])
+    
+        else:
+            user = User.objects.get(pk=donor["user"]) #this refers to 'worker' or recruiter...
+            org = Organization.objects.get(id=donor["org"])
+            name = donor["name"]
+            addr = donor["addr"]
+            city = donor["city"]
+            state= donor["state"]
+            zipcode = donor["zip"]
+            email = donor["email"]
+            phone = donor["phone"]
+            over18 = bool(int(donor["over18"]))
+            
+            donorObj = Donor(user=user,org=org,name=name,addr=addr,city=city,state=state,zipcode=zipcode,email=email,phone=phone,over18=over18,addedOn=now,addedBy=addedBy)
+            donorObj.save()
+        
+        donationType = int(donation["donationType"])
+        donationObj = None
+        value = donation["value"]
+        if donationType==1: #cash donation          
+            donationObj = Donation(donor = donorObj, donationType=1,value=value, addedOn = now,addedBy=addedBy)
+            
+            donationObj.save()
+        
+
+        serialized = DonationSerializer(donationObj)
+        return JsonResponse(serialized.data, safe=False)
 """
 @csrf_exempt
 def form1(request,userId=None,orgId=None):

@@ -26,7 +26,7 @@ class PayTerms(models.Model):
     description = models.CharField(max_length=512)
     notes = models.CharField(max_length=1024)
 
-class Donors(models.Model):
+class Donor(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)  #This refers to recruiter 
     org = models.ForeignKey(Organization,on_delete=models.CASCADE)
     name = models.CharField(max_length=32)
@@ -37,15 +37,15 @@ class Donors(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=16)
     over18 = models.BooleanField()
-    addedOn = models.DateField()
+    addedOn = models.DateTimeField()
     addedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="addedDonor")
 
 class Donation(models.Model):
-    donor = models.ForeignKey(Donors)
-    payTerms = models.ForeignKey(PayTerms)
+    donor = models.ForeignKey(Donor)
+    payTerms = models.ForeignKey(PayTerms,null=True)
     donationType = models.IntegerField() #1 - cash, 2 - creditcard, 3- check
     value = models.FloatField()
-    addedOn = models.DateField()
+    addedOn = models.DateTimeField()
     addedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="addedDonation")
 
 class Check(models.Model):
