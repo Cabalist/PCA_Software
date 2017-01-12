@@ -20,7 +20,7 @@
   
   
   <hr>
-  
+  <h4>Donor:</h4>
   <div class="input-group">
     <span class="input-group-addon">Name:</span>
     <input type="text" class="form-control" />
@@ -41,20 +41,89 @@
   </div>
 
   <div class="input-group">
-    <span class="input-group-addon">email:</span>
+    <span class="input-group-addon">Email:</span>
     <input type="text" class="form-control" />
   </div>
 
   <div class="input-group">
-    <span class="input-group-addon">phone:</span>
+    <span class="input-group-addon">Phone:</span>
     <input type="text" class="form-control" />
     <span class="input-group-addon">Over 18?:</span>
     <div class="form-control">
-      <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked> Yes
-      <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> No
+      <input type="radio" name="over18" id="over18" value="option1" checked> Yes
+      <input type="radio" name="over18" id="under18" value="option2"> No
     </div>
-
   </div>
 
+  <hr>
+  <h4>Donation:</h4>
+ 
+  <div class="input-group">
+    <span class="input-group-addon">Type:</span>
+    <div class="form-control">
+      <input type="radio" ng-model="donationType" id="dcash" ng-value=1 checked>Cash
+      <input type="radio" ng-model="donationType" id="dcc" ng-value=2 />CreditCard
+      <input type="radio" ng-model="donationType" id="dcheck" ng-value=3 />Check
+    </div>
+  </div>
+  
+  <div ng-show="donationType==1">
+    <div class="input-group">
+      <span class="input-group-addon">Value:</span>
+      <span class="input-group-addon">$</span>
+      <input type="text" class="form-control" placeholder="50.00" />
+    </div>
+  </div>
+
+  <div ng-show="donationType==2">
+    <div class="input-group">
+      <span class="input-group-addon">Name On Card:</span>
+      <input type="text" class="form-control" />
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">Card Last 4:</span>
+      <input type="text" class="form-control" />
+      <span class="input-group-addon">Exp:</span>
+      <input type="text" class="form-control" placeholder="MM/YYYY"/>
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon">Value:</span>
+      <span class="input-group-addon">$</span>
+      <input type="text" class="form-control" />
+      <span class="input-group-addon">Recurring:</span>
+      <div class="form-control">
+	<input type="radio" ng-model="ccRecurring" ng-value=1 checked>No
+	<input type="radio" ng-model="ccRecurring" ng-value=2 />Yes
+      </div>
+    </div>
+  </div>
+
+  <div ng-show="donationType==3">
+    <div class="input-group">
+      <span class="input-group-addon">Check Number:</span>
+      <input type="text" class="form-control" />
+    </div>
+    
+    <div class="input-group">
+      <span class="input-group-addon">Check Date:</span>
+      <input type="text" class="form-control" uib-datepicker-popup ng-model="checkDt" is-open="popup2.opened" ng-required="true" />
+      <span class="input-group-btn">
+	<button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+      </span>
+
+    </div>
+    
+    <div class="input-group">
+      <span class="input-group-addon">Value:</span>
+      <span class="input-group-addon">$</span>
+      <input type="text" class="form-control" />
+    </div>
+  </div>
+    
+
+  <br>
+  
+  <button class="btn btn-primary" ng-click="submitClick()">Submit</button>
   
 </div>

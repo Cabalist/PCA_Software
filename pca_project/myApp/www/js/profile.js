@@ -167,7 +167,6 @@ myApp.controller('BkprUsrMgmtController', ['$scope','$http','$log','$stateParams
     }
     
     $scope.rejectUserRequest = function(indx){
-	$log.log(indx);
 	$log.log("REJECT!");
     }
 
@@ -235,17 +234,33 @@ myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', f
 myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.$emit("selectForm",1);
     $scope.dt = new Date();
-
+    $scope.checkDt = new Date();
+    $scope.donationType=1;
+    $scope.ccRecurring=1;
     //datepicker things
     $scope.today = function() {
 	$scope.dt = new Date();
+	$scope.checkDt = new Date();
     };
     $scope.today();
     $scope.popup1 = {
 	opened: false
     };
+
+    $scope.popup2 = {
+	opened: false
+    };
     $scope.open1 = function() {
 	$scope.popup1.opened = true;
+    };
+
+    $scope.open2 = function() {
+	$scope.popup2.opened = true;
+    };
+
+
+    $scope.submitClick = function(){
+
     };
     
 }]);
