@@ -117,6 +117,20 @@ def orgList(request):
 
         return JsonResponse(results, safe=False)
 
+@csrf_exempt
+def orgWorkers(request,orgId=None):
+    if request.method == "GET":
+        """Returns list of all active workers in an organizations"""
+        org = Organization.objects.get(id=orgId)
+        query = UserOrganizationRoleRel.objects.filter(status=1).filter(role=1).filter(organization=org)
+
+        result = query.all()
+        serialized = OrgUsersSerializer(result,many=True)
+        
+
+        return JsonResponse(serialized.data, safe=False)
+
+    
 """
 @csrf_exempt
 def form1(request,userId=None,orgId=None):

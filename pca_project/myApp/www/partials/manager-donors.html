@@ -2,14 +2,10 @@
   <h3>Donors Form</h3>
   <div class="input-group">
     <span class="input-group-addon">Recruiter:</span>
-    <select class="form-control">
-      <option></option>
-      <option>Alex</option>
-      <option>Greg</option>
-      <option>Don</option>
+    <select class="form-control" ng-model="selectedWorker" ng-options="worker.userInfo.first_name+' '+worker.userInfo.last_name for worker in workers track by worker.userInfo.pk">
     </select>
   </div>
-  
+
   <div class="input-group">
     <span class="input-group-addon">Date:</span>
     <input type="text" class="form-control" uib-datepicker-popup ng-model="dt" is-open="popup1.opened" ng-required="true" />
@@ -111,7 +107,6 @@
       <span class="input-group-btn">
 	<button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
       </span>
-
     </div>
     
     <div class="input-group">
@@ -120,8 +115,7 @@
       <input type="text" class="form-control" />
     </div>
   </div>
-    
-
+  
   <br>
   
   <button class="btn btn-primary" ng-click="submitClick()">Submit</button>

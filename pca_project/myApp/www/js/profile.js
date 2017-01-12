@@ -237,6 +237,7 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
     $scope.checkDt = new Date();
     $scope.donationType=1;
     $scope.ccRecurring=1;
+    $scope.selectedWorker = null;
     //datepicker things
     $scope.today = function() {
 	$scope.dt = new Date();
@@ -258,6 +259,11 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
 	$scope.popup2.opened = true;
     };
 
+    //Get org workers list.
+    $scope.workers = [];
+    $http.get('/api/rest/orgWorkers/' + $scope.orgId).then(function(data){
+	$scope.workers = data.data;
+    });    
 
     $scope.submitClick = function(){
 
