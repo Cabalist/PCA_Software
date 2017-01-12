@@ -33,6 +33,7 @@ class Donors(models.Model):
     addr = models.CharField(max_length=64)
     city = models.CharField(max_length=16)
     state = models.CharField(max_length=2)
+    zipcode = models.CharField(max_length=12)
     email = models.EmailField()
     phone = models.CharField(max_length=16)
     over18 = models.BooleanField()
@@ -42,10 +43,10 @@ class Donors(models.Model):
 class Donation(models.Model):
     donor = models.ForeignKey(Donors)
     payTerms = models.ForeignKey(PayTerms)
-    date = models.DateField()
     donationType = models.IntegerField() #1 - cash, 2 - creditcard, 3- check
     value = models.FloatField()
-    recurring = models.BooleanField()
+    addedOn = models.DateField()
+    addedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="addedDonation")
 
 class Check(models.Model):
     donation = models.ForeignKey(Donation)
@@ -58,9 +59,11 @@ class Check(models.Model):
 
 class CreditCard(models.Model):
     donation = models.ForeignKey(Donation)
-    last4 = models.IntegerField()
     nameOnCard = models.CharField(max_length=32)
-
+    last4 = models.IntegerField()
+    exp = models.CharField(max_length=7)
+    recurring = models.BooleanField()
+    
 class CCTransaction(models.Model):
     creditCard = models.ForeignKey(CreditCard)
     proccessedBy = models.ForeignKey(settings.AUTH_USER_MODEL)

@@ -13,41 +13,40 @@
       <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
     </span>
   </div>
-  
-  
+
   <hr>
   <h4>Donor:</h4>
   <div class="input-group">
     <span class="input-group-addon">Name:</span>
-    <input type="text" class="form-control" />
+    <input type="text" class="form-control" ng-model="donorName"/>
   </div>
   
   <div class="input-group">
     <span class="input-group-addon">Address:</span>
-    <input type="text" class="form-control" />
+    <input type="text" class="form-control" ng-model="donorAddr"/>
   </div>
 
   <div class="input-group">
     <span class="input-group-addon">City:</span>
-    <input type="text" class="form-control" />
+    <input type="text" class="form-control" ng-model="donorCity"/>
     <span class="input-group-addon">State:</span>
-    <input type="text" class="form-control" />
+    <input type="text" class="form-control" ng-model="donorState"/>
     <span class="input-group-addon">Zip:</span>
-    <input type="text" class="form-control" />
+    <input type="text" class="form-control" ng-model="donorZip"/>
   </div>
 
   <div class="input-group">
     <span class="input-group-addon">Email:</span>
-    <input type="text" class="form-control" />
+    <input type="text" class="form-control" ng-model="donorEmail"/>
   </div>
 
   <div class="input-group">
     <span class="input-group-addon">Phone:</span>
-    <input type="text" class="form-control" />
+    <input type="text" class="form-control" ng-model="donorPhone"/>
     <span class="input-group-addon">Over 18?:</span>
     <div class="form-control">
-      <input type="radio" name="over18" id="over18" value="option1" checked> Yes
-      <input type="radio" name="over18" id="under18" value="option2"> No
+      <input type="radio" ng-model="donorOver18" id="over18" value="1" checked > Yes
+      <input type="radio" ng-model="donorOver18" id="under18" value="0"> No
     </div>
   </div>
 
@@ -67,7 +66,7 @@
     <div class="input-group">
       <span class="input-group-addon">Value:</span>
       <span class="input-group-addon">$</span>
-      <input type="text" class="form-control" placeholder="50.00" />
+      <input type="text" class="form-control" ng-model="donationValue" />
     </div>
   </div>
 
@@ -86,7 +85,7 @@
     <div class="input-group">
       <span class="input-group-addon">Value:</span>
       <span class="input-group-addon">$</span>
-      <input type="text" class="form-control" />
+      <input type="text" class="form-control" ng-model="donationValue"/>
       <span class="input-group-addon">Recurring:</span>
       <div class="form-control">
 	<input type="radio" ng-model="ccRecurring" ng-value=1 checked>No
@@ -112,7 +111,7 @@
     <div class="input-group">
       <span class="input-group-addon">Value:</span>
       <span class="input-group-addon">$</span>
-      <input type="text" class="form-control" />
+      <input type="text" class="form-control" ng-model="donationValue"/>
     </div>
   </div>
   

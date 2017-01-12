@@ -235,9 +235,18 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
     $scope.$emit("selectForm",1);
     $scope.dt = new Date();
     $scope.checkDt = new Date();
+    $scope.donorName=null;
+    $scope.donorAddr=null;
+    $scope.donorCity=null;
+    $scope.donorState=null;
+    $scope.donorZip=null;
+    $scope.donorEmail=null;
+    $scope.donorPhone=null;
     $scope.donationType=1;
     $scope.ccRecurring=1;
     $scope.selectedWorker = null;
+    $scope.donorOver18 = "1";
+    $scope.donationValue = 0 ;
     //datepicker things
     $scope.today = function() {
 	$scope.dt = new Date();
@@ -266,7 +275,28 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
     });    
 
     $scope.submitClick = function(){
+	var donor = { 'user': $scope.selectedWorker.userInfo.pk,
+		      'org': $scope.orgId,
+		      'name': $scope.donorName,
+		      'addr': $scope.donorAddr,
+		      'city': $scope.donorCity,
+		      'state': $scope.donorState,
+		      'zip': $scope.donorZip,
+		      'email': $scope.donorEmail,
+		      'phone': $scope.donorPhone,
+		      'over18': $scope.donorOver18};
 
+	var donation = null;
+	if ($scope.donationType==1){
+	    donation = { 'donationType' : 1,
+			 'value': $scope.donationValue
+		       };
+	}
+
+	var data = {'donor':donor,'donation':donation};
+	$http.post('/api/rest/donation',JSON.stringify(data)).then(function(data){
+	    $log.log("OK");
+	});
     };
     
 }]);

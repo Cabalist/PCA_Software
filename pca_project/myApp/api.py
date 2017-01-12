@@ -130,7 +130,13 @@ def orgWorkers(request,orgId=None):
 
         return JsonResponse(serialized.data, safe=False)
 
-    
+@csrf_exempt
+def donation(request,orgId=None):
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+        print(data)
+
+        return JsonResponse({'test':[]}, safe=False)
 """
 @csrf_exempt
 def form1(request,userId=None,orgId=None):
