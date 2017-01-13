@@ -48,6 +48,14 @@ myApp.config(function($stateProvider){
 myApp.controller('mainController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.userId = document.getElementById('userId').value;
     $scope.userName = document.getElementById('userName').value;
+    $scope.orgList = [];
+
+    //TODO FIX THIS ... OrgList is used to populate org list dropdown in /profile ,
+    //  Also this information used to get org name in org page...
+    $http.get('/api/rest/orgList').then(function(data){
+	$scope.orgList = data.data;
+    });
+    
 }]);
 
 myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,$http,$log) {
@@ -55,15 +63,10 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
 
     $scope.userOrgs = [];
     $scope.userPendingOrgs = [];
-    $scope.orgList = [];
     
     $http.get('/api/rest/userRoles/' + $scope.userId).then(function(data){
 	$scope.userOrgs = data.data.roles;
 	$scope.userPendingOrgs = data.data.pending;
-    });
-
-    $http.get('/api/rest/orgList').then(function(data){
-	$scope.orgList = data.data;
     });
     
     $scope.getRoleName=function(roleNum){
@@ -126,6 +129,17 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
 
 myApp.controller('BookkeeperController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.orgId = $stateParams.orgId;
+    $scope.orgName= null;
+    //Set org name
+    for(var i=0;i<$scope.orgList.length;i++){
+	var locationList = $scope.orgList[i].orgs;
+	for(var p=0;p<locationList.length;p++){
+	    if (locationList[p].id==$scope.orgId){
+		$scope.orgName=locationList[p].name;
+	    }
+	}
+    }
+
     $log.log("hello from Bookkeeper controller");
 }]);
 
@@ -218,6 +232,7 @@ myApp.controller('BkprUsrMgmtController', ['$scope','$http','$log','$stateParams
 
 myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.orgId = $stateParams.orgId;
+    $scope.orgName= null;
     $scope.selectedForm = null;
     $scope.isFormActive = function(formIndex){	
 	if ( $scope.selectedForm == formIndex){
@@ -228,6 +243,16 @@ myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', f
     $scope.$on("selectForm",function(event,formIndex){
 	$scope.selectedForm = formIndex;
     });
+
+    //Set org name
+    for(var i=0;i<$scope.orgList.length;i++){
+	var locationList = $scope.orgList[i].orgs;
+	for(var p=0;p<locationList.length;p++){
+	    if (locationList[p].id==$scope.orgId){
+		$scope.orgName=locationList[p].name;
+	    }
+	}
+    }    
 }]);
 
 
@@ -295,7 +320,24 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
 
 	var data = {'donor':donor,'donation':donation};
 	$http.post('/api/rest/donation',JSON.stringify(data)).then(function(data){
+	    //clear form
+	    $scope.donorName=null;
+	    $scope.donorAddr=null;
+	    $scope.donorCity=null;
+	    $scope.donorState=null;
+	    $scope.donorZip=null;
+	    $scope.donorEmail=null;
+	    $scope.donorPhone=null;
+	    $scope.donorOver18 = "1";
+	    
+	    $scope.donationValue = 0 ;
+	    //cc specific
 	    $log.log("OK");
+
+	    
+	    //check specific
+
+
 	});
     };
     
