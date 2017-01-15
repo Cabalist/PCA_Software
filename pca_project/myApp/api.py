@@ -185,7 +185,7 @@ def donationHist(request,userId=None,orgId=None):
         org = Organization.objects.filter(id=orgId)
 
 
-        query = Donation.objects.filter(user=user).filter(org=org) #Todo... filter last 30 days.
+        query = Donation.objects.filter(user=user).filter(org=org).order_by("-formDate") #Todo... filter last 30 days.
         results = query.all()
 
         serialized = DonationSerializer(results,many=True)

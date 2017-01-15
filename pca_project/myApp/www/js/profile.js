@@ -358,16 +358,56 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
 	});
     };
 
+    function getDateIndex(hist,date){
+	for(var i=0;i<hist.length;i++){
+	    if(hist[i].formDate==date){
+		return i;
+	    }
+	}
+
+	return -1;
+    };
 
     $scope.recruiterChange = function(userId){
 	//get user donation history for past 30 days
 	$http.get('/api/rest/donationHist/' + userId+'/'+$scope.orgId).then(function(data){
-	    $scope.history= data.data ;
-	    //$scope.submitHistory = data.data.history;
-	});
+	    var hist = [];
+	    var donations = data.data;
 	
-	$log.log(userId);
+	    for(var i=0;i<donations.length;i++){
+		var donation = donations[i];
+	
+		var dateIndex = getDateIndex(hist,donation.formDate);
+		if (dateIndex==-1){ //if date doesn't exist in hist, create it.
+		    hist.push({'formDate':donation.formDate,'donations':[donation]});
+		}else{ //if date exists, need to append to donations for that day.
+		    hist[dateIndex].donations.push(donation);
+		}
+
+	    }
+	    $scope.history = hist;
+	});	
     };
+
+    $scope.donationTypeStr = function(type){
+	if (type=='1'){
+	    return "Cash";
+	}else if (type=='2'){
+	    return "Cred Card";
+	}else if (type=='3'){
+	    return "Check";
+	}
+    };
+
+    $scope.dayTotal = function(dayIndx){
+	var day = $scope.history[dayIndx];
+	var sum = 0;
+	for(var i = 0;i<day.donations.length;i++){
+	    sum += day.donations[i].value;
+	}
+	return sum;
+    };
+    
 }]);
 
 myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {

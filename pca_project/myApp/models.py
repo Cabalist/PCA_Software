@@ -29,7 +29,6 @@ class PayTerms(models.Model):
 class Donor(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)  #This refers to recruiter 
     org = models.ForeignKey(Organization,on_delete=models.CASCADE)
-
     name = models.CharField(max_length=32)
     addr = models.CharField(max_length=64)
     city = models.CharField(max_length=16)

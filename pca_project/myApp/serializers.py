@@ -32,7 +32,7 @@ class UserOrgRoleSerializer(serializers.ModelSerializer):
 class DonationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Donation
-        fields= ['id','donor','donationType','value','addedOn']
+        fields= ['id','formDate','donor','donationType','value','addedOn']
 
 #class Form1Serializer(serializers.ModelSerializer):
 #    class Meta:
