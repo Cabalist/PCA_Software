@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from myApp.models import UserOrganizationRoleRel, Organization
 from myApp.serializers import *
-from datetime import datetime
+import datetime
 import pytz
 
 @csrf_exempt
@@ -46,7 +46,7 @@ def userRoles(request,userId=None):
         org = Organization.objects.get(id = data["orgId"])
         role = data["role"]
         acceptedBy = User.objects.get(pk=int(data["acceptedBy"]))
-        now = datetime.now(pytz.timezone('US/Pacific'))
+        now = datetime.datetime.now(pytz.timezone('US/Pacific'))
         
         request = UserOrganizationRoleRel(user=user,organization=org,role=role,status=1,approvedOrRejectedBy=acceptedBy,approvedOrRejectDate=now)
         request.save()
@@ -76,7 +76,7 @@ def orgUsers(request,orgId=None):
         
         org = Organization.objects.get(id = data["orgId"])
 
-        now  = datetime.now(pytz.timezone('US/Pacific'))
+        now  = datetime.datetime.now(pytz.timezone('US/Pacific'))
         #If advStatus = active, need to unset previous active.
         
         request = UserOrganizationRoleRel(user=user,organization=org,role=1,request_date=now,status=0)
@@ -89,7 +89,7 @@ def orgUsers(request,orgId=None):
     if request.method == "PUT":
         data = JSONParser().parse(request)
         reqId = data["id"]
-        now  = datetime.now(pytz.timezone('US/Pacific'))
+        now  = datetime.datetime.now(pytz.timezone('US/Pacific'))
 
         reqObj = UserOrganizationRoleRel.objects.filter(id=data['id']).update(status=data['status'],approvedOrRejectedBy=data['approvedOrRejectedBy'])
 
@@ -141,17 +141,17 @@ def donation(request,orgId=None):
         data = JSONParser().parse(request)
         donor = data["donor"]
         donation = data["donation"]
+        user = User.objects.get(pk=donation["user"]) #this refers to 'worker' or recruiter...
+        org = Organization.objects.get(id=donation["org"])
         
         donorObj = None
-        now = datetime.now(pytz.timezone('US/Pacific'))
+        now = datetime.datetime.now(pytz.timezone('US/Pacific'))
         addedBy = User.objects.get(pk=request.user.id)
         #if got donor description
         if hasattr(donor,'id'):
             donorObj = Donor.objects.get(id=donor['id'])
     
         else:
-            user = User.objects.get(pk=donor["user"]) #this refers to 'worker' or recruiter...
-            org = Organization.objects.get(id=donor["org"])
             name = donor["name"]
             addr = donor["addr"]
             city = donor["city"]
@@ -165,15 +165,31 @@ def donation(request,orgId=None):
             donorObj.save()
         
         donationType = int(donation["donationType"])
+        dateLi = donation["date"].split()
+        date = datetime.date(int(dateLi[0]),int(dateLi[1]),int(dateLi[2]))
         donationObj = None
         value = donation["value"]
         if donationType==1: #cash donation          
-            donationObj = Donation(donor = donorObj, donationType=1,value=value, addedOn = now,addedBy=addedBy)
+            donationObj = Donation(user=user,org=org, formDate=date, donor = donorObj, donationType=1,value=value, addedOn = now,addedBy=addedBy)
             
             donationObj.save()
         
-
         serialized = DonationSerializer(donationObj)
+        return JsonResponse(serialized.data, safe=False)
+
+@csrf_exempt
+def donationHist(request,userId=None,orgId=None):
+    if request.method == "GET":
+        """Returns list of all active workers in an organizations"""
+        user = User.objects.get(pk=userId)
+        org = Organization.objects.filter(id=orgId)
+
+
+        query = Donation.objects.filter(user=user).filter(org=org) #Todo... filter last 30 days.
+        results = query.all()
+
+        serialized = DonationSerializer(results,many=True)
+        
         return JsonResponse(serialized.data, safe=False)
 """
 @csrf_exempt

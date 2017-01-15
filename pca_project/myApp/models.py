@@ -29,6 +29,7 @@ class PayTerms(models.Model):
 class Donor(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)  #This refers to recruiter 
     org = models.ForeignKey(Organization,on_delete=models.CASCADE)
+
     name = models.CharField(max_length=32)
     addr = models.CharField(max_length=64)
     city = models.CharField(max_length=16)
@@ -41,8 +42,11 @@ class Donor(models.Model):
     addedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="addedDonor")
 
 class Donation(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)  #This refers to recruiter
+    org = models.ForeignKey(Organization)
     donor = models.ForeignKey(Donor)
     payTerms = models.ForeignKey(PayTerms,null=True)
+    formDate = models.DateField()
     donationType = models.IntegerField() #1 - cash, 2 - creditcard, 3- check
     value = models.FloatField()
     addedOn = models.DateTimeField()

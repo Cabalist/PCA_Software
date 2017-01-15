@@ -54,8 +54,7 @@ myApp.controller('mainController', ['$scope','$http','$log','$stateParams', func
     //  Also this information used to get org name in org page...
     $http.get('/api/rest/orgList').then(function(data){
 	$scope.orgList = data.data;
-    });
-    
+    });    
 }]);
 
 myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,$http,$log) {
@@ -272,6 +271,23 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
     $scope.selectedWorker = null;
     $scope.donorOver18 = "1";
     $scope.donationValue = 0 ;
+
+    //history section
+    $scope.history = [];
+
+    $scope.oneAtAtime=true; //thid doesn't work?
+    //init status for each item in history...
+    $scope.histStatus = {'isOpen':[]};
+    $scope.initHist = function(){
+	
+	for (var i =0;i< $scope.history.length;i++){
+	    $scope.histStatus[i]=false;
+	};
+	if ($scope.history.length){
+	    $scope.histStatus.isOpen[0]=true;
+	}
+    };
+        
     //datepicker things
     $scope.today = function() {
 	$scope.dt = new Date();
@@ -313,8 +329,11 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
 
 	var donation = null;
 	if ($scope.donationType==1){
-	    donation = { 'donationType' : 1,
-			 'value': $scope.donationValue
+	    donation = {'user': $scope.selectedWorker.userInfo.pk,
+			'org': $scope.orgId,
+			'donationType' : 1,
+			'date': moment($scope.dt).format("YYYY MM DD"),
+			'value': $scope.donationValue
 		       };
 	}
 
@@ -336,11 +355,19 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
 
 	    
 	    //check specific
-
-
 	});
     };
-    
+
+
+    $scope.recruiterChange = function(userId){
+	//get user donation history for past 30 days
+	$http.get('/api/rest/donationHist/' + userId+'/'+$scope.orgId).then(function(data){
+	    $scope.history= data.data ;
+	    //$scope.submitHistory = data.data.history;
+	});
+	
+	$log.log(userId);
+    };
 }]);
 
 myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {

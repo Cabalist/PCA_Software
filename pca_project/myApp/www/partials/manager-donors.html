@@ -1,8 +1,8 @@
-<div>
+<div class="col-lg-6">
   <h3>Donors Form</h3>
   <div class="input-group">
     <span class="input-group-addon">Recruiter:</span>
-    <select class="form-control" ng-model="selectedWorker" ng-options="worker.userInfo.first_name+' '+worker.userInfo.last_name for worker in workers track by worker.userInfo.pk">
+    <select class="form-control" ng-model="selectedWorker" ng-options="worker.userInfo.first_name+' '+worker.userInfo.last_name for worker in workers track by worker.userInfo.pk" ng-change="recruiterChange(selectedWorker.userInfo.pk)">
     </select>
   </div>
 
@@ -127,5 +127,29 @@
   <br>
   
   <button class="btn btn-primary" ng-click="submitClick()">Submit</button>
+  
+</div>
+
+<div class="col-lg-4">
+  
+  <div ng-show="history.length">
+    <br>
+    <br>
+    <h4>History</h4>
+    <uib-accordion  close-others="oneAtATime" >
+      
+      <div uib-accordion-group class="panel-default" ng-repeat="day in history" is-open="histStatus.isOpen[$index]">
+	<uib-accordion-heading> date   <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': histStatus.isOpen[$index], 'glyphicon-chevron-right': !histStatus.isOpen[$index]}"></i>
+	</uib-accordion-heading>
+	<ul class="list-group">
+	  <li class="list-group-item">cash  $55</li>
+	  <li class="list-group-item">CC  $20</li>
+	  <li class="list-group-item">check $100</li>
+	</ul>
+	
+      </div>
+      
+    </uib-accordion>
+  </div>
   
 </div>
