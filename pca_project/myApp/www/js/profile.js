@@ -427,7 +427,7 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
 	if (type=='1'){
 	    return "Cash";
 	}else if (type=='2'){
-	    return "Cred Card";
+	    return "Credit Card";
 	}else if (type=='3'){
 	    return "Check";
 	}
