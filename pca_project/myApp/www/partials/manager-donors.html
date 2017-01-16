@@ -82,13 +82,13 @@
   <div ng-show="donationType==2">
     <div class="input-group">
       <span class="input-group-addon">Name On Card:</span>
-      <input type="text" class="form-control" />
+      <input type="text" class="form-control" ng-model="nameOnCard"/>
     </div>
     <div class="input-group">
       <span class="input-group-addon">Card Last 4:</span>
-      <input type="text" class="form-control" />
+      <input type="text" class="form-control" ng-model="cardLast4"/>
       <span class="input-group-addon">Exp:</span>
-      <input type="text" class="form-control" placeholder="MM/YYYY"/>
+      <input type="text" class="form-control" ng-model="cardExp" placeholder="MM/YYYY"/>
     </div>
 
     <div class="input-group">
@@ -97,8 +97,8 @@
       <input type="text" class="form-control" ng-model="donationValue"/>
       <span class="input-group-addon">Recurring:</span>
       <div class="form-control">
-	<input type="radio" ng-model="ccRecurring" ng-value=1 checked>No
-	<input type="radio" ng-model="ccRecurring" ng-value=2 />Yes
+	<input type="radio" ng-model="cardRecurring" ng-value=0 checked>No
+	<input type="radio" ng-model="cardRecurring" ng-value=1 />Yes
       </div>
     </div>
   </div>
@@ -106,7 +106,7 @@
   <div ng-show="donationType==3">
     <div class="input-group">
       <span class="input-group-addon">Check Number:</span>
-      <input type="text" class="form-control" />
+      <input type="text" class="form-control" ng-model="checkNum"/>
     </div>
     
     <div class="input-group">

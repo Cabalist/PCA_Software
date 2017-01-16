@@ -267,11 +267,16 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
     $scope.donorEmail=null;
     $scope.donorPhone=null;
     $scope.donationType=1;
-    $scope.ccRecurring=1;
+    $scope.nameOnCard=null;
+    $scope.cardLast4=null;
+    $scope.cardExp=null;
+    $scope.cardRecurring=0;
+    $scope.checkNum=null;
     $scope.selectedWorker = null;
     $scope.donorOver18 = "1";
     $scope.donationValue = 0 ;
 
+    
     //history section
     $scope.history = [];
 
@@ -328,17 +333,44 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
 		      'over18': $scope.donorOver18};
 
 	var donation = null;
-	if ($scope.donationType==1){
+	if ($scope.donationType==1){ //cash donation
 	    donation = {'user': $scope.selectedWorker.userInfo.pk,
 			'org': $scope.orgId,
-			'donationType' : 1,
+			'donationType' : $scope.donationType,
 			'date': moment($scope.dt).format("YYYY MM DD"),
 			'value': $scope.donationValue
+		       };
+	}else if ($scope.donationType==2){ //Credit Card
+	    donation = {'user': $scope.selectedWorker.userInfo.pk,
+			'org': $scope.orgId,
+			'donationType' : $scope.donationType,
+			'date': moment($scope.dt).format("YYYY MM DD"),
+			'value': $scope.donationValue,
+			//Credid Card specific
+			'nameOnCard': $scope.nameOnCard,
+			'cardLast4' : $scope.cardLast4,
+			'cardExp'   : $scope.cardExp,
+			'cardRecurring': $scope.cardRecurring,
+		       };
+	    $log.log(donation);
+	    
+	}else if ($scope.donationType==3){ //check
+	    donation = {'user': $scope.selectedWorker.userInfo.pk,
+			'org': $scope.orgId,
+			'donationType' : $scope.donationType,
+			'date': moment($scope.dt).format("YYYY MM DD"),
+			'value': $scope.donationValue,
+			//Check specific
+			'checkNum':$scope.checkNum,
+			'checkDate':moment($scope.checDt).format("YYYY MM DD"),
 		       };
 	}
 
 	var data = {'donor':donor,'donation':donation};
 	$http.post('/api/rest/donation',JSON.stringify(data)).then(function(data){
+	    //Add new entry to history.
+	    addDonations([data.data]);
+	    	    
 	    //clear form
 	    $scope.donorName=null;
 	    $scope.donorAddr=null;
@@ -347,20 +379,22 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
 	    $scope.donorZip=null;
 	    $scope.donorEmail=null;
 	    $scope.donorPhone=null;
-	    $scope.donorOver18 = "1";
-	    
+	    $scope.donorOver18 = "1";	    
 	    $scope.donationValue = 0 ;
 	    //cc specific
-	    $log.log("OK");
-
-	    
+	    $scope.nameOnCard=null;
+	    $scope.cardLast4=null;
+	    $scope.cardExp=null;
+	    $scope.cardRecurring=0;  
 	    //check specific
+	    $scope.checkNum=null;
+	    $scope.checkDt = new Date(); //Maybe refresh formDate as well?
 	});
     };
 
-    function getDateIndex(hist,date){
-	for(var i=0;i<hist.length;i++){
-	    if(hist[i].formDate==date){
+    function getDateIndex(date){
+	for(var i=0;i<$scope.history.length;i++){
+	    if($scope.history[i].formDate==date){
 		return i;
 	    }
 	}
@@ -368,24 +402,24 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
 	return -1;
     };
 
+    function addDonations(donLi){
+	//Adds a list of donations to $schope.history
+	for (var i=0;i<donLi.length;i++){
+	    var donation = donLi[i]
+	    var dateIndex = getDateIndex(donation.formDate);
+	    if (dateIndex==-1){ //if date doesn't exist in hist, create it.
+		$scope.history.push({'formDate':donation.formDate,'donations':[donation]});
+	    }else{ //if date exists, need to append to donations for that day.
+		$scope.history[dateIndex].donations.push(donation);
+	    }   
+	}
+    }
+    
     $scope.recruiterChange = function(userId){
 	//get user donation history for past 30 days
 	$http.get('/api/rest/donationHist/' + userId+'/'+$scope.orgId).then(function(data){
-	    var hist = [];
 	    var donations = data.data;
-	
-	    for(var i=0;i<donations.length;i++){
-		var donation = donations[i];
-	
-		var dateIndex = getDateIndex(hist,donation.formDate);
-		if (dateIndex==-1){ //if date doesn't exist in hist, create it.
-		    hist.push({'formDate':donation.formDate,'donations':[donation]});
-		}else{ //if date exists, need to append to donations for that day.
-		    hist[dateIndex].donations.push(donation);
-		}
-
-	    }
-	    $scope.history = hist;
+	    addDonations(donations);//Add donations to history format...
 	});	
     };
 

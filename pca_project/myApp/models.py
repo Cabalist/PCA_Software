@@ -53,12 +53,11 @@ class Donation(models.Model):
 
 class Check(models.Model):
     donation = models.ForeignKey(Donation)
-    proccessedBy = models.ForeignKey(settings.AUTH_USER_MODEL)
+    proccessedBy = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
     checkNum = models.CharField(max_length=10)
     checkDate = models.DateField()
     status = models.IntegerField() #0 - pending proccessing, 1 - success, 2 - fail
-    processedOn = models.DateTimeField()
-    notes = models.CharField(max_length=128)
+    processedOn = models.DateTimeField(null=True)
 
 class CreditCard(models.Model):
     donation = models.ForeignKey(Donation)

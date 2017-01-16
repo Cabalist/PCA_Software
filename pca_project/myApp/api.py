@@ -136,7 +136,7 @@ def donation(request,orgId=None):
         #POST INPUT:
         #{donor:{},donation:{}}
         #Where donor can be an ID of an existing donor, or a new donor.
-
+        #output: donation. Possibly donor also saved, and check and credit card.
         
         data = JSONParser().parse(request)
         donor = data["donor"]
@@ -169,11 +169,31 @@ def donation(request,orgId=None):
         date = datetime.date(int(dateLi[0]),int(dateLi[1]),int(dateLi[2]))
         donationObj = None
         value = donation["value"]
-        if donationType==1: #cash donation          
-            donationObj = Donation(user=user,org=org, formDate=date, donor = donorObj, donationType=1,value=value, addedOn = now,addedBy=addedBy)
+
+        donationObj = Donation(user=user,org=org, formDate=date, donor = donorObj, donationType=donationType, value=value, addedOn = now,addedBy=addedBy)
+        donationObj.save()
+        if donationType==1: #cash donation
+            pass
             
-            donationObj.save()
-        
+        elif donationType==2:
+            #Also save CC
+            nameOnCard = donation["nameOnCard"]
+            cardLast4 = donation["cardLast4"]
+            cardExp = donation["cardExp"]
+            cardRecurring = donation['cardRecurring']
+            
+            ccObj = CreditCard(donation=donationObj,nameOnCard=nameOnCard,last4=cardLast4,exp = cardExp,recurring=cardRecurring)
+            ccObj.save()
+            
+        elif donationType==3:
+            #also save check
+            checkNum = donation["checkNum"]
+            dateLi = donation["checkDate"].split()
+            checkDate = datetime.date(int(dateLi[0]),int(dateLi[1]),int(dateLi[2]))
+            
+            checkObj = Check(donation=donationObj,checkNum=checkNum,checkDate=checkDate,status=0)
+            checkObj.save()
+            
         serialized = DonationSerializer(donationObj)
         return JsonResponse(serialized.data, safe=False)
 
