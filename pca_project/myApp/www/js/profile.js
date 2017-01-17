@@ -28,6 +28,11 @@ myApp.config(function($stateProvider){
 	    templateUrl: '/www/partials/manager-donors.html',
 	    controller: 'ManagerDonorsController'
 	})
+        .state('manager.hours',{
+	    url:"/hours",
+	    templateUrl: '/www/partials/manager-hours.html',
+	    controller: 'ManagerHoursController'
+	})
         .state('manager.form1',{
 	    url:"/form1",
 	    templateUrl: '/www/partials/forms/form1.html',
@@ -444,8 +449,20 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
     
 }]);
 
-myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+myApp.controller('ManagerHoursController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.$emit("selectForm",2);
+
+    $scope.workers = [];
+
+    //Get org workers list.
+    $http.get('/api/rest/orgWorkers/' + $scope.orgId).then(function(data){
+	$scope.workers = data.data;
+    });    
+
+}]);
+
+myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+    $scope.$emit("selectForm",3);
     
     $scope.canvassHours=4;
     $scope.trf="";
@@ -534,7 +551,7 @@ myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', fun
 }]);
 
 myApp.controller('Form2Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
-    $scope.$emit("selectForm",3);
+    $scope.$emit("selectForm",4);
 }]);
 
 

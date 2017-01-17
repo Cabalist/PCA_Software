@@ -1,0 +1,8 @@
+<div class="col-lg-6">
+  <h3>Hour Tracking</h3>
+  <div class="input-group">
+    <span class="input-group-addon">Recruiter:</span>
+    <select class="form-control" ng-model="selectedWorker" ng-options="worker.userInfo.first_name+' '+worker.userInfo.last_name for worker in workers track by worker.userInfo.pk" ng-change="recruiterChange(selectedWorker.userInfo.pk)"></select>
+    
+  </div>
+</div>
