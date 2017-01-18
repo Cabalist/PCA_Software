@@ -423,6 +423,7 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
     $scope.recruiterChange = function(userId){
 	//get user donation history for past 30 days
 	$http.get('/api/rest/donationHist/' + userId+'/'+$scope.orgId).then(function(data){
+	    $scope.history=[];
 	    var donations = data.data;
 	    addDonations(donations);//Add donations to history format...
 	});	
@@ -458,6 +459,17 @@ myApp.controller('ManagerHoursController', ['$scope','$http','$log','$stateParam
     $scope.hoursType="1";
     $scope.hours=4;
     $scope.history = [];
+    //init status for each item in history...
+    $scope.histStatus = {'isOpen':[]};
+    $scope.initHist = function(){
+	
+	for (var i =0;i< $scope.history.length;i++){
+	    $scope.histStatus[i]=false;
+	};
+	if ($scope.history.length){
+	    $scope.histStatus.isOpen[0]=true;
+	}
+    };
     
     //date stuff
     $scope.today = function() {
@@ -482,13 +494,66 @@ myApp.controller('ManagerHoursController', ['$scope','$http','$log','$stateParam
 	var hours = {'userId':$scope.selectedWorker.userInfo.pk,'date':date,'type': $scope.hoursType, 'orgId':$scope.orgId,'hours':$scope.hours,'addedBy':$scope.userId};
 	
 	$http.post("/api/rest/hours/"+$scope.selectedWorker.userInfo.pk+"/"+$scope.orgId,JSON.stringify(hours)).then(function(data){
-	    $scope.history.push(data.data);
+	    addHours([data.data]);
 
 	    //need to process data.data
 	});
     }
-											       
 
+    function getDateIndex(date){
+	for(var i=0;i<$scope.history.length;i++){
+	    if($scope.history[i].date==date){
+		return i;
+	    }
+	}
+
+	return -1;
+    };
+
+    //NAMING IS CONFUSING
+    //$scope.addHours adds hours by POST request
+    //This addHours process data and adss it to $scope.history
+    function addHours(hoursLi){
+	//Adds a list of donations to $schope.history
+	for (var i=0;i<hoursLi.length;i++){
+	    var day = hoursLi[i]
+	    var dateIndex = getDateIndex(day.date);
+	    if (dateIndex==-1){ //if date doesn't exist in hist, create it.
+		$scope.history.push({'date':day.date,'hours':[day]});
+	    }else{ //if date exists, need to append to donations for that day.
+		$scope.history[dateIndex].hours.push(day);
+	    }   
+	}
+    }
+    
+    $scope.workerChange = function(userId){
+	//get user donation history for past 30 days
+	$http.get('/api/rest/hours/' + userId+'/'+$scope.orgId).then(function(data){
+	    $scope.history=[];
+	    addHours(data.data);//Add hours to history format...
+	});	
+    };
+
+    $scope.dayTotal = function(index){
+	var day = $scope.history[index];
+	var sum = 0;
+	for(var i = 0;i<day.hours.length;i++){
+	    sum += day.hours[i].hours;
+	}
+	return sum;
+	
+    };
+    
+    $scope.hoursTypeStr = function(type){
+	if (type=='1'){
+	    return "Canvassing";
+	}else if (type=='2'){
+	    return "Admin";
+	}else if (type=='3'){
+	    return "Travel";
+	}
+    };
+    
 }]);
 
 myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {

@@ -215,6 +215,17 @@ def donationHist(request,userId=None,orgId=None):
     
 @csrf_exempt
 def hours(request,userId=None,orgId=None):
+    if request.method == "GET":
+        user = User.objects.get(pk=userId)
+        org = Organization.objects.get(id=orgId)
+
+        hoursQuery = Hours.objects.filter(user=user).filter(org=org)
+        results = hoursQuery.all()
+
+        serialized = HoursSerializer(results,many=True)
+        return JsonResponse(serialized.data,safe=False)
+                                
+        
     if request.method == "POST":
         data = JSONParser().parse(request)
 
