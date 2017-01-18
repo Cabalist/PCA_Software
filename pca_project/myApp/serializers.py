@@ -34,6 +34,11 @@ class DonationSerializer(serializers.ModelSerializer):
         model = Donation
         fields= ['id','formDate','donor','donationType','value','addedOn']
 
+class HoursSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Hours
+        fields= ['id','user','org','date','hoursType','hours']
+
 #class Form1Serializer(serializers.ModelSerializer):
 #    class Meta:
 #        model = Form1

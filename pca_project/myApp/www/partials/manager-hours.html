@@ -2,7 +2,36 @@
   <h3>Hour Tracking</h3>
   <div class="input-group">
     <span class="input-group-addon">Recruiter:</span>
-    <select class="form-control" ng-model="selectedWorker" ng-options="worker.userInfo.first_name+' '+worker.userInfo.last_name for worker in workers track by worker.userInfo.pk" ng-change="recruiterChange(selectedWorker.userInfo.pk)"></select>
+    <select class="form-control" ng-model="selectedWorker" ng-options="worker.userInfo.first_name+' '+worker.userInfo.last_name for worker in workers track by worker.userInfo.pk" ng-change="workerChange(selectedWorker.userInfo.pk)"></select>
+  </div>
+
+  <div ng-show="selectedWorker">
+    <h4>Add Hours:</h4>
+    <div class="input-group">
+      <span class="input-group-addon">Date:</span>
+      <input type="text" class="form-control" uib-datepicker-popup ng-model="dt" is-open="popup1.opened" ng-required="true" />
+      <span class="input-group-btn">
+	<button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+      </span>
+    </div>
+    
+
+    <div class="input-group clearfix">
+      <span class="input-group-addon">Type:</span>
+      <select class="form-control" ng-model="hoursType">
+	<option value="1" selected>Canvassing</option>
+	<option value="2">Admin</option>
+	<option value="3">Travel</option>
+      </select>
+      <span class="input-group-addon">Hours:</span>
+      <input class="form-control" type="number" ng-model="hours"/>
+
+      <span class="input-group-btn">
+	<button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Add Hours" ng-click="addHours()"><span class="glyphicon glyphicon-plus"></span></button>
+      </span>
+      
+    </div>
+    
     
   </div>
 </div>

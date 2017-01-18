@@ -452,12 +452,42 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
 myApp.controller('ManagerHoursController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.$emit("selectForm",2);
 
+    $scope.dt = new Date();
     $scope.workers = [];
+    $scope.selectedWorker=null;
+    $scope.hoursType="1";
+    $scope.hours=4;
+    $scope.history = [];
+    
+    //date stuff
+    $scope.today = function() {
+	$scope.dt = new Date();
+    };
+    $scope.today();
+    $scope.popup1 = {
+	opened: false
+    };
+
+    $scope.open1 = function() {
+	$scope.popup1.opened = true;
+    };
 
     //Get org workers list.
     $http.get('/api/rest/orgWorkers/' + $scope.orgId).then(function(data){
 	$scope.workers = data.data;
-    });    
+    });
+    
+    $scope.addHours = function(){
+	var date = moment($scope.dt).format('YYYY-MM-DD');
+	var hours = {'userId':$scope.selectedWorker.userInfo.pk,'date':date,'type': $scope.hoursType, 'orgId':$scope.orgId,'hours':$scope.hours,'addedBy':$scope.userId};
+	
+	$http.post("/api/rest/hours/"+$scope.selectedWorker.userInfo.pk+"/"+$scope.orgId,JSON.stringify(hours)).then(function(data){
+	    $scope.history.push(data.data);
+
+	    //need to process data.data
+	});
+    }
+											       
 
 }]);
 

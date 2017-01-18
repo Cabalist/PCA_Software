@@ -211,6 +211,29 @@ def donationHist(request,userId=None,orgId=None):
         serialized = DonationSerializer(results,many=True)
         
         return JsonResponse(serialized.data, safe=False)
+
+    
+@csrf_exempt
+def hours(request,userId=None,orgId=None):
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+
+        user = User.objects.get(pk=data["userId"])
+        org = Organization.objects.get(id=data["orgId"])
+        
+        date = data["date"]
+        htype = data["type"]
+        hours = data["hours"]
+        addedBy = User.objects.get(pk=data["addedBy"])
+        now = datetime.datetime.now(pytz.timezone('US/Pacific'))
+            
+        newHours = Hours(user=user,org=org,date=date,hoursType=htype,hours=hours,addedBy=addedBy,addedOn=now)
+        newHours.save()
+
+        serialized = HoursSerializer(newHours)
+        
+        return JsonResponse(serialized.data, safe=False)
+        
 """
 @csrf_exempt
 def form1(request,userId=None,orgId=None):

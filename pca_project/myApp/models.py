@@ -26,6 +26,15 @@ class PayTerms(models.Model):
     description = models.CharField(max_length=512)
     notes = models.CharField(max_length=1024)
 
+class Hours(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    org = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    date = models.DateField()
+    hoursType = models.IntegerField()
+    hours = models.FloatField()
+    addedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="addedHours")
+    addedOn = models.DateTimeField()
+    
 class Donor(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)  #This refers to recruiter 
     org = models.ForeignKey(Organization,on_delete=models.CASCADE)
