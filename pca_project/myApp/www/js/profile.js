@@ -18,6 +18,11 @@ myApp.config(function($stateProvider){
 	    templateUrl: '/www/partials/bookkeeper-userMgmt.html',
 	    controller: 'BkprUsrMgmtController'
 	})
+        .state('bookkeeper.payterms',{
+	    url:"/payterms",
+	    templateUrl: '/www/partials/bookkeeper-payterms.html',
+	    controller: 'BkprPaytermsController'
+	})
         .state('manager',{
 	    url:"/org/:orgId/manager",
 	    templateUrl: '/www/partials/manager.html',
@@ -134,6 +139,7 @@ myApp.controller('ProfileController', ['$scope','$http','$log', function($scope,
 myApp.controller('BookkeeperController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.orgId = $stateParams.orgId;
     $scope.orgName= null;
+
     //Set org name
     for(var i=0;i<$scope.orgList.length;i++){
 	var locationList = $scope.orgList[i].orgs;
@@ -143,11 +149,24 @@ myApp.controller('BookkeeperController', ['$scope','$http','$log','$stateParams'
 	    }
 	}
     }
+    
+    $scope.selectedForm = null;
+    $scope.isFormActive = function(formIndex){	
+	if ( $scope.selectedForm == formIndex){
+	    return "active";
+	}
+    };
+    
+    $scope.$on("selectForm",function(event,formIndex){
+	$scope.selectedForm = formIndex;
+    });
 
     $log.log("hello from Bookkeeper controller");
+
 }]);
 
 myApp.controller('BkprUsrMgmtController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+    $scope.$emit("selectForm",1);
     $log.log("Hello from Bookkeeper User Mgmt controller");
 
     $scope.bookkeepers = [];
@@ -257,6 +276,11 @@ myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', f
 	    }
 	}
     }    
+}]);
+
+myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+    $scope.$emit("selectForm",2);
+    $log.log("Hello from Bookkeeper Payterms  controller");
 }]);
 
 
