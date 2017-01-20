@@ -87,6 +87,7 @@ def orgUsers(request,orgId=None):
         return JsonResponse(serialized.data, safe=False)
 
     if request.method == "PUT":
+        """This is where requests are rejected or accepted... status gets updated"""
         data = JSONParser().parse(request)
         reqId = data["id"]
         now  = datetime.datetime.now(pytz.timezone('US/Pacific'))
@@ -96,7 +97,21 @@ def orgUsers(request,orgId=None):
         #can't I return the reqObj ?
         modifiedObj = UserOrganizationRoleRel.objects.get(id=data['id'])
         serialized = OrgUsersSerializer(modifiedObj)
-            
+
+        #If this is new user joining an organization, payterms are created.
+        if modifiedObj.role==1 and data['status']==1:
+            user = modifiedObj.user
+            org = modifiedObj.organization
+
+            #get percent for newcomers...
+            newcomerShare = 50
+            orgSetting = OrgSettings.objects.filter(org=org).filter(settingName="newcomerShare").all()
+            if len(orgSetting):
+                newcomerShare=float(orgSetting[0].settingValue)                
+
+            newTerms = PayTerms(user=user,org=org,termsType=1,percent=newcomerShare)
+            newTerms.save()
+
         return JsonResponse(serialized.data, safe=False)
         
 @csrf_exempt
@@ -127,7 +142,6 @@ def orgWorkers(request,orgId=None):
         result = query.all()
         serialized = OrgUsersSerializer(result,many=True)
         
-
         return JsonResponse(serialized.data, safe=False)
 
 @csrf_exempt
@@ -244,7 +258,17 @@ def hours(request,userId=None,orgId=None):
         serialized = HoursSerializer(newHours)
         
         return JsonResponse(serialized.data, safe=False)
-        
+
+    
+@csrf_exempt
+def payTerms(request, orgId=None):
+    if request.method == "GET":
+        #Get all Users and their payterms for the org.
+        terms = PayTerms.objects.filter(org=orgId)
+
+        serialized = PayTermsSerializer(terms,many=True)
+        return JsonResponse(serialized.data, safe=False)
+ 
 """
 @csrf_exempt
 def form1(request,userId=None,orgId=None):

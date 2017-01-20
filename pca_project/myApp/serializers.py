@@ -39,6 +39,14 @@ class HoursSerializer(serializers.ModelSerializer):
         model = Hours
         fields= ['id','user','org','date','hoursType','hours']
 
+
+class PayTermsSerializer(serializers.ModelSerializer):
+    userInfo = UserSerializer(source="user")
+
+    class Meta:
+        model = PayTerms
+        fields= ['id','userInfo','percent','termsType']
+
 #class Form1Serializer(serializers.ModelSerializer):
 #    class Meta:
 #        model = Form1

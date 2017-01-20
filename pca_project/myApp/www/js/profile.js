@@ -176,7 +176,7 @@ myApp.controller('BkprUsrMgmtController', ['$scope','$http','$log','$stateParams
     
     //Areas: Bookkeepers, managers, workers, pending requests
     $scope.pendingRequests = [];
-    $http.get('/api/rest/orgUsers/' + $scope.orgId).then(function(data){	
+    $http.get('/api/rest/orgUsers/' + $scope.orgId).then(function(data){
 	for(var i=0;i<data.data.active.length ;i++){
 	    var usrRole = data.data.active[i].role;
 	    if (usrRole==1){
@@ -281,6 +281,10 @@ myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', f
 myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.$emit("selectForm",2);
     $log.log("Hello from Bookkeeper Payterms  controller");
+
+    $http.get('/api/rest/payTerms/' + $scope.orgId).then(function(data){
+	$log.log("got data");
+    });
 }]);
 
 

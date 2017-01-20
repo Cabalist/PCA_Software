@@ -16,15 +16,23 @@ class UserOrganizationRoleRel(models.Model):
     status = models.IntegerField(default=0) #0-Waiting for approval, 1-Approved, 2-Rejected
     approvedOrRejectedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="admin",null=True)
     approvedOrRejectDate = models.DateTimeField(null=True)
+
+class OrgSettings(models.Model):
+    org = models.ForeignKey(Organization)
+    settingName = models.CharField(max_length=16)
+    settingValue = models.CharField(max_length=128)    
     
 class PayTerms(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     org = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    percentTFR = models.FloatField()
-    startDate = models.DateField()
-    endDate = models.DateField()
-    description = models.CharField(max_length=512)
-    notes = models.CharField(max_length=1024)
+    termsType = models.IntegerField() # 1 -- base level (doesn't need start and end dates) 2--temporary, requires dates
+    percent = models.FloatField()
+    startDate = models.DateField(null=True)
+    endDate = models.DateField(null=True)
+    description = models.CharField(max_length=512, null=True)
+    notes = models.CharField(max_length=1024, null=True )
+    addedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="payTermsAdder",null=True)
+    addedOn = models.DateTimeField(null=True)
 
 class Hours(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
