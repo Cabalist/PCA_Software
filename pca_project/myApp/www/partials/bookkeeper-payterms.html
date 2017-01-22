@@ -1,1 +1,30 @@
-Hello
+
+<div>
+  <h4>Pay Terms</h4>
+
+  <div class="input-group" ng-repeat="usr in userTerms">
+    <span class="input-group-addon">Name:</span>
+    <span class="input-group-addon">{{ usr.userInfo.username }} ({{ usr.userInfo.first_name }} {{ usr.userInfo.last_name }})</span>
+    <span class="input-group-addon">Take %:</span>
+    <span class="input-group-addon">
+      <input class="form-control" type="text"  size="5" ng-value="usr.terms[0].percent" disabled ng-if="usr.terms.length==1">
+      <input class="form-control" type="text"  size="5" ng-value="usr.terms[1].percent" disabled ng-if="usr.terms.length==2">
+    </span>
+    <span ng-if="usr.terms.length==2">Temp From x  To y </span>
+    <span class="input-group-addon">
+      <button class="btn btn-default" ng-click="editUserTerms($index)">Edit</button>
+    </span>
+  </div>
+  <br>
+  
+  <!--ul class="list-group">
+    <li class="list-group-item clearfix" style="vertical-align:middle" ng-repeat="usr in userTerms">
+      <div ng-if="usr.terms.length==1">
+      <span class="pull-left" >{{ usr.userInfo.first_name  }} {{ usr.userInfo.last_name }}</span>
+      <span class="pull-left">
+	<input class="form-control" type="text" value="{{ usr.terms[0].percent }}">
+      </span>
+      </div>
+    </li>
+  </ul-->
+</div>

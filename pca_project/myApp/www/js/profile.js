@@ -280,11 +280,64 @@ myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', f
 
 myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.$emit("selectForm",2);
+    $scope.userTerms = [];
+    $scope.editing = null;
+    
+    function getDateIndex(userId){
+	for(var i=0;i<$scope.userTerms.length;i++){
+	    if($scope.userTerms[i].userInfo.pk==userId){
+		return i;
+	    }
+	}
+	
+	return -1;
+    };
+    
+
+    function addTerms(termsLi){
+	//Adds a list of user terms to $schope.userTerms
+	for (var i=0;i<termsLi.length;i++){
+	    var term = termsLi[i]
+	    var usrIndex = getDateIndex(term.userInfo.pk);
+	    if (usrIndex==-1){ //if user terms doesn't exist, create them.
+		$scope.userTerms.push({'userInfo':term.userInfo,'terms':[term]});
+	    }else{ //if user terms exist,		
+		//only store latest of each type.
+		var usrTerms = $scope.userTerms[usrIndex].terms;
+
+		var colide = false; //Keep track if encountered same type
+		
+		for(var t=0;t<usrTerms.length;t++){
+		    if (usrTerms[t].type==term.type){
+			if (usrTerms[t].id < term.id){ //keep latest, by id...
+			    $scope.userTerms[usrIndex].terms[t] = term;
+			}
+			colide=true;
+		    }
+		}
+
+		if (!colide){ //if hasn't encountered otehrs of that type, this is the first.
+		    $scope.userTerms[usrIndex].terms.push(term);
+		}
+	    }   
+	}
+
+	//TODO:
+	// USE a Temp variable, sort it, and only at the end assign it to $scope.userTerms
+	// Make sure type 1 terms are at index 0, and type 2 terms are at index 1.
+    }
+    
+    $http.get('/api/rest/payTerms/' + $scope.orgId).then(function(data){
+	$scope.userTerms=[];
+	addTerms(data.data);
+    });
+
     $log.log("Hello from Bookkeeper Payterms  controller");
 
-    $http.get('/api/rest/payTerms/' + $scope.orgId).then(function(data){
-	$log.log("got data");
-    });
+    $scope.editUserTerms = function(userIndx){
+	$scope.editing = $scope.userTerms[userIndx];
+	$log.log($scope.editing);
+    };
 }]);
 
 
@@ -308,7 +361,6 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
     $scope.selectedWorker = null;
     $scope.donorOver18 = "1";
     $scope.donationValue = 0 ;
-
     
     //history section
     $scope.history = [];
