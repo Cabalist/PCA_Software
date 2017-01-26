@@ -253,6 +253,104 @@ myApp.controller('BkprUsrMgmtController', ['$scope','$http','$log','$stateParams
     }
 }]);
 
+myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+    $scope.$emit("selectForm",2);
+    $scope.userTerms = [];
+    $scope.editing = null;
+    
+    function getDateIndex(userId){
+	for(var i=0;i<$scope.userTerms.length;i++){
+	    if($scope.userTerms[i].userInfo.pk==userId){
+		return i;
+	    }
+	}
+	
+	return -1;
+    };
+
+    function addToBase(term,usrIndex){
+	//This function replaces base terms as needed.
+	if ($scope.userTerms[usrIndex].terms.base.length==0){
+	    $scope.userTerms[usrIndex].terms.base.push(term);
+	}else{
+	    if (term.id > $scope.userTerms[usrIndex].terms.base[0].id){ //replace if new item has higher id...
+		$scope.userTerms[usrIndex].terms.base=[term];
+	    }
+	}
+	
+    }
+
+    function addToTemp(term,usrIndex){
+	//This function replaces temp terms as needed.
+	if ($scope.userTerms[usrIndex].terms.temp.length==0){
+	    $scope.userTerms[usrIndex].terms.temp.push(term);
+	}else{
+	    if (term.id > $scope.userTerms[usrIndex].terms.temp[0].id){ //replace if new item has higher id...
+		$scope.userTerms[usrIndex].terms.temp=[term];
+	    }
+	}
+    }
+
+    function addTerms(termsLi){
+	//Adds a list of user terms to $schope.userTerms
+	for (var i=0;i<termsLi.length;i++){
+	    var term = termsLi[i]
+	    var usrIndex = getDateIndex(term.userInfo.pk);
+	    if (usrIndex==-1){ //if user terms doesn't exist, create them.
+		
+		if (term.termsType==1){
+		    $scope.userTerms.push({'userInfo':term.userInfo,'terms':{'base':[term],'temp':[]}  }  );
+		}else if (term.termsType==2){
+		    $scope.userTerms.push({'userInfo':term.userInfo,'terms':{'base':[],'temp':[term]} });
+		}
+	    }else{ //if user terms exist,		
+		//only store latest of each type.
+
+		if (term.termsType==1){
+		    addToBase(term,usrIndex);
+		}else if (term.termsType==2){
+		    addToTemp(term,usrIndex);
+		}
+		/*
+		var usrTerms = $scope.userTerms[usrIndex].terms;
+
+		
+		var colide = false; //Keep track if encountered same type
+
+		
+		
+		for(var t=0;t<usrTerms.length;t++){
+		    if (usrTerms[t].type==term.type){
+			if (usrTerms[t].id < term.id){ //keep latest, by id...
+			    $scope.userTerms[usrIndex].terms[t] = term;
+			}
+			colide=true;
+		    }
+		}
+
+		if (!colide){ //if hasn't encountered otehrs of that type, this is the first.
+		    $scope.userTerms[usrIndex].terms.push(term);
+		}
+		*/
+	    }
+	}
+
+    }
+    
+    $http.get('/api/rest/payTerms/' + $scope.orgId).then(function(data){
+	$scope.userTerms=[];
+	addTerms(data.data);
+    });
+
+    $log.log("Hello from Bookkeeper Payterms  controller");
+
+    $scope.editUserTerms = function(userIndx){
+	$scope.editing = $scope.userTerms[userIndx];
+	$log.log($scope.editing);
+    };
+}]);
+
+
 myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.orgId = $stateParams.orgId;
     $scope.orgName= null;
@@ -276,68 +374,6 @@ myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', f
 	    }
 	}
     }    
-}]);
-
-myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
-    $scope.$emit("selectForm",2);
-    $scope.userTerms = [];
-    $scope.editing = null;
-    
-    function getDateIndex(userId){
-	for(var i=0;i<$scope.userTerms.length;i++){
-	    if($scope.userTerms[i].userInfo.pk==userId){
-		return i;
-	    }
-	}
-	
-	return -1;
-    };
-    
-
-    function addTerms(termsLi){
-	//Adds a list of user terms to $schope.userTerms
-	for (var i=0;i<termsLi.length;i++){
-	    var term = termsLi[i]
-	    var usrIndex = getDateIndex(term.userInfo.pk);
-	    if (usrIndex==-1){ //if user terms doesn't exist, create them.
-		$scope.userTerms.push({'userInfo':term.userInfo,'terms':[term]});
-	    }else{ //if user terms exist,		
-		//only store latest of each type.
-		var usrTerms = $scope.userTerms[usrIndex].terms;
-
-		var colide = false; //Keep track if encountered same type
-		
-		for(var t=0;t<usrTerms.length;t++){
-		    if (usrTerms[t].type==term.type){
-			if (usrTerms[t].id < term.id){ //keep latest, by id...
-			    $scope.userTerms[usrIndex].terms[t] = term;
-			}
-			colide=true;
-		    }
-		}
-
-		if (!colide){ //if hasn't encountered otehrs of that type, this is the first.
-		    $scope.userTerms[usrIndex].terms.push(term);
-		}
-	    }   
-	}
-
-	//TODO:
-	// USE a Temp variable, sort it, and only at the end assign it to $scope.userTerms
-	// Make sure type 1 terms are at index 0, and type 2 terms are at index 1.
-    }
-    
-    $http.get('/api/rest/payTerms/' + $scope.orgId).then(function(data){
-	$scope.userTerms=[];
-	addTerms(data.data);
-    });
-
-    $log.log("Hello from Bookkeeper Payterms  controller");
-
-    $scope.editUserTerms = function(userIndx){
-	$scope.editing = $scope.userTerms[userIndx];
-	$log.log($scope.editing);
-    };
 }]);
 
 
