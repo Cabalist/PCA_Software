@@ -259,6 +259,7 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
     $scope.editing = null;
     $scope.tempBaseRate = null;
     $scope.baseRateChanged=false;
+    $scope.newTempRate = null;
 
     $scope.today = function() {
 	$scope.dt = new Date();
@@ -355,6 +356,16 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
     $scope.editUserTerms = function(userIndx){
 	$scope.editing = $scope.userTerms[userIndx];
 	$scope.tempBaseRate = $scope.editing.terms.base[0].percent;
+
+	if ($scope.editing.terms.temp.length){ //if temporary terms are active, load start and end date, and rate.
+	    $scope.newTempRate = $scope.editing.terms.temp[0].percent;
+
+	    var sdate  =  $scope.editing.terms.temp[0].startDate.split('-');
+	    var edate  =  $scope.editing.terms.temp[0].endDate.split('-');
+	    $scope.dt  = new Date(sdate);
+	    $scope.dt2 = new Date(edate);
+
+	}
     };
 
     $scope.saveNewBaseTerms = function(){
@@ -383,7 +394,7 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
 	var data = {'user':$scope.editing.userInfo.pk,
 		    'org': $scope.orgId,
 		    'termsType': 2,
-		    'percent': $scope.tempBaseRate,
+		    'percent': $scope.newTempRate,
 		    'startDate' : moment($scope.dt).format('YYYY-MM-DD'),
 		    'endDate': moment($scope.dt2).format('YYYY-MM-DD'),
 		    'addedBy': $scope.userId,
