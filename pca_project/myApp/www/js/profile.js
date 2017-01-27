@@ -257,6 +257,35 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
     $scope.$emit("selectForm",2);
     $scope.userTerms = [];
     $scope.editing = null;
+    $scope.tempBaseRate = null;
+    $scope.baseRateChanged=false;
+
+    $scope.today = function() {
+	$scope.dt = new Date();
+	$scope.dt2 = new Date();
+	$scope.dt2.setDate($scope.dt.getDate() + 7);
+
+    };
+    $scope.today();
+    $scope.popup1 = {
+	opened: false
+    };
+
+    $scope.popup2 = {
+	opened: false
+    };
+    $scope.open1 = function() {
+	$scope.popup1.opened = true;
+    };
+
+    $scope.open2 = function() {
+	$scope.popup2.opened = true;
+    };
+
+    $scope.startChanged = function(){
+	$scope.dt2 = new Date()
+	$scope.dt2.setDate($scope.dt.getDate()+7);
+    };
     
     function getDateIndex(userId){
 	for(var i=0;i<$scope.userTerms.length;i++){
@@ -311,27 +340,6 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
 		}else if (term.termsType==2){
 		    addToTemp(term,usrIndex);
 		}
-		/*
-		var usrTerms = $scope.userTerms[usrIndex].terms;
-
-		
-		var colide = false; //Keep track if encountered same type
-
-		
-		
-		for(var t=0;t<usrTerms.length;t++){
-		    if (usrTerms[t].type==term.type){
-			if (usrTerms[t].id < term.id){ //keep latest, by id...
-			    $scope.userTerms[usrIndex].terms[t] = term;
-			}
-			colide=true;
-		    }
-		}
-
-		if (!colide){ //if hasn't encountered otehrs of that type, this is the first.
-		    $scope.userTerms[usrIndex].terms.push(term);
-		}
-		*/
 	    }
 	}
 
@@ -346,8 +354,23 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
 
     $scope.editUserTerms = function(userIndx){
 	$scope.editing = $scope.userTerms[userIndx];
-	$log.log($scope.editing);
+	$scope.tempBaseRate = $scope.editing.terms.base[0].percent;
     };
+
+    $scope.saveNewBaseTerms = function(){
+	$log.log("save base rate");
+
+	//hide button
+	$scope.baseRateChanged=false;
+    };
+    
+    $scope.saveNewTempTerms = function(){
+	$log.log("save temp terms");
+
+	//hide button
+	$scope.tempRateChanged=false;
+    };
+    
 }]);
 
 

@@ -1,7 +1,7 @@
 
-<div>
+<div class="col-lg-7">
   <h4>Pay Terms</h4>
-
+  
   <div class="input-group" ng-repeat="usr in userTerms">
     <span class="input-group-addon">Name:</span>
     <span class="input-group-addon">{{ usr.userInfo.username }} ({{ usr.userInfo.first_name }} {{ usr.userInfo.last_name }})</span>
@@ -17,14 +17,63 @@
   </div>
   <br>
   
-  <!--ul class="list-group">
-    <li class="list-group-item clearfix" style="vertical-align:middle" ng-repeat="usr in userTerms">
-      <div ng-if="usr.terms.length==1">
-      <span class="pull-left" >{{ usr.userInfo.first_name  }} {{ usr.userInfo.last_name }}</span>
-      <span class="pull-left">
-	<input class="form-control" type="text" value="{{ usr.terms[0].percent }}">
-      </span>
+</div>
+
+<div class="col-lg-3">
+  <div ng-show="editing">
+    <br>
+    <br>
+    <h4>Edit Pay Terms</h4>
+    <div class="panel panel-default">
+      <div class="panel-body">
+	<h4> User: {{ editing.userInfo.first_name }} {{ editing.userInfo.last_name }}</h4>
+	<div class="panel panel-primary" ng-show="!editing.terms.temp.length">
+	  <div class="panel-heading">
+	    Active policy
+	  </div>
+	  <div class="panel-body"> 
+	    Base Rate:
+	    <br>
+	    <div class="input-group">	      
+	      <input class="form-control" type="text" ng-model="tempBaseRate" ng-change="baseRateChanged=1">
+	      <div ng-show="baseRateChanged">
+		<button class="btn btn-default" ng-click="saveNewBaseTerms()">Save</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div class="panel panel-default" ng-show="!editing.terms.temp.length">
+	  <div class="panel-heading">Temporary Override</div>
+	  <div class="panel-body">
+	    Start Date:
+	    <div class="input-group">
+	      <input type="text" class="form-control" uib-datepicker-popup ng-model="dt" is-open="popup1.opened" ng-required="true" ng-change="startChanged()"/>
+	      <span class="input-group-btn">
+		<button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+	      </span>
+	    </div>
+
+	    End Date:
+	    <div class="input-group">
+	      <input type="text" class="form-control" uib-datepicker-popup ng-model="dt2" is-open="popup2.opened" ng-required="true" />
+	      <span class="input-group-btn">
+		<button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+	      </span>
+	    </div>
+
+	    Take rate(percent):
+	    
+	    <input class="form-control" type="text" ng-model="newTempPercent" ng-change="tempRateChanged=1">
+	    <div ng-show="tempRateChanged">
+	      <button class="btn btn-default" ng-click="saveNewTempTerms()">Save</button>
+	    </div>
+	    
+	  </div>
+	</div>		
+
       </div>
-    </li>
-  </ul-->
+      </div>
+      
+    </div>
+  </div>
 </div>
