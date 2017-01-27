@@ -268,111 +268,27 @@ def payTerms(request, orgId=None):
 
         serialized = PayTermsSerializer(terms,many=True)
         return JsonResponse(serialized.data, safe=False)
- 
-"""
-@csrf_exempt
-def form1(request,userId=None,orgId=None):
-    if request.method == "GET":
-        user = User.objects.get(pk=userId)
-        allForm1s = Form1.objects.filter(user=user)
-
-        history = allForm1s.filter(status=1).all()
-
-        histResult = []
-        for i in history:
-            rDict = Form1Serializer(i).data
-            total = i.totalDonations()
-            rDict["total"] = total
-            histResult.append(rDict)
-        
-        return JsonResponse({'history':histResult},safe=False)
 
     if request.method == "POST":
         data = JSONParser().parse(request)
-        formJson = data["form1"]
-        userId = formJson["userId"]
-        user = User.objects.get(pk=userId)
-        orgId = formJson["orgId"]
-        org = Organization.objects.get(id=orgId)
-        dateStr = formJson["date"]
-        date = datetime.strptime(dateStr,"%m-%d-%Y").date()
-        canvassHours = formJson["canvassHours"]
-        #otherHours = data["otherHours"]
-        trf=formJson["trf"]
+        
+        user = User.objects.get(pk=int(data["user"]))        
+        org = Organization.objects.get(id = data["org"])
+        termsType = data["termsType"]
+        percent = data["percent"]
+        addedBy = User.objects.get(pk=int(data["addedBy"]))
+        now = datetime.datetime.now(pytz.timezone('US/Pacific'))
+
+        pt = None 
+        if termsType==1: #base terms
+            pt = PayTerms(user=user, org=org, termsType=termsType, percent=percent ,addedBy=addedBy, addedOn=now)
+        elif termsType==2:
+            startDate = data['startDate']
+            endDate = data['endDate']
             
-        newForm = Form1(user=user,org=org,date=date,canvassHours=canvassHours,otherHours=0,trf=trf,status=1)
-        newForm.save()
-
-        donationsJson = data["donations"]
-        total = 0
-        for donation in donationsJson:
-            chk = donation['chk']
-            cc = donation['cc']
-            money = donation['money']
-
-            newDonation = Donation(form=newForm,chk=chk,cc=cc,money=money)
-            newDonation.save()
-
-            total+= float(money)
-
-        fDict = Form1Serializer(newForm).data
-        fDict["total"] = total
-        
-        return JsonResponse(fDict,safe=False)
-    
-    
-    """  """
-    if request.method == "PUT":
-        data = JSONParser().parse(request)
-        if len(data.keys()) == 2:
-            formId = data['id']
-            status = data['status']
-
-            f = Form1.objects.get(id=formId)
-            f.status = status
-            f.save()
-
-            serialized = Form1Serializer(f).data
-            total = f.totalDonations()
-            serialized["total"] = total
+            pt = PayTerms(user=user, org=org, termsType=termsType, percent=percent ,startDate=startDate,endDate=endDate, addedBy=addedBy, addedOn=now)
             
-        return JsonResponse(serialized, safe=False)
-    """ """ 
-        
-@csrf_exempt
-def donation(request):
-    pass
-    """ """
-    if request.method == "POST":
-        data = JSONParser().parse(request)
-        formJson = data["form"]
-        chk = data['chk']
-        cc = data['cc']
-        money = data['money']
+        pt.save()
 
-        formId = formJson;
-        if type(formJson)==type({}): #if got dictionary instead of formId (need to create form1)
-            userId = formJson["userId"]
-            user = User.objects.get(pk=userId)
-            orgId = formJson["orgId"]
-            org = Organization.objects.get(id=orgId)
-            dateStr = formJson["date"]
-            date = datetime.strptime(dateStr,"%m-%d-%Y").date()
-            canvassHours = formJson["canvassHours"]
-            #otherHours = data["otherHours"]
-            trf=formJson["trf"]
-            
-            newForm = Form1(user=user,org=org,date=date,canvassHours=canvassHours,otherHours=0,trf=trf,status=0)
-            newForm.save()
-
-            formId = newForm.id
-
-        form = Form1.objects.get(id=formId)
-        newDonation = Donation(form=form,chk=chk,cc=cc,money=money)
-        newDonation.save()
-
-        serialized = DonationSerializer(newDonation)
-        
-        
+        serialized = PayTermsSerializer(pt)
         return JsonResponse(serialized.data, safe=False)
-    """

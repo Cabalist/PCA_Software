@@ -10,7 +10,7 @@
       <input class="form-control" type="text"  size="5" ng-value="usr.terms.base[0].percent" disabled ng-if="!usr.terms.temp.length">
       <input class="form-control" type="text"  size="5" ng-value="usr.terms.temp[0].percent" disabled ng-if="usr.terms.temp.length">
     </span>
-    <span ng-if="usr.terms.temp.length">Temp From x  To y </span>
+    <span class="input-group-addon" ng-if="usr.terms.temp.length">temp*</span>
     <span class="input-group-addon">
       <button class="btn btn-default" ng-click="editUserTerms($index)">Edit</button>
     </span>
@@ -27,6 +27,8 @@
     <div class="panel panel-default">
       <div class="panel-body">
 	<h4> User: {{ editing.userInfo.first_name }} {{ editing.userInfo.last_name }}</h4>
+	<!-- base rate active -->
+	
 	<div class="panel panel-primary" ng-show="!editing.terms.temp.length">
 	  <div class="panel-heading">
 	    Active policy
@@ -42,6 +44,24 @@
 	    </div>
 	  </div>
 	</div>
+	
+	<!-- temp rate active -->
+	<div class="panel panel-default" ng-show="editing.terms.temp.length">
+	  <div class="panel-body"> 
+	    Base Rate:
+	    <br>
+	    <div class="input-group">	      
+	      <input class="form-control" type="text" ng-model="tempBaseRate" ng-change="baseRateChanged=1">
+	      <div ng-show="baseRateChanged">
+		<button class="btn btn-default" ng-click="saveNewBaseTerms()">Save</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- end possible base rate options -->
+
+	<!-- possible temp rates -->
+	
 	<div class="panel panel-default" ng-show="!editing.terms.temp.length">
 	  <div class="panel-heading">Temporary Override</div>
 	  <div class="panel-body">
@@ -52,7 +72,7 @@
 		<button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
 	      </span>
 	    </div>
-
+	    
 	    End Date:
 	    <div class="input-group">
 	      <input type="text" class="form-control" uib-datepicker-popup ng-model="dt2" is-open="popup2.opened" ng-required="true" />
@@ -60,7 +80,39 @@
 		<button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
 	      </span>
 	    </div>
+	    
+	    Take rate(percent):
+	    
+	    <input class="form-control" type="text" ng-model="newTempPercent" ng-change="tempRateChanged=1">
+	    <div ng-show="tempRateChanged">
+	      <button class="btn btn-default" ng-click="saveNewTempTerms()">Save</button>
+	    </div>
+	    
+	  </div>
+	</div>
 
+	
+
+	<!-- temp rate is active --> 
+	<div class="panel panel-primary" ng-show="editing.terms.temp.length">
+	  <div class="panel-heading">Active Temporary Override</div>
+	  <div class="panel-body">
+	    Start Date:
+	    <div class="input-group">
+	      <input type="text" class="form-control" uib-datepicker-popup ng-model="dt" is-open="popup1.opened" ng-required="true" ng-change="startChanged()"/>
+	      <span class="input-group-btn">
+		<button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+	      </span>
+	    </div>
+	    
+	    End Date:
+	    <div class="input-group">
+	      <input type="text" class="form-control" uib-datepicker-popup ng-model="dt2" is-open="popup2.opened" ng-required="true" />
+	      <span class="input-group-btn">
+		<button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+	      </span>
+	    </div>
+	    
 	    Take rate(percent):
 	    
 	    <input class="form-control" type="text" ng-model="newTempPercent" ng-change="tempRateChanged=1">
@@ -71,9 +123,11 @@
 	  </div>
 	</div>		
 
+
+	
       </div>
-      </div>
-      
     </div>
+    
   </div>
 </div>
+

@@ -360,6 +360,19 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
     $scope.saveNewBaseTerms = function(){
 	$log.log("save base rate");
 
+	var data = {'user':$scope.editing.userInfo.pk,
+		    'org': $scope.orgId,
+		    'termsType': 1,
+		    'percent': $scope.tempBaseRate,
+		    'addedBy': $scope.userId,
+		   };
+	
+	$http.post('/api/rest/payTerms/'+$scope.orgId,JSON.stringify(data)).then(function(data){
+	    $log.log(data.data);
+	    addTerms([data.data]);
+	    $log.log("OK");
+	});
+	
 	//hide button
 	$scope.baseRateChanged=false;
     };
@@ -367,6 +380,20 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
     $scope.saveNewTempTerms = function(){
 	$log.log("save temp terms");
 
+	var data = {'user':$scope.editing.userInfo.pk,
+		    'org': $scope.orgId,
+		    'termsType': 2,
+		    'percent': $scope.tempBaseRate,
+		    'startDate' : moment($scope.dt).format('YYYY-MM-DD'),
+		    'endDate': moment($scope.dt2).format('YYYY-MM-DD'),
+		    'addedBy': $scope.userId,
+		   };
+	
+	$http.post('/api/rest/payTerms/'+$scope.orgId,JSON.stringify(data)).then(function(data){
+	    $log.log(data.data);
+	    addTerms([data.data]);
+	    $log.log("OK");
+	});
 	//hide button
 	$scope.tempRateChanged=false;
     };
