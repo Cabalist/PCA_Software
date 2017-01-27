@@ -1,10 +1,23 @@
 
 <div class="col-lg-7">
-  <h4>Pay Terms</h4>
+  
+  <div class="input-group">
+    <span class="input-group-addon"><b>Newcomer Share:</b></span>
+    <span class="input-group-addon">
+      <input class="form-control" type="text" ng-model="newcomerShare" ng-disabled="!editNewcomerShare" ng-change="newcomerShareChanged=1">
+    </span>
+    <span class="input-group-addon">%</span>
+    <span class="input-group-addon">
+      <button class="btn btn-default" ng-click="editNewcomerShare=true" ng-hide="editNewcomerShare">Edit</button>
+      <button class="btn btn-primary" ng-click="saveNewcomerShare()" ng-show="newcomerShareChanged">Save!</button>
+    </span>
+  </div>
+  <hr>
+  <h4>User Pay Terms</h4>
   
   <div class="input-group" ng-repeat="usr in userTerms">
     <span class="input-group-addon">Name:</span>
-    <span class="input-group-addon">{{ usr.userInfo.username }} ({{ usr.userInfo.first_name }} {{ usr.userInfo.last_name }})</span>
+    <span class="input-group-addon"><h4>{{ usr.userInfo.username }} ({{ usr.userInfo.first_name }} {{ usr.userInfo.last_name }})</h4></span>
     <span class="input-group-addon">Take %:</span>
     <span class="input-group-addon">
       <input class="form-control" type="text"  size="5" ng-value="usr.terms.base[0].percent" disabled ng-if="!usr.terms.temp.length">
@@ -21,6 +34,7 @@
 
 <div class="col-lg-3">
   <div ng-show="editing">
+    <br>
     <br>
     <br>
     <h4>Edit Pay Terms</h4>

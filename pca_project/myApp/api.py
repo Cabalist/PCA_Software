@@ -104,6 +104,7 @@ def orgUsers(request,orgId=None):
             org = modifiedObj.organization
 
             #get percent for newcomers...
+            #TODO GET THIS NUMBER FROM pca_project/settings.py
             newcomerShare = 50
             orgSetting = OrgSettings.objects.filter(org=org).filter(settingName="newcomerShare").all()
             if len(orgSetting):
@@ -272,7 +273,7 @@ def payTerms(request, orgId=None):
     if request.method == "POST":
         data = JSONParser().parse(request)
         
-        user = User.objects.get(pk=int(data["user"]))        
+        user = User.objects.get(pk=int(data["user"]))
         org = Organization.objects.get(id = data["org"])
         termsType = data["termsType"]
         percent = data["percent"]
@@ -292,3 +293,34 @@ def payTerms(request, orgId=None):
 
         serialized = PayTermsSerializer(pt)
         return JsonResponse(serialized.data, safe=False)
+
+
+@csrf_exempt
+def newcomerShare(request,orgId=None):
+    if request.method == "GET":
+        org = Organization.objects.get(id=orgId)
+        setting = OrgSettings.objects.filter(org=org).filter(settingName="newcomerShare")
+        result = 0;
+
+        if setting.count()==0:
+            #TODO GET THIS VALUE FROM settings.py
+            result = 50
+        else:        
+            result = setting.last().settingValue
+
+        return JsonResponse({'newcomerShare':result}, safe=False)
+
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+
+        org = Organization.objects.get(id=data["org"])
+        settingValue = data["settingValue"]
+        
+        addedBy = User.objects.get(pk=int(data["addedBy"]))
+        now = datetime.datetime.now(pytz.timezone('US/Pacific'))
+        
+        newVal = OrgSettings(org=org,settingName="newcomerShare",settingValue=settingValue,addedBy=addedBy,addedDate=now)
+        newVal.save()
+        
+        return JsonResponse({'newcomerShare':settingValue}, safe=False)
+    

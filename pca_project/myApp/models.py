@@ -20,7 +20,9 @@ class UserOrganizationRoleRel(models.Model):
 class OrgSettings(models.Model):
     org = models.ForeignKey(Organization)
     settingName = models.CharField(max_length=16)
-    settingValue = models.CharField(max_length=128)    
+    settingValue = models.CharField(max_length=128)
+    addedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="orgSettingsChanger",null=True)
+    addedDate = models.DateTimeField(null=True)
     
 class PayTerms(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)

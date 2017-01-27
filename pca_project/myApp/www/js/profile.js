@@ -260,7 +260,9 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
     $scope.tempBaseRate = null;
     $scope.baseRateChanged=false;
     $scope.newTempRate = null;
-
+    $scope.newcomerShare = null
+    $scope.newcomerShareChanged = false;
+    
     $scope.today = function() {
 	$scope.dt = new Date();
 	$scope.dt2 = new Date();
@@ -343,7 +345,6 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
 		}
 	    }
 	}
-
     }
     
     $http.get('/api/rest/payTerms/' + $scope.orgId).then(function(data){
@@ -351,7 +352,11 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
 	addTerms(data.data);
     });
 
-    $log.log("Hello from Bookkeeper Payterms  controller");
+
+    $http.get('/api/rest/newcomerShare/' + $scope.orgId).then(function(data){
+	$scope.newcomerShare = data.data.newcomerShare;
+	
+    });
 
     $scope.editUserTerms = function(userIndx){
 	$scope.editing = $scope.userTerms[userIndx];
@@ -401,14 +406,30 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
 		   };
 	
 	$http.post('/api/rest/payTerms/'+$scope.orgId,JSON.stringify(data)).then(function(data){
-	    $log.log(data.data);
 	    addTerms([data.data]);
-	    $log.log("OK");
 	});
 	//hide button
 	$scope.tempRateChanged=false;
     };
+
+    $scope.saveNewcomerShare = function(){
+	var data = {'org': $scope.orgId,
+		    'settingName': 'newcomerShare',
+		    'settingValue': $scope.newcomerShare,
+		    'addedBy': $scope.userId,
+		   };
+	
+	$http.post('/api/rest/newcomerShare/'+$scope.orgId,JSON.stringify(data)).then(function(data){
+	    //addTerms([data.data]);
+	    $scope.newcomerShareChanged = false;
+	    $scope.editNewcomerShare=false;
+	});
+
+    };
+
     
+    
+    $log.log("Hello from Bookkeeper Payterms  controller");
 }]);
 
 
