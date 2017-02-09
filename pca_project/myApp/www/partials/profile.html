@@ -11,7 +11,7 @@
   <div class="col-lg-4">
     <h3>Organizations:</h3>
     <ul class="list-group">
-
+      
       <li class="list-group-item clearfix" ng-repeat="org in userOrgs">
 	<span class="thumbnail pull-left">
 	  <img ng-src="/www/img/orgLogos/{{ org.organization.logo }}.png" alt="">
@@ -26,7 +26,7 @@
 	      </a>
 	    </li>
 	  </ul>
-
+	  
 	</span>
       </li>
       
@@ -47,15 +47,15 @@
 	</span>
       </li>
     </ul>
-
+    
     <br>
     <div ng-show="userPendingOrgs.length">
       <h3>Pending Join Requests:</h3>
       <ul class="list-group">
-
+	
 	<li class="list-group-item clearfix" ng-repeat="request in userPendingOrgs">
 	  <span class="thumbnail pull-left">
-	    <img ng-src="/www/img/orgLogos/{{ request.organization }}.png" alt=""-->
+	    <img ng-src="/www/img/orgLogos/{{ request.organization }}.png" alt="">
 	  </span>
 	  <span class="pull-right orgInfo">
 	    <h4><u>{{ getOrgName(request.organization) }}</u></h4>
@@ -63,7 +63,8 @@
 	</li>
 	
       </ul>
-
+      
     </div>
   </div>
 </div>
+
