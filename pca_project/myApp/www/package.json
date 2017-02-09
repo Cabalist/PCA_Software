@@ -1,0 +1,29 @@
+{
+  "name": "pcaproject",
+  "version": "1.0.0",
+  "description": "bookkeeping software for grassroot campaigns.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agilman/PCA_Software.git"
+  },
+  "author": "Alexander Gilman",
+  "license": "EPL-1.0",
+  "bugs": {
+    "url": "https://github.com/agilman/PCA_Software/issues"
+  },
+  "homepage": "https://github.com/agilman/PCA_Software#readme",
+  "dependencies": {
+    "angular": "^1.5.9",
+    "angular-ui-bootstrap": "^2.3.0",
+    "angular-ui-router": "^0.3.2",
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.1.1",
+    "jquery-easing": "0.0.1",
+    "moment": "^2.17.1"
+  }
+}
