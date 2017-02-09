@@ -42,9 +42,10 @@
       </div>
     </nav>
 
-    <div class="container">
-      <ui-view></ui-view>
-    </div>
+    {% block content %}
+       Please log in to view content
+    {% endblock %}
+    
 
     <!-- Angular -->
     <script src="/www/node_modules/angular/angular.min.js"></script>
@@ -52,21 +53,9 @@
     <script src="/www/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
 
     <script src="/www/node_modules/moment/min/moment.min.js"></script>
-    
-    <!--controller -->
-    <script src="/www/app/app.js"></script>
-    <script src="/www/app/routes.js"></script>
-    <script src="/www/app/shared/mainController.js"></script>
-    <script src="/www/app/components/bookkeeper/bookkeeperController.js"></script>
-    <script src="/www/app/components/bookkeeper/payTerms/bkprPayTermsController.js"></script>
-    <script src="/www/app/components/bookkeeper/userMngmnt/bkprUsrMgmtController.js"></script>
-    <script src="/www/app/components/manager/managerController.js"></script>
-    <script src="/www/app/components/manager/donors/managerDonorsController.js"></script>
-    <script src="/www/app/components/manager/hours/managerHoursController.js"></script>
-    <script src="/www/app/components/profile/profileController.js"></script>
-    <script src="/www/app/components/worker/workerController.js"></script>  
-    
-    {% block js-vars %}
+
+    {% block additionalJS %}    
+
     {% endblock %}
 
   </body>
