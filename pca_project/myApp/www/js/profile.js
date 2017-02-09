@@ -1,4 +1,3 @@
-
 var myApp = angular.module('userApp', ['ui.router','ui.bootstrap']);
 
 myApp.config(function($stateProvider){
@@ -37,16 +36,6 @@ myApp.config(function($stateProvider){
 	    url:"/hours",
 	    templateUrl: '/www/partials/manager-hours.html',
 	    controller: 'ManagerHoursController'
-	})
-        .state('manager.form1',{
-	    url:"/form1",
-	    templateUrl: '/www/partials/forms/form1.html',
-	    controller: 'Form1Controller'
-	})
-        .state('manager.form2',{
-	    url:"/form2",
-	    templateUrl: '/www/partials/forms/form2.html',
-	    controller: 'Form2Controller'
 	})
         .state('worker',{
 	    url:"/org/:orgId/worker",
@@ -427,11 +416,8 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
 
     };
 
-    
-    
     $log.log("Hello from Bookkeeper Payterms  controller");
 }]);
-
 
 myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.orgId = $stateParams.orgId;
@@ -457,7 +443,6 @@ myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', f
 	}
     }    
 }]);
-
 
 myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $scope.$emit("selectForm",1);
@@ -686,16 +671,44 @@ myApp.controller('ManagerHoursController', ['$scope','$http','$log','$stateParam
     $http.get('/api/rest/orgWorkers/' + $scope.orgId).then(function(data){
 	$scope.workers = data.data;
     });
-    
-    $scope.addHours = function(){
+
+    function validateHours(){
 	var date = moment($scope.dt).format('YYYY-MM-DD');
+	var hoursNum = $scope.hours + parseFloat("0."+document.getElementById("minutes").value);
+	//$log.log(hoursNum);
 	var hours = {'userId':$scope.selectedWorker.userInfo.pk,'date':date,'type': $scope.hoursType, 'orgId':$scope.orgId,'hours':$scope.hours,'addedBy':$scope.userId};
 	
-	$http.post("/api/rest/hours/"+$scope.selectedWorker.userInfo.pk+"/"+$scope.orgId,JSON.stringify(hours)).then(function(data){
-	    addHours([data.data]);
+	
+	//check if hours is integer
+	var reg = new RegExp(/^\d+$/);
 
-	    //need to process data.data
-	});
+	if (!reg.test($scope.hours)){
+	    return {'status':0,'errorMsg':'Hours must be an integer'};
+	}
+
+	//check if minutes is valid..
+	var min = document.getElementById("minutes").value;
+	if (["0","25","50","75"].includes(min)){
+	    var h = parseInt($scope.hours) + parseFloat("0."+min);
+	    hours['hours'] = h ;
+	} else {
+	    return {'status':0,'errorMsg':"Couldn't prase minutes"};
+	}    
+
+	return {'status':1,'hours':hours};
+    };
+    
+    $scope.addHours = function(){
+	var validatedHours = validateHours();
+	if (validatedHours.status){	    
+	    $http.post("/api/rest/hours/"+$scope.selectedWorker.userInfo.pk+"/"+$scope.orgId,JSON.stringify(validatedHours.hours)).then(function(data){
+		addHours([data.data]);
+		$scope.errorMsg = null;		
+	    });
+	}else{
+	    //set message here...	    
+	    $scope.errorMsg = validatedHours.errorMsg;
+	}	
     }
 
     function getDateIndex(date){
@@ -753,100 +766,6 @@ myApp.controller('ManagerHoursController', ['$scope','$http','$log','$stateParam
     };
     
 }]);
-
-myApp.controller('Form1Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
-    $scope.$emit("selectForm",3);
-    
-    $scope.canvassHours=4;
-    $scope.trf="";
-    $scope.donations = [];
-    $scope.chk = "";
-    $scope.cc = "";
-    $scope.money = 0.0;
-    $scope.form1 = null;
-    $scope.submitHistory=[];
-
-    //validators
-    $scope.isMoneyNumber = function(){
-	var mon = !isNaN($scope.money);
-	return mon;
-    }
-    
-    //datepicker things
-    $scope.today = function() {
-	$scope.dt = new Date();
-    };
-    $scope.today();
-    $scope.popup1 = {
-	opened: false
-    };
-    $scope.open1 = function() {
-	$scope.popup1.opened = true;
-    };
-    
-    //get only history. No unfinished forms are stored.
-    $http.get('/api/rest/form1/' + $scope.userId+'/'+$scope.orgId).then(function(data){
-	$scope.submitHistory = data.data.history;
-    });
-    
-    $scope.addDonation = function(){
-	//No need for this... form1 gets created on 'submitClick'
-	//if form1 is null, need to create it first
-	/*
-	var form1 = $scope.form1;
-	if (form1==null){
-	    var date = moment($scope.dt).format('MM-DD-YYYY');
-	    
-	    form1 = {'userId':$scope.userId,'date':date,'orgId':$scope.orgId,'canvassHours':$scope.canvassHours,'trf':$scope.trf};
-	}else{
-	    form1 = $scope.form1.id;
-	}
-	*/
-	var donation = {'chk': $scope.chk,'cc':$scope.cc,'money':$scope.money};
-	$scope.donations.push(donation);
-	
-	//TODO REMOVE THIS API CALL
-	/*$http.post('/api/rest/donation',JSON.stringify(donation)).then(function(data){
-	    //need to set $scope.form1
-	    if($scope.form1==null){
-		$scope.form1 = form1;
-		$scope.form1.id=data.data.form;		
-	    }
-	});
-	*/
-	
-	//clear values
-	$scope.chk = "";
-	$scope.cc ="";
-	$scope.money = "";
-    };
-    
-    $scope.submitClick=function(){
-	var date = moment($scope.dt).format('MM-DD-YYYY');
-	var form1 = {'userId':$scope.userId,'date':date,'orgId':$scope.orgId,'canvassHours':$scope.canvassHours,'trf':$scope.trf};
-	var form1Data = {"form1":form1,"donations":$scope.donations}
-	//var formId = $scope.form1.id;
-	//var update = {'id':formId,'status':1};
-
-	//TODO REMOVE PUT FROM API...
-	/*
-	$http.put('/api/rest/form1/'+$scope.userId,JSON.stringify()).then(function(data){
-	    $scope.submitHistory.push(data.data);
-	});
-	*/
-
-	$http.post('/api/rest/form1/'+$scope.userId,JSON.stringify(form1Data)).then(function(data){
-	    $scope.submitHistory.push(data.data);
-
-	    $scope.donations=[];
-	});
-    };
-}]);
-
-myApp.controller('Form2Controller', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
-    $scope.$emit("selectForm",4);
-}]);
-
 
 myApp.controller('WorkerController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
     $log.log("Hello from Worker Controller");

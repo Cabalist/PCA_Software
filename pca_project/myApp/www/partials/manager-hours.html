@@ -25,13 +25,22 @@
       </select>
       <span class="input-group-addon">Hours:</span>
       <input class="form-control" type="number" ng-model="hours"/>
-
+      <span class="input-group-addon">Minutes:</span>
+      <select class="form-control" id="minutes">
+	<option value="0" selected>0</option>
+	<option value="25">15M</option>	
+	<option value="50">30M</option>
+	<option value="75">45M</option>
+      </select>
       <span class="input-group-btn">
 	<button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Add Hours" ng-click="addHours()"><span class="glyphicon glyphicon-plus"></span></button>
-      </span>
-      
+      </span>      
     </div>
 
+    <div ng-show="errorMsg">
+      <h4 class="alert">ERROR: {{ errorMsg  }} </h4>
+    </div>
+    
     <div ng-show="history.length">
       <h4>History:</h4>
       <uib-accordion>
