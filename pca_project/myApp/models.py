@@ -11,7 +11,7 @@ class Organization(models.Model):
 class UserOrganizationRoleRel(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    role = models.IntegerField()
+    role = models.IntegerField()  #1 - worker, 2 - Manager , 3- Bookkeeper
     request_date = models.DateTimeField(null=True)
     status = models.IntegerField(default=0) #0-Waiting for approval, 1-Approved, 2-Rejected
     approvedOrRejectedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="admin",null=True)

@@ -145,6 +145,24 @@ def orgWorkers(request,orgId=None):
         
         return JsonResponse(serialized.data, safe=False)
 
+def getPayTerms(user,org):
+    payTerms = user.payterms_set.filter(org=org)
+
+    #check if user has temporary pay terms
+    tempTerms = payTerms.filter(startDate__gte=datetime.date.today()).filter(endDate__lt=datetime.date.today()).all()
+    if len(tempTerms):  #use latest temp terms...
+        return tempTerms[len(tempTerms)-1]     
+   
+    else:
+        baseRate = payTerms.filter(termsType=1).all()
+        if len(baseRate):
+
+            return baseRate[len(baseRate)-1]
+
+        else:
+            return None
+
+    
 @csrf_exempt
 def donation(request,orgId=None):
     if request.method == "POST":
@@ -156,7 +174,7 @@ def donation(request,orgId=None):
         data = JSONParser().parse(request)
         donor = data["donor"]
         donation = data["donation"]
-        user = User.objects.get(pk=donation["user"]) #this refers to 'worker' or recruiter...
+        user = User.objects.get(pk=donation["user"]) #this refers to 'worker' or 'recruiter'...
         org = Organization.objects.get(id=donation["org"])
         
         donorObj = None
@@ -185,7 +203,11 @@ def donation(request,orgId=None):
         donationObj = None
         value = donation["value"]
 
-        donationObj = Donation(user=user,org=org, formDate=date, donor = donorObj, donationType=donationType, value=value, addedOn = now,addedBy=addedBy)
+        #Get curently applied payTerms
+        payTerms = getPayTerms(user,org)
+        
+
+        donationObj = Donation(user=user,org=org, payTerms = payTerms, formDate=date, donor = donorObj, donationType=donationType, value=value, addedOn = now,addedBy=addedBy)
         donationObj.save()
         if donationType==1: #cash donation
             pass
@@ -208,7 +230,9 @@ def donation(request,orgId=None):
             
             checkObj = Check(donation=donationObj,checkNum=checkNum,checkDate=checkDate,status=0)
             checkObj.save()
-            
+
+
+        
         serialized = DonationSerializer(donationObj)
         return JsonResponse(serialized.data, safe=False)
 
