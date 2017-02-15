@@ -20,7 +20,32 @@ myApp.config(function($stateProvider){
 	    templateUrl: '/www/partials/bookkeeper-payterms.html',
 	    controller: 'BkprPaytermsController'
 	})
-        .state('manager',{
+        .state('bookkeeper.reports',{
+	    url:'/reports',
+	    templateUrl: '/www/partials/bookkeeper-reports.html',
+	    controller: 'reportsController'
+	})
+        .state('bookkeeper.reports.ytd',{
+	    url:'/ytd',
+	    templateUrl: '/www/partials/bookkeeper-reports-ytd.html',
+	    controller: 'ytdController'
+	})
+        .state('bookkeeper.reports.c2w',{ //Canvasser 2 week report
+	    url:'/c2w',
+	    templateUrl: '/www/partials/bookkeeper-reports-c2w.html',
+	    controller: 'c2wController'
+	})
+        .state('bookkeeper.reports.r3',{ 
+	    url:'/r3',
+	    templateUrl: '/www/partials/bookkeeper-reports-r3.html',
+	    controller: 'r3Controller'
+	})
+        .state('bookkeeper.reports.r4',{ 
+	    url:'/r4',
+	    templateUrl: '/www/partials/bookkeeper-reports-r4.html',
+	    controller: 'r4Controller'
+	})
+	.state('manager',{
 	    url:"/org/:orgId/manager",
 	    templateUrl: '/www/partials/manager.html',
 	    controller: 'ManagerController'

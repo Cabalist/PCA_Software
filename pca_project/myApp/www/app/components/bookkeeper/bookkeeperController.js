@@ -1,4 +1,4 @@
-myApp.controller('BookkeeperController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+myApp.controller('BookkeeperController', ['$scope','$http','$log','$state','$stateParams', function($scope,$http,$log,$state,$stateParams) {
     $scope.orgId = $stateParams.orgId;
     $scope.orgName= null;
 
@@ -23,6 +23,13 @@ myApp.controller('BookkeeperController', ['$scope','$http','$log','$stateParams'
 	$scope.selectedForm = formIndex;
     });
 
+
+    $scope.goToReports = function (){
+
+	$state.go('bookkeeper.reports');
+	$scope.$broadcast("selectReport",0);
+    };
+    
     $log.log("hello from Bookkeeper controller");
 
 }]);
