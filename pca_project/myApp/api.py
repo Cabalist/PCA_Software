@@ -348,3 +348,19 @@ def newcomerShare(request,orgId=None):
         
         return JsonResponse({'newcomerShare':settingValue}, safe=False)
     
+
+
+#Reports
+@csrf_exempt
+def orgYTDDonations(request,orgId=None,year=None):
+    if request.method == "GET":
+
+
+        ret = [ {"firstName": "Alex",
+                 "lastName": "Gilman"},{
+                 "firstName": "Test",
+                 "lastName": "Test"},{
+                 "firstName": "Test",
+                 "lastName": "Test"}]
+        
+        return JsonResponse(ret, safe = False )

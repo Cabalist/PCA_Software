@@ -1,1 +1,1 @@
-var myApp = angular.module('userApp', ['ui.router','ui.bootstrap']);
+var myApp = angular.module('userApp', ['ui.router','ui.bootstrap','ui.grid']);
