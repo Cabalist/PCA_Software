@@ -91,7 +91,8 @@ class CCTransaction(models.Model):
     proccessedOn = models.DateTimeField()
     status = models.IntegerField() #0 - pending processing, 1- success, 2 - fail
     notes = models.CharField(max_length=128)
-    
+
+    donation = models.ForeignKey(Donation,related_name="ccTransaction")
     
 #class UserOrgJoinRequest(models.Model):
 #    user = models.ForeignKey(settings.AUTH_USER_MODEL)

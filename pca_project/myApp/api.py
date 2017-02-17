@@ -354,13 +354,19 @@ def newcomerShare(request,orgId=None):
 @csrf_exempt
 def orgYTDDonations(request,orgId=None,year=None):
     if request.method == "GET":
-
-
-        ret = [ {"firstName": "Alex",
-                 "lastName": "Gilman"},{
-                 "firstName": "Test",
-                 "lastName": "Test"},{
-                 "firstName": "Test",
-                 "lastName": "Test"}]
+        #Get donations for given year. Recurring CC donations are proccessed differently from cash and check donations.
+        #Donation types: cash=1 , CC=2, check=3
         
-        return JsonResponse(ret, safe = False )
+        org = Organization.objects.get(id=orgId)
+        donations1 = Donation.objects.filter(org=org).filter(formDate__year=year).all()
+
+            
+        #TODO Handle Credid Card transactions if recurring... DonationType = 2.
+        transactionLi = CCTransaction.objects.filter(proccessedOn__year = year).all()
+        donations2 = Donation.objects.filter(org=org).filter(donationType = 2).filter(ccTransaction__in = transactionLi).all()
+
+        ##TODO Need a way to enter CCtransactions first...
+
+    
+        serialized = Donations1Serializer(donations1,many=True)
+        return JsonResponse(serialized.data, safe=False)
