@@ -1,4 +1,22 @@
 <div>
-  <p>test</p>
   <div id="grid1" ui-grid="gridOptions" class="grid"></div>
+  <br>
+  <div style="width:550px">
+    <span class="pull-left">
+      <canvas width="180" height="220" id="polar-area" class="chart chart-pie"
+	      chart-data="chartData" chart-labels="labels" legend="true" chart-options="chartOptions">
+      </canvas>
+    </span>
+    <span class="pull-right">
+      <ul class="list-group" style="width:300px">
+	<li class="list-group-item" ng-repeat="share in sharesData">
+	  {{ getShareHolderName($index) }} - ${{ share.shareVal }} ({{ getSharePercent($index)  }} %)
+	</li>
+      </ul>
+
+
+    </span>
+  </div>
+
+  
 </div>

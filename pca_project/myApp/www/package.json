@@ -18,6 +18,7 @@
   "homepage": "https://github.com/agilman/PCA_Software#readme",
   "dependencies": {
     "angular": "^1.5.9",
+    "angular-chart.js": "^1.1.1",
     "angular-ui-bootstrap": "^2.3.0",
     "angular-ui-grid": "^4.0.2",
     "angular-ui-router": "^0.3.2",
