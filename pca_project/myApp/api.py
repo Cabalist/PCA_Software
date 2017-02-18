@@ -149,7 +149,7 @@ def getPayTerms(user,org):
     payTerms = user.payterms_set.filter(org=org)
 
     #check if user has temporary pay terms
-    tempTerms = payTerms.filter(startDate__gte=datetime.date.today()).filter(endDate__lt=datetime.date.today()).all()
+    tempTerms = payTerms.filter(startDate__lte=datetime.date.today()).filter(endDate__gt=datetime.date.today()).all()
     if len(tempTerms):  #use latest temp terms...
         return tempTerms[len(tempTerms)-1]     
    
