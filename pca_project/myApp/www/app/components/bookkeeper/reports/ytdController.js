@@ -1,3 +1,12 @@
+
+
+// This filter Simply formats the inputs as decimal ands adds %.
+myApp.filter('percentage', ['$filter', function ($filter) {
+    return function (input, decimals) {
+	return $filter('number')(input, decimals) + '%';
+    };
+}]);
+
 myApp.controller('ytdController', ['$scope','$http','$log','uiGridConstants', function($scope,$http,$log,uiGridConstants) {
     $scope.$emit("selectReport",1);
     $scope.rawData = [];
@@ -13,13 +22,35 @@ myApp.controller('ytdController', ['$scope','$http','$log','uiGridConstants', fu
     $scope.gridOptions={
 	showColumnFooter:true,
 	data: $scope.myData,
-	columnDefs:[{field:'canvasser', width:'20%'},
-		    {name:"Donor",field:'donor',aggregationType: uiGridConstants.aggregationTypes.count ,width:'20%'},
-		    {name:"Date", field:'date', width:'15%' },
-		    {name:"$", field:'value',aggregationType: uiGridConstants.aggregationTypes.sum ,width:'12%' },
-		    {name:'Cnvsr. %', field:"canvasserPrcnt", width:'12%' },
-		    {name:'Cnvsr. Take',field:"canvasserTake",aggregationType: uiGridConstants.aggregationTypes.sum, width:'10%' },
-		    {name:'Org Take', field:"orgTake",aggregationType: uiGridConstants.aggregationTypes.sum ,width:'10%' } ],
+	columnDefs:[{field:'canvasser',
+		     aggregationType: uiGridConstants.aggregationTypes.count ,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >Count: {{col.getAggregationValue()}}</div>',
+		     width:'18%'},
+		    {name:"Donor",
+		     field:'donor',
+		     width:'15%'},
+		    {name:"Date", field:'date', width:'11%' },
+		    {name:"Value",
+		     cellFilter:'currency',
+		     field:'value',
+		     aggregationType: uiGridConstants.aggregationTypes.sum ,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
+		     width:'10%' },
+		    {name:"Type", field:"type",width:'10%'},
+		    {name:'Cnvsr. %', cellFilter:'percentage',field:"canvasserPrcnt", width:'10%' },
+		    {name:'Cnvsr. Take',
+		     cellFilter:'currency',
+		     field:"canvasserTake",
+		     aggregationType: uiGridConstants.aggregationTypes.sum,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
+		     width:'10%' },
+		    {name:'Org Take',
+		     cellFilter:'currency',
+		     field:"orgTake",
+		     aggregationType: uiGridConstants.aggregationTypes.sum ,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
+		     width:'10%' }
+		   ],
 	onRegisterApi: function(gridApi){  // this is for exposing api to other controllers...
 	    $scope.gridApi = gridApi; //Don't use it...
 	}
@@ -77,21 +108,30 @@ myApp.controller('ytdController', ['$scope','$http','$log','uiGridConstants', fu
 	    
 	    if (d.payTerms != null){
 		dRow["canvasserPrcnt"] = d.payTerms.percent;
-	    }
-	    
+	    }	    
 
 	    if (d.payTerms!=null){
 		dRow["canvasserTake"] = (d.value * (d.payTerms.percent/100)).toFixed(2);
-	    }
-	    
+	    }	    
 
 	    if (d.payTerms!=null){
 		dRow["orgTake"] = (d.value - (d.value * (d.payTerms.percent/100)).toFixed(2)).toFixed(2);
 				              
 	    }else{
 		dRow["orgTake"] = d.value;
+
 	    }
 
+	    if (d.donationType==1){
+		dRow["type"] = "Cash";
+	    } 
+	    else if (d.donationType==2){
+		dRow["type"] = "CC";
+	    }else if (d.donationType==3){
+		dRow["type"] = "Check";
+	    }		
+
+	    
 	    $scope.myData.push(dRow);
 	    addUserShares(d.user,dRow["canvasserTake"],dRow["orgTake"]);
 	}
