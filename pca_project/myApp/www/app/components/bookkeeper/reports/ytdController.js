@@ -22,6 +22,9 @@ myApp.controller('ytdController', ['$scope','$http','$log','uiGridConstants', fu
     $scope.gridOptions={
 	showColumnFooter:true,
 	data: $scope.myData,
+	enableGridMenu: true,
+	exporterCsvFilename: 'ytdData.csv',
+	exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
 	columnDefs:[{field:'canvasser',
 		     aggregationType: uiGridConstants.aggregationTypes.count ,
 		     footerCellTemplate: '<div class="ui-grid-cell-contents" >Count: {{col.getAggregationValue()}}</div>',
