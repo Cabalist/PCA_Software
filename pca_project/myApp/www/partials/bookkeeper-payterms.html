@@ -1,8 +1,8 @@
 
 <div class="col-lg-7">
-  
   <div class="input-group">
     <span class="input-group-addon"><b>Newcomer Share:</b></span>
+    
     <span class="input-group-addon">
       <input class="form-control" type="text" ng-model="newcomerShare" ng-disabled="!editNewcomerShare" ng-change="newcomerShareChanged=1">
     </span>
@@ -12,8 +12,48 @@
       <button class="btn btn-primary" ng-click="saveNewcomerShare()" ng-show="newcomerShareChanged">Save!</button>
     </span>
   </div>
+  
+  <button  class="btn" data-toggle="tooltip" title="Toggle info" ng-hide="showNewcomerInfo" ng-click="showNewcomerInfo=true;">
+    <i class="glyphicon glyphicon-info-sign"></i>
+  </button>
+  <div class="panel panel-info" ng-show="showNewcomerInfo">
+    <div class="panel-heading clearfix">	  
+      <span class="pull-left">
+      <button class="btn" ng-click="showNewcomerInfo=false">
+	<i class="glyphicon glyphicon-remove"></i>
+      </button>
+      <span>
+	<b>Newcomer Share:</b>
+      </span>
+    </div>
+    <div class="panel-body">This is the default percentage applied to new members of the organization.</div>
+  </div>
+  
   <hr>
   <h4>User Pay Terms</h4>
+  <button  class="btn" data-toggle="tooltip" title="Toggle info" ng-hide="showPolicyInfo" ng-click="showPolicyInfo=true;">
+    <i class="glyphicon glyphicon-info-sign"></i>
+  </button>
+  <div class="panel panel-info" ng-show="showPolicyInfo">
+    <div class="panel-heading clearfix">	  
+      <span class="pull-left">
+	<button class="btn" ng-click="showPolicyInfo=false;">
+	  <i class="glyphicon glyphicon-remove"></i>
+	</button>
+	<span>
+	  <b>Pay Term Policies:</b>
+	</span>
+    </div>
+    <div class="panel-body">
+      <ul>
+	<li>User Pay Terms are used to pay canvassers a percentage of received donations.</li>
+	<li>Each user can only have one active policy at a time.</li>
+	<li>A policy can be permenant (Base Rate), or Temporary.</li>
+	<li>Temporary policies are used to boost canvassers earning for special projects...</li>
+	<li>Pay terms are applied to the donation when it is entered. Changing a canvassers pay terms will not result in retroactive changes to donations.</li>
+      </ul>
+    </div>
+  </div>
   
   <div class="input-group" ng-repeat="usr in userTerms">
     <span class="input-group-addon">Name:</span>
