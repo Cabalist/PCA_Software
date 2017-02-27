@@ -1,5 +1,3 @@
-
-
 // This filter Simply formats the inputs as decimal ands adds %.
 myApp.filter('percentage', ['$filter', function ($filter) {
     return function (input, decimals) {
@@ -18,6 +16,8 @@ myApp.controller('ytdController', ['$scope','$http','$log','uiGridConstants', fu
 
     $scope.sharesData =[];
     $scope.sharesSumTotal = 0;
+
+    $scope.showSpinner=true;
     
     $scope.gridOptions={
 	showColumnFooter:true,
@@ -58,6 +58,10 @@ myApp.controller('ytdController', ['$scope','$http','$log','uiGridConstants', fu
 	    $scope.gridApi = gridApi; //Don't use it...
 	}
     };
+
+    //init spinner
+    var target = document.getElementById('spinner')
+    var spinner = new Spinner().spin(target);
 
     function parsePayTermsData(){
 	if($scope.sharesData.length>1){
@@ -137,6 +141,8 @@ myApp.controller('ytdController', ['$scope','$http','$log','uiGridConstants', fu
 	    
 	    $scope.myData.push(dRow);
 	    addUserShares(d.user,dRow["canvasserTake"],dRow["orgTake"]);
+
+	    $scope.showSpinner=false;
 	}
 
     };
