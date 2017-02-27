@@ -17,7 +17,7 @@
     <span class="pull-right">
       <ul class="list-group" style="width:300px">
 	<li class="list-group-item" ng-repeat="share in sharesData">
-	  {{ getShareHolderName($index) }} - ${{ share.shareVal }} ({{ getSharePercent($index)  }} %)
+	  {{ getShareHolderName($index) }} - ${{ share.shareVal | number:2 }} ({{ getSharePercent($index)  }} %)
 	</li>
       </ul>
 

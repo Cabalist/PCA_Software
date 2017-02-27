@@ -17,7 +17,7 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
     $scope.checkNum=null;
     $scope.selectedWorker = null;
     $scope.donorOver18 = "1";
-    $scope.donationValue = 0 ;
+    $scope.donationValue = 1.0 ;
 
     //history section
     $scope.history = [];
@@ -40,6 +40,7 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
 	$scope.dt = new Date();
 	$scope.checkDt = new Date();
     };
+    
     $scope.today();
     $scope.popup1 = {
 	opened: false
@@ -61,77 +62,84 @@ myApp.controller('ManagerDonorsController', ['$scope','$http','$log','$statePara
     $http.get('/api/rest/orgWorkers/' + $scope.orgId).then(function(data){
 	$scope.workers = data.data;
     });
-
+    
     $scope.submitClick = function(){
-	var donor = { 'user': $scope.selectedWorker.userInfo.pk,
-		      'org': $scope.orgId,
-		      'name': $scope.donorName,
-		      'addr': $scope.donorAddr,
-		      'city': $scope.donorCity,
-		      'state': $scope.donorState,
-		      'zip': $scope.donorZip,
-		      'email': $scope.donorEmail,
-		      'phone': $scope.donorPhone,
-		      'over18': $scope.donorOver18};
-
-	var donation = null;
-	if ($scope.donationType==1){ //cash donation
-	    donation = {'user': $scope.selectedWorker.userInfo.pk,
-			'org': $scope.orgId,
-			'donationType' : $scope.donationType,
-			'date': moment($scope.dt).format("YYYY MM DD"),
-			'value': $scope.donationValue
-		       };
-	}else if ($scope.donationType==2){ //Credit Card
-	    donation = {'user': $scope.selectedWorker.userInfo.pk,
-			'org': $scope.orgId,
-			'donationType' : $scope.donationType,
-			'date': moment($scope.dt).format("YYYY MM DD"),
-			'value': $scope.donationValue,
-			//Credid Card specific
-			'nameOnCard': $scope.nameOnCard,
-			'cardLast4' : $scope.cardLast4,
-			'cardExp'   : $scope.cardExp,
-			'cardRecurring': $scope.cardRecurring,
-		       };
-	    $log.log(donation);
-
-	}else if ($scope.donationType==3){ //check
-	    donation = {'user': $scope.selectedWorker.userInfo.pk,
-			'org': $scope.orgId,
-			'donationType' : $scope.donationType,
-			'date': moment($scope.dt).format("YYYY MM DD"),
-			'value': $scope.donationValue,
-			//Check specific
-			'checkNum':$scope.checkNum,
-			'checkDate':moment($scope.checDt).format("YYYY MM DD"),
-		       };
+	if($scope.dForm.$valid){
+	    var donor = { 'user': $scope.selectedWorker.userInfo.pk,
+			  'org': $scope.orgId,
+			  'name': $scope.donorName,
+			  'addr': $scope.donorAddr,
+			  'city': $scope.donorCity,
+			  'state': $scope.donorState,
+			  'zip': $scope.donorZip,
+			  'email': $scope.donorEmail,
+			  'phone': $scope.donorPhone,
+			  'over18': $scope.donorOver18};
+	    
+	    var donation = null;
+	    if ($scope.donationType==1){ //cash donation
+		donation = {'user': $scope.selectedWorker.userInfo.pk,
+			    'org': $scope.orgId,
+			    'donationType' : $scope.donationType,
+			    'date': moment($scope.dt).format("YYYY MM DD"),
+			    'value': $scope.donationValue
+			   };
+	    }else if ($scope.donationType==2){ //Credit Card
+		donation = {'user': $scope.selectedWorker.userInfo.pk,
+			    'org': $scope.orgId,
+			    'donationType' : $scope.donationType,
+			    'date': moment($scope.dt).format("YYYY MM DD"),
+			    'value': $scope.donationValue,
+			    //Credid Card specific
+			    'nameOnCard': $scope.nameOnCard,
+			    'cardLast4' : $scope.cardLast4,
+			    'cardExp'   : $scope.cardExp,
+			    'cardRecurring': $scope.cardRecurring,
+			   };
+		$log.log(donation);
+		
+	    }else if ($scope.donationType==3){ //check
+		donation = {'user': $scope.selectedWorker.userInfo.pk,
+			    'org': $scope.orgId,
+			    'donationType' : $scope.donationType,
+			    'date': moment($scope.dt).format("YYYY MM DD"),
+			    'value': $scope.donationValue,
+			    //Check specific
+			    'checkNum':$scope.checkNum,
+			    'checkDate':moment($scope.checDt).format("YYYY MM DD"),
+			   };
+	    }
+	    
+	    var data = {'donor':donor,'donation':donation};
+	    $http.post('/api/rest/donation',JSON.stringify(data)).then(function(data){
+		//Add new entry to history.
+		addDonations([data.data]);
+		
+		//clear form
+		$scope.donorName=null;
+		$scope.donorAddr=null;
+		$scope.donorCity=null;
+		$scope.donorState=null;
+		$scope.donorZip=null;
+		$scope.donorEmail=null;
+		$scope.donorPhone=null;
+		$scope.donorOver18 = "1";
+		$scope.donationValue = 1.0 ;
+		//cc specific
+		$scope.nameOnCard=null;
+		$scope.cardLast4=null;
+		$scope.cardExp=null;
+		$scope.cardRecurring=0;
+		//check specific
+		$scope.checkNum=null;
+		$scope.checkDt = new Date(); //Maybe refresh formDate as well?
+	    });
+	    
 	}
 
-	var data = {'donor':donor,'donation':donation};
-	$http.post('/api/rest/donation',JSON.stringify(data)).then(function(data){
-	    //Add new entry to history.
-	    addDonations([data.data]);
 
-	    //clear form
-	    $scope.donorName=null;
-	    $scope.donorAddr=null;
-	    $scope.donorCity=null;
-	    $scope.donorState=null;
-	    $scope.donorZip=null;
-	    $scope.donorEmail=null;
-	    $scope.donorPhone=null;
-	    $scope.donorOver18 = "1";
-	    $scope.donationValue = 0 ;
-	    //cc specific
-	    $scope.nameOnCard=null;
-	    $scope.cardLast4=null;
-	    $scope.cardExp=null;
-	    $scope.cardRecurring=0;
-	    //check specific
-	    $scope.checkNum=null;
-	    $scope.checkDt = new Date(); //Maybe refresh formDate as well?
-	});
+	//set pristine
+	$scope.dForm.value.$setPristine();
     };
 
     function getDateIndex(date){
