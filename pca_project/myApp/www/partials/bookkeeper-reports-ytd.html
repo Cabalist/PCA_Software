@@ -1,29 +1,31 @@
 <div>
-
+  <div class="input-group">
+    <span class="input-group-addon">Year:</span>
+    <select class="form-control" ng-options="item as item for item in yearOptions track by item" ng-model="selectedYear" ng-change="loadYear(selectedYear)")>
+    </select>
+  </div>
+  <br>
   <div ng-show="showSpinner" id="spinner" ng-hide="!showSpinner"></div>
-
+  
   <div ng-if="!showSpinner">
     <div id="grid1" style="width:100%" ui-grid="gridOptions" class="grid" ui-grid-exporter>
     </div>
   </div>
 
   <br>
-  <div style="width:500px">
+  <div style="width:600px">
     <span class="pull-left">
-      <canvas width="180" height="220" id="polar-area" class="chart chart-pie"
+      <canvas width="320" height="240" id="polar-area" class="chart chart-pie"
 	      chart-data="chartData" chart-labels="labels" legend="true" chart-options="chartOptions">
       </canvas>
     </span>
     <span class="pull-right">
-      <ul class="list-group" style="width:300px">
+      <ul class="list-group" style="width:280px">
 	<li class="list-group-item" ng-repeat="share in sharesData">
 	  {{ getShareHolderName($index) }} - ${{ share.shareVal | number:2 }} ({{ getSharePercent($index)  }} %)
 	</li>
       </ul>
-
-
     </span>
   </div>
-
   
 </div>

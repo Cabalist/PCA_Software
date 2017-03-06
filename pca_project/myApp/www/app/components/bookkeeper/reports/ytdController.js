@@ -17,11 +17,13 @@ myApp.controller('ytdController', ['$scope','$http','$log','uiGridConstants', fu
     $scope.sharesData =[];
     $scope.sharesSumTotal = 0;
 
+    var y = moment().format("YYYY");
+    $scope.yearOptions = [y,y-1,y-2,y-3];
+    $scope.selectedYear = $scope.yearOptions[0];
     $scope.showSpinner=true;
     
     $scope.gridOptions={
 	showColumnFooter:true,
-	data: $scope.myData,
 	enableGridMenu: true,
 	exporterCsvFilename: 'ytdData.csv',
 	exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
@@ -147,12 +149,32 @@ myApp.controller('ytdController', ['$scope','$http','$log','uiGridConstants', fu
 
     };
     
-    $http.get('/api/rest/orgYTDDonations/' + $scope.orgId+'/'+moment().year()).then(function(data){
-	$scope.rawData = data.data;
-	addYTDDataToGrid(data.data);
-	parsePayTermsData();
-    });
+    $scope.loadYear = function(year){
+	$scope.gridOptions.data=[];
+	$scope.rawData = [];
+	$scope.myData = [];
+	$scope.labels = [];
+	$scope.chartData = [];
+	$scope.sharesData =[];
+	$scope.sharesSumTotal = 0;
+	
+	$http.get('/api/rest/orgYTDDonations/' + $scope.orgId+'/'+year).then(function(data){
+	    $scope.rawData = data.data;
+	    addYTDDataToGrid(data.data);
 
+	    $scope.gridOptions.data = $scope.myData;
+	    //refresh grid data
+	    if(typeof($scope.gridApi)!='undefined'){
+		
+		$scope.gridApi.core.refresh();
+	    }
+	
+	    parsePayTermsData();
+	});
+    }
+
+    $scope.loadYear($scope.selectedYear);
+    
     $scope.getShareHolderName = function(index){
 	if (index==0){
 	    return $scope.sharesData[0].user;
