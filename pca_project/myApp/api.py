@@ -152,7 +152,8 @@ def getPayTerms(user,org):
     tempTerms = payTerms.filter(startDate__lte=datetime.date.today()).filter(endDate__gt=datetime.date.today()).all()
     if len(tempTerms):  #use latest temp terms...
         return tempTerms[len(tempTerms)-1]     
-   
+
+    
     else:
         baseRate = payTerms.filter(termsType=1).all()
         if len(baseRate):
@@ -289,6 +290,7 @@ def hours(request,userId=None,orgId=None):
 def payTerms(request, orgId=None):
     if request.method == "GET":
         #Get all Users and their payterms for the org.
+        #filter here? or in UI?
         terms = PayTerms.objects.filter(org=orgId)
 
         serialized = PayTermsSerializer(terms,many=True)

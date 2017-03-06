@@ -59,13 +59,24 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
 
     function addToTemp(term,usrIndex){
 	//This function replaces temp terms as needed.
-	if ($scope.userTerms[usrIndex].terms.temp.length==0){
-	    $scope.userTerms[usrIndex].terms.temp.push(term);
-	}else{
-	    if (term.id > $scope.userTerms[usrIndex].terms.temp[0].id){ //replace if new item has higher id...
-		$scope.userTerms[usrIndex].terms.temp=[term];
+
+	//if THe date is in range...
+	var today = moment().format("YYYY-MM-DD");
+	
+	if ((term.startDate <= today) && (today<term.endDate)){
+	    //$log.log("OK, active...");
+	    if ($scope.userTerms[usrIndex].terms.temp.length==0){
+		$scope.userTerms[usrIndex].terms.temp.push(term);
+	    }else{
+		if (term.id > $scope.userTerms[usrIndex].terms.temp[0].id){ //replace if new item has higher id...
+		    $scope.userTerms[usrIndex].terms.temp=[term];
+		}
 	    }
+	}else{
+	    //$log.log("NOT ACTIVE");
 	}
+	
+
     }
 
     function addTerms(termsLi){
@@ -82,7 +93,7 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
 		}
 	    }else{ //if user terms exist,
 		//only store latest of each type.
-
+		//NOPE, Only show active...
 		if (term.termsType==1){
 		    addToBase(term,usrIndex);
 		}else if (term.termsType==2){
@@ -127,9 +138,7 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
 		   };
 
 	$http.post('/api/rest/payTerms/'+$scope.orgId,JSON.stringify(data)).then(function(data){
-	    $log.log(data.data);
-	    addTerms([data.data]);
-	    $log.log("OK");
+	    addTerms([data.data]);	    
 	});
 
 	//hide button
@@ -137,8 +146,6 @@ myApp.controller('BkprPaytermsController', ['$scope','$http','$log','$stateParam
     };
 
     $scope.saveNewTempTerms = function(){
-	$log.log("save temp terms");
-
 	var data = {'user':$scope.editing.userInfo.pk,
 		    'org': $scope.orgId,
 		    'termsType': 2,
