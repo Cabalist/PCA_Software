@@ -1,15 +1,25 @@
 <div>
-  TEST
   <br>
   <div class="input-group">
-    <span class="input-group-addon">Year:</span>
-    <select class="form-control" ng-options="year for year in yearOptions track by year" ng-model="selectedYear" ng-change="changeYear(selectedYear)">
+    <span class="input-group-addon btn" ng-click="goToPrev()">
+      
+	<i class="glyphicon glyphicon-chevron-left"></i>
+	Prev</span>
+    
+    <span class="input-group-addon">From:</span>
+    <input class="form-control" ng-model="startOfPeriodStr" />
+    <span class="input-group-addon">To:</span>
+    <input class="form-control" ng-model="endOfPeriodStr"/>
+    <span class="input-group-addon btn" ng-click="goToNext()" ng-show="showNext()">Next
+      <i class="glyphicon glyphicon-chevron-right"></i>
+    </span>
+  </div>
+  <div class="input-group">
+    <span class="input-group-addon">Canvasser:</span>
+    <select class="form-control" type="select">
+      <option>All</option>
     </select>
-  </div>
-  <br>
-  
-  <div id="grid1" style="width:100%" ui-grid="gridOptions" class="grid">
-  </div>
-  
+    <br>
+    
 </div>
 

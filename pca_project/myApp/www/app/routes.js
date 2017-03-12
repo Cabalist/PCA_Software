@@ -30,8 +30,12 @@ myApp.config(function($stateProvider){
 	    templateUrl: '/www/partials/bookkeeper-reports-ytd.html',
 	    controller: 'ytdController'
 	})
-        .state('bookkeeper.reports.c2w',{ //Canvasser 2 week report
+        .state('bookkeeper.reports.c2wIndex',{ //Canvasser 2 week report Index
 	    url:'/c2w',
+	    controller: 'c2wIndexController'
+	})
+        .state('bookkeeper.reports.c2w',{ //Canvasser 2 week report
+	    url:'/c2w/:year/:period',
 	    templateUrl: '/www/partials/bookkeeper-reports-c2w.html',
 	    controller: 'c2wController'
 	})

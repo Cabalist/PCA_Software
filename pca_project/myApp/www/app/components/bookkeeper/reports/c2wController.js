@@ -1,34 +1,72 @@
-myApp.controller('c2wController', ['$scope','$http','$log',function($scope,$http,$log) {
+myApp.controller('c2wIndexController', ['$scope','$http','$log','$state',function($scope,$http,$log,$state) {
     $scope.$emit("selectReport",2);
-    
-    var y = moment().format("YYYY");
-    $scope.yearOptions=[y,y-1,y-2,y-3]
-    $scope.selectedYear = $scope.yearOptions[0];
 
-    $scope.myData = [{'name':"2017 Test",'value':'$15'}];
+
+    //This controller should figure out latest week and change to that state.
+    //current week
+    var now = moment();
+    var curWeek = now.week();
+
+    var cur = null;
+    var start = null;
     
-    $scope.gridOptions={
-	data: $scope.myData,
-	onRegisterApi: function(gridApi){
-	    $scope.gridApi = gridApi;
+    //if odd, get start of previous week.
+    if (curWeek%2!=0){
+	cur = (curWeek-1)/2;
+    }else {
+	cur = curWeek/2;
+    }
+
+    $state.go("bookkeeper.reports.c2w",{ 'year': now.format("YYYY"), 'period':cur });
+    
+}]);
+
+
+myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParams',function($scope,$http,$log,$state,$stateParams) {
+    //probably need to emit something to set year and period in parent scope...
+    $scope.year = $stateParams.year;
+    $scope.period = $stateParams.period;
+    
+    //figure out start of period...    
+    $scope.startOfPeriod = moment($scope.year+"-01-01").add($scope.period*14-1,'days').startOf('week');
+    $scope.startOfPeriodStr = $scope.startOfPeriod.format("MMMM Do, YYYY");
+
+    $scope.endOfPeriod = $scope.startOfPeriod.add(14,'days').startOf('week');
+    $scope.endOfPeriodStr = $scope.endOfPeriod.format("MMMM Do, YYYY");
+
+    $scope.showNext = function(){
+	var now = moment();
+	if ($scope.endOfPeriod > now){
+	    return false;
+	    
+	}else{
+	    return true;
 	}
     };
 
-    $scope.changeYear=function(year){
-	$log.log(year);
-	if(year==2017){
-	    $scope.gridOptions.data = $scope.myData ;
-	}else if (year==2016){
-	    $scope.gridOptions.data = [{'name':'2016 Test','value':'$5'}];
-	}else {
-	    $scope.gridOptions.data = [{'name':'Test','value':'$0'}];
-	}
-
-	if (typeof($scope.gridApi)!='undefined'){
-	    $scope.gridApi.core.refresh();
-	    $log.log("refresh");
+    $scope.goToPrev = function(){
+	if ($scope.period > 1){
+	    $scope.period--;
+	    $state.go("bookkeeper.reports.c2w",{ 'year': $scope.year, 'period':$scope.period });
+	}else{
+	    $scope.year--;
+	    $scope.period= 26;
+	    $state.go("bookkeeper.reports.c2w",{ 'year': $scope.year, 'period':$scope.period });
 	}
     };
 
-    $scope.changeYear($scope.selectedYear);
+
+    $scope.goToNext = function(){
+	if ($scope.endOfPeriod.format("YYYY") > $scope.startOfPeriod.format("YYYY")){
+	    $scope.period =1 ;
+	    $scope.year++;
+	    $state.go("bookkeeper.reports.c2w",{ 'year': $scope.year, 'period':$scope.period });
+	}else{
+	    $scope.period++;
+	    $state.go("bookkeeper.reports.c2w",{ 'year': $scope.year, 'period':$scope.period });
+	}
+    };
+    
+    $log.log("Hello from c2wController");
+    
 }]);

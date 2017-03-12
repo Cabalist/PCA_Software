@@ -24,6 +24,7 @@ myApp.controller('BookkeeperController', ['$scope','$http','$log','$state','$sta
     });
 
 
+    //Why not do ui-sref in HTML?
     $scope.goToReports = function (){
 
 	$state.go('bookkeeper.reports');
