@@ -35,7 +35,7 @@ myApp.config(function($stateProvider){
 	    controller: 'c2wIndexController'
 	})
         .state('bookkeeper.reports.c2w',{ //Canvasser 2 week report
-	    url:'/c2w/:year/:period',
+	    url:'/c2w/:year/:period/:canvId/',
 	    templateUrl: '/www/partials/bookkeeper-reports-c2w.html',
 	    controller: 'c2wController'
 	})

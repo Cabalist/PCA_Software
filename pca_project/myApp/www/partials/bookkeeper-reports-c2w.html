@@ -14,9 +14,7 @@
   
   <div class="input-group">
     <span class="input-group-addon">Canvasser:</span>
-    <select class="form-control" type="select">
-      <option>All</option>
-    </select>
+    <select class="form-control" ng-model="selectedCnvsr" ng-options="cnvsr.userInfo.first_name+' '+ cnvsr.userInfo.last_name for cnvsr in canvassers track by cnvsr.userInfo.pk"  ng-change="changeCnvsr(selectedCnvsr.userInfo.pk)"></select>
     <br>
   </div>
 
