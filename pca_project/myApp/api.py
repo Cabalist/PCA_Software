@@ -372,3 +372,22 @@ def orgYTDDonations(request,orgId=None,year=None):
     
         serialized = Donations1Serializer(donations1,many=True)
         return JsonResponse(serialized.data, safe=False)
+
+@csrf_exempt
+def c2wReport(request,orgId=None,start=None,end=None):
+    org = Organization.objects.get(id=orgId)
+
+    myStart = start.split("-")
+    mySDate = datetime.date(int(myStart[0]),int(myStart[1]),int(myStart[2]))
+
+    myEnd = end.split("-")
+    myEDate = datetime.date(int(myEnd[0]),int(myEnd[1]),int(myEnd[2]))
+
+    #TODO, check that start and end dates are reasonable...
+    
+    
+    donations1 = Donation.objects.filter(org=org).filter(formDate__gte=mySDate).filter(formDate__lt=myEDate).all()
+
+    serialized = Donations1Serializer(donations1,many=True)
+    return JsonResponse(serialized.data, safe=False)
+    

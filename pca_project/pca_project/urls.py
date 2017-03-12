@@ -44,6 +44,7 @@ urlpatterns = [
     url(r'^api/rest/hours/(?P<userId>\d+)/(?P<orgId>\d+)$', api.hours),
 
     #reports
-    url(r'^api/rest/orgYTDDonations/(?P<orgId>\d+)/(?P<year>\d+)$',api.orgYTDDonations)
+    url(r'^api/rest/orgYTDDonations/(?P<orgId>\d+)/(?P<year>\d+)$',api.orgYTDDonations),
+    url(r'^api/rest/c2wReport/(?P<orgId>\d+)/(?P<start>[\w\-]+)/(?P<end>[\w\-]+)$',api.c2wReport)
     
 ]
