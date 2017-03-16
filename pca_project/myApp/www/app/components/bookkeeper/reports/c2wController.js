@@ -157,43 +157,43 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 	exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
 	columnDefs:[{name:'Date',
 		     field:'date',
-		     width:'20%'},
+		     width:'*'},
 		    {name:"Hours",
 		     field:'canvassingHours',
 		     aggregationType: uiGridConstants.aggregationTypes.sum ,
 		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() }} Hours</div>',
-		     width:'12%'},
+		     width:'*'},
 		    {name:"Admin",
 		     field:'adminHours',
 		     aggregationType: uiGridConstants.aggregationTypes.sum ,
 		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() }} Hours</div>',
-		     width:'11%' },
+		     width:'*' },
 		    {name:"Travel",
 		     field:'travelHours',
 		     aggregationType: uiGridConstants.aggregationTypes.sum ,
 		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() }} Hours</div>',
-		     width:'12%' },
+		     width:'*' },
 		    {name:"Donations",
 		     field:"donations",
-		     width:'10%'},
+		     width:'*'},
 		    {name:'Value',
 		     cellFilter:'currency',
 		     field:'value',	    
 		     aggregationType: uiGridConstants.aggregationTypes.sum ,
 		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
-		     width:'12%' },
+		     width:'*' },
 		    {name:'Cnvsr Take',
 		     cellFilter:'currency',
 		     field:"canvasserTake",
 		     aggregationType: uiGridConstants.aggregationTypes.sum,
 		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
-		     width:'12%' },
+		     width:'*' },
 		    {name:'Org Take',
 		     cellFilter:'currency',
 		     field:"orgTake",
 		     aggregationType: uiGridConstants.aggregationTypes.sum,
 		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
-		     width:'11%'}
+		     width:'*'}
 		   ],
 	onRegisterApi: function(gridApi){  // this is for exposing api to other controllers...
 	    $scope.hoursGridApi = gridApi; //Don't use it...
@@ -323,7 +323,7 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 	    $scope.rawHours = data.data.hours;
 	    
 	    addDataToGrid();
-	    addDataToHoursGrid();
+	    
 	    
 	    //refresh grid
 	    $scope.gridOptions.data = $scope.gridData;
@@ -331,18 +331,25 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 		$scope.gridApi.core.refresh();
 	    }	    
 
-	    $scope.hoursGridOptions.data = $scope.hoursGridData;
-
-	    $interval(hoursRefresh,500,5);
-	    
+	    if($scope.selectedCnvsr.userInfo.pk!=0){
+		addDataToHoursGrid();
+		$scope.hoursGridOptions.data = $scope.hoursGridData;
+		
+		$scope.fresh=false;
+		$interval(hoursRefresh,500,10);
+	    }
 	});
     }
 
 
     var hoursRefresh = function() {
-	if(typeof($scope.gridApi)!='undefined'){
-	    $scope.hoursGridApi.core.refresh();
-	}	    
+	if (!$scope.fresh){
+	    if(typeof($scope.gridApi)!='undefined'){
+		$scope.hoursGridApi.core.refresh();
+		$scope.fresh=true;
+		$log.log("Hours Grid REFRESHED!");
+	    }
+	}
 
     };
     
