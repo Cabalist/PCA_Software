@@ -22,8 +22,49 @@
 
     
     <label>Hours:</label>
-    <div ng-if="!hoursRefresh" style="width:100%" ui-grid="hoursGridOptions" class="grid" ui-grid-exporter>
-    </div>
+    <table class="table table-bordered">
+      <thead>
+	<tr>
+	  <th>Date</th>
+	  <th>Canvassing</th>
+	  <th>Admin</th>
+	  <th>Travel</th>
+	  <th>Donations</th>
+	  <th>Value</th>
+	  <th>Canvasser Take</th>
+	  <th>Org Take</th>
+	</tr>
+      </thead>
+      <tbody>
+	<tr ng-repeat="day in hoursGridData">
+	  <td>{{day.date}}</td>
+	  <td>{{day.canvassingHours}}</td>
+	  <td>{{day.adminHours}}</td>
+	  <td>{{day.travelHours}}</td>
+	  <td>{{day.donations }}</td>
+	  <td>{{day.value | currency }}</td>
+	  <td>{{day.canvasserTake | currency }}</td>
+	  <td>{{day.orgTake | currency }}</td>
+	</tr>
+      </tbody>
+      <tfoot>
+	<tr>
+	  <td><b>TOTALS:</b></td>
+	  <td>{{ getCanvassingTotal() }} Hours</td>
+	  <td>{{ getAdminTotal() }} Hours</td>
+	  <td>{{ getTravelTotal() }} Hours</td>
+	  <td>{{ getDonationsTotal() }} </td>
+	  <td>{{ getValueTotal() | currency }}</td>
+	  <td>{{ getCnvsrTotal() | currency }}</td>
+	  <td>{{ getOrgTotal() | currency }} </td>
+
+	</tr>
+      </tfoot>
+    </table>
+    
+    <!--div style="width:100%" ui-grid="hoursGridOptions" class="grid" ui-grid-exporter>	</div-->
+
+    
     
   </div>  
   

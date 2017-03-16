@@ -333,25 +333,83 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 
 	    if($scope.selectedCnvsr.userInfo.pk!=0){
 		addDataToHoursGrid();
-		$scope.hoursGridOptions.data = $scope.hoursGridData;
+		//$scope.hoursGridOptions.data = $scope.hoursGridData;
 		
-		$scope.fresh=false;
-		$interval(hoursRefresh,500,10);
+		//$scope.fresh=false;
+		//$interval(hoursRefresh,500,10);
 	    }
 	});
-    }
+    };
 
-
-    var hoursRefresh = function() {
-	if (!$scope.fresh){
-	    if(typeof($scope.gridApi)!='undefined'){
-		$scope.hoursGridApi.core.refresh();
-		$scope.fresh=true;
-		$log.log("Hours Grid REFRESHED!");
-	    }
+    $scope.getOrgTotal = function(){
+	var total = 0;
+	for(var i = 0;i<$scope.hoursGridData.length;i++){
+	    total += parseFloat($scope.hoursGridData[i].orgTake);
 	}
 
+	return  total;
     };
+
+    $scope.getCnvsrTotal = function(){
+	var total = 0;
+	for(var i = 0;i<$scope.hoursGridData.length;i++){
+	    total += parseFloat($scope.hoursGridData[i].canvasserTake);
+	}
+	
+	return  total;
+    };
+
+    $scope.getValueTotal = function(){
+	var total = 0;
+	for(var i = 0;i<$scope.hoursGridData.length;i++){
+	    total += parseFloat($scope.hoursGridData[i].value);
+	}
+	
+	return  total;
+    };
+
+    $scope.getDonationsTotal = function(){
+	var total = 0;
+	$log.log($scope.hoursGridData);
+	for(var i = 0; i<$scope.hoursGridData.length;i++){
+	    total += parseInt($scope.hoursGridData[i].donations);
+	}
+	
+	return  total;
+    };
+
+    $scope.getTravelTotal = function(){
+	var total = 0;
+	$log.log($scope.hoursGridData);
+	for(var i = 0; i<$scope.hoursGridData.length;i++){
+	    total += parseInt($scope.hoursGridData[i].travelHours);
+	}
+	
+	return  total;
+    };
+
+    $scope.getAdminTotal = function(){
+	var total = 0;
+	$log.log($scope.hoursGridData);
+	for(var i = 0; i<$scope.hoursGridData.length;i++){
+	    total += parseInt($scope.hoursGridData[i].adminHours);
+	}
+	
+	return  total;
+    };
+
+
+    $scope.getCanvassingTotal = function(){
+	var total = 0;
+	$log.log($scope.hoursGridData);
+	for(var i = 0; i<$scope.hoursGridData.length;i++){
+	    total += parseInt($scope.hoursGridData[i].canvassingHours);
+	}
+	
+	return  total;
+    };
+
+
     
     $scope.loadData();
     
