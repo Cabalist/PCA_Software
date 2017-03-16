@@ -40,7 +40,7 @@ class Hours(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     org = models.ForeignKey(Organization, on_delete=models.CASCADE)
     date = models.DateField()
-    hoursType = models.IntegerField()
+    hoursType = models.IntegerField()  #1 - canvassing, 2 - admin, 3 - travel
     hours = models.FloatField()
     addedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="addedHours")
     addedOn = models.DateTimeField()

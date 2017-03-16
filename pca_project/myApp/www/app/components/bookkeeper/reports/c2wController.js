@@ -163,22 +163,22 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 		     aggregationType: uiGridConstants.aggregationTypes.sum ,
 		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() }} Hours</div>',
 		     width:'12%'},
-		    {name:"Travl",
-		     field:'travelHours',
-		     aggregationType: uiGridConstants.aggregationTypes.sum ,
-		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() }} Hours</div>',
-		     width:'12%' },
 		    {name:"Admin",
 		     field:'adminHours',
 		     aggregationType: uiGridConstants.aggregationTypes.sum ,
 		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() }} Hours</div>',
 		     width:'11%' },
+		    {name:"Travel",
+		     field:'travelHours',
+		     aggregationType: uiGridConstants.aggregationTypes.sum ,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() }} Hours</div>',
+		     width:'12%' },
 		    {name:"Donations",
 		     field:"donations",
 		     width:'10%'},
 		    {name:'Value',
 		     cellFilter:'currency',
-		     field:'Value',		    
+		     field:'value',	    
 		     aggregationType: uiGridConstants.aggregationTypes.sum ,
 		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
 		     width:'12%' },
@@ -245,12 +245,78 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 	}	
     }
 
+    function getHoursOnDate(date){
+	//Input: date
+	//Output: {admin:<float>,travel:<float>, canvassing:<float>}
+
+	var canvassing = 0;
+	var admin = 0;
+	var travel = 0;
+	
+	for(var i=0;i<$scope.rawHours.length;i++){
+	    var hoursDate = moment($scope.rawHours[i].date).format("YYYY-MM-DD");
+	    if(hoursDate == date.format("YYYY-MM-DD")){
+		if ($scope.rawHours[i].hoursType==1){
+		    canvassing += $scope.rawHours[i].hours;
+		}else if ($scope.rawHours[i].hoursType==2){
+		    admin += $scope.rawHours[i].hours;
+		}else if ($scope.rawHours[i].hoursType==3){
+		    travel += $scope.rawHours[i].hours;
+		}
+	    }
+	}
+
+	return {'admin':admin,'travel':travel,'canvassing':canvassing};
+    }
+
+    function getDonationsOnDate(date){
+	var donations = 0;
+	var value = 0;
+	var canvTake = 0;
+	var orgTake = 0;
+
+	for(var i= 0; i< $scope.gridData.length;i++){
+	    var donationDate = moment($scope.gridData[i].date).format("YYYY-MM-DD");
+	    	    
+	    if (donationDate == date.format("YYYY-MM-DD")){
+		donations+=1;
+		value += parseFloat($scope.gridData[i].value);
+		canvTake += parseFloat($scope.gridData[i].canvasserTake);
+		orgTake += parseFloat($scope.gridData[i].orgTake);
+	    }
+
+	}
+
+	return {'donations':donations,'value':value,'canvTake':canvTake,'orgTake':orgTake};
+    }
+    
     function addDataToHoursGrid(){
-	$log.log($scope.rawHours);
+	for(var i =0;i<14; i++){
+	    var date = $scope.startOfPeriod.clone().add(i,'days');
+
+	    var hours = getHoursOnDate(date);
+
+	    var donations = getDonationsOnDate(date);
+
+	    if (hours.canvassing || hours.admin || hours.travel || donations.donations){
+		var hRow = {'date': date.format("YYYY-MM-DD"),
+			    'canvassingHours':hours.canvassing,
+			    'adminHours':hours.admin,
+			    'travelHours':hours.travel,
+			    'donations': donations.donations,
+			    'value' : donations.value,
+			    'canvasserTake':donations.canvTake,
+			    'orgTake':donations.orgTake};
+		
+		$scope.hoursGridData.push(hRow);
+	    }
+	    
+	}
     }
     
     $scope.loadData = function(){
 	$scope.gridData = [];
+	$scope.hoursGridData = [];
 
 	$http.get('/api/rest/c2wReport/'+$scope.orgId+'/'+$scope.startOfPeriod.format("YYYY-MM-DD")+"/"+$scope.endOfPeriod.format("YYYY-MM-DD")).then(function(data){
 	    $scope.rawData= data.data.donations;
@@ -260,15 +326,19 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 	    addDataToHoursGrid();
 	    
 	    //refresh grid
-	    $scope.gridOptions.data= $scope.gridData;
+	    $scope.gridOptions.data = $scope.gridData;
 	    if(typeof($scope.gridApi)!='undefined'){
 		$scope.gridApi.core.refresh();
 	    }	    
-	    
+
+	    $scope.hoursGridOptions.data = $scope.hoursGridData;
+	    if(typeof($scope.hoursGridApi)!='undefined'){
+		$scope.hoursGridApi.core.refresh();
+	    }	    
 	});
     }
     
     $scope.loadData();
     
-    $log.log("Hello from c2wController");    
+    $log.log("Hello from c2wController");
 }]);
