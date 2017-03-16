@@ -332,9 +332,9 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 	    }	    
 
 	    $scope.hoursGridOptions.data = $scope.hoursGridData;
-	    if(typeof($scope.hoursGridApi)!='undefined'){
-		$scope.hoursGridApi.core.refresh();
-	    }	    
+	    //if(typeof($scope.hoursGridApi)!='undefined'){
+	    $scope.hoursGridApi.core.refresh();
+	    //}	    
 	});
     }
     
