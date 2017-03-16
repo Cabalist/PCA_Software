@@ -22,13 +22,13 @@
 
     
     <label>Hours:</label>
-    <div id="grid2" style="width:100%" ui-grid="hoursGridOptions" class="grid" ui-grid-exporter>
+    <div ng-if="!hoursRefresh" style="width:100%" ui-grid="hoursGridOptions" class="grid" ui-grid-exporter>
     </div>
     
   </div>  
   
   <label>Donations:</label>
-  <div id="grid1" style="width:100%" ui-grid="gridOptions" class="grid" ui-grid-exporter>
+  <div  style="width:100%" ui-grid="gridOptions" class="grid" ui-grid-exporter>
   </div>
 
  

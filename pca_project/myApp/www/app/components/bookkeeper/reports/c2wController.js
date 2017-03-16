@@ -21,7 +21,7 @@ myApp.controller('c2wIndexController', ['$scope','$http','$log','$state',functio
 }]);
 
 
-myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParams','uiGridConstants',function($scope,$http,$log,$state,$stateParams,uiGridConstants) {
+myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParams','uiGridConstants','$timeout',function($scope,$http,$log,$state,$stateParams,uiGridConstants,$timeout) {
     //probably need to emit something to set year and period in parent scope...
     $scope.year = $stateParams.year;
     $scope.period = $stateParams.period;
@@ -332,11 +332,22 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 	    }	    
 
 	    $scope.hoursGridOptions.data = $scope.hoursGridData;
-	    //if(typeof($scope.hoursGridApi)!='undefined'){
-	    $scope.hoursGridApi.core.refresh();
-	    //}	    
+
+	    hoursRefresh();
 	});
     }
+
+
+    var hoursRefresh = function() {
+	$scope.refresh = true;
+	$timeout(function() {
+	    if(typeof($scope.hoursGridApi)!='undefined'){
+		$scope.hoursGridApi.core.refresh();
+	    }	    
+	    
+	    $scope.refresh = false;
+	}, 0);
+    };
     
     $scope.loadData();
     
