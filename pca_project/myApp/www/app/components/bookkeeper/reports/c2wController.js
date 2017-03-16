@@ -382,7 +382,7 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 	var total = 0;
 	$log.log($scope.hoursGridData);
 	for(var i = 0; i<$scope.hoursGridData.length;i++){
-	    total += parseInt($scope.hoursGridData[i].travelHours);
+	    total += parseFloat($scope.hoursGridData[i].travelHours);
 	}
 	
 	return  total;
@@ -392,7 +392,7 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 	var total = 0;
 	$log.log($scope.hoursGridData);
 	for(var i = 0; i<$scope.hoursGridData.length;i++){
-	    total += parseInt($scope.hoursGridData[i].adminHours);
+	    total += parseFloat($scope.hoursGridData[i].adminHours);
 	}
 	
 	return  total;
@@ -403,7 +403,7 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 	var total = 0;
 	$log.log($scope.hoursGridData);
 	for(var i = 0; i<$scope.hoursGridData.length;i++){
-	    total += parseInt($scope.hoursGridData[i].canvassingHours);
+	    total += parseFloat($scope.hoursGridData[i].canvassingHours);
 	}
 	
 	return  total;
