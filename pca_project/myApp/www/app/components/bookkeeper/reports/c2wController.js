@@ -16,7 +16,7 @@ myApp.controller('c2wIndexController', ['$scope','$http','$log','$state',functio
 	cur = curWeek/2;
     }
 
-    $state.go("bookkeeper.reports.c2w",{ 'year': now.format("YYYY"), 'period':cur, 'canvId':0});
+    $state.go("bookkeeper.reports.c2w",{ 'year': now.format("YYYY"), 'period':cur, 'canvId':0 });
     
 }]);
 
@@ -25,14 +25,10 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
     //probably need to emit something to set year and period in parent scope...
     $scope.year = $stateParams.year;
     $scope.period = $stateParams.period;
-    
-    if ($stateParams.canvId!=''){
-	$scope.canvId = $stateParams.canvId;
-    }else{
-	$scope.canvId = "0";
-    }
+    $scope.canvId = $stateParams.canvId;
 
     $scope.gridData = [];
+    $scope.hoursGridData = [] ;
     
     //figure out start of period...    
     $scope.startOfPeriod = moment($scope.year+"-01-01").add($scope.period*14-1,'days').startOf('week');
@@ -41,22 +37,15 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
     $scope.endOfPeriod = $scope.startOfPeriod.clone().add(14,'days').startOf('week');
     $scope.endOfPeriodStr = $scope.endOfPeriod.format("MMMM Do, YYYY");
 
-
-
-    //get canvassers list
     function selectCanvsr(){
-	if($scope.canvId==0){
-	    $scope.selectedCnvsr=$scope.canvassers[0];
-	}else{
-	    for(var i=0; i<$scope.canvassers.length; i++){
-		if($scope.canvId==$scope.canvassers[i].userInfo.pk){
-		    $scope.selectedCnvsr=$scope.canvassers[i];
-		}
+	for(var i=0; i<$scope.canvassers.length; i++){
+	    if($scope.canvId==$scope.canvassers[i].userInfo.pk){
+		$scope.selectedCnvsr=$scope.canvassers[i];
 	    }
 	}
     }
 
-    
+    //get canvassers list
     $http.get('/api/rest/orgWorkers/' + $scope.orgId).then(function(data){
 	$scope.canvassers =[{'userInfo':
 			     {'pk':0,
@@ -64,7 +53,6 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 			      'last_name':""}}];
 
 	//push
-
 	for (var i=0;i<data.data.length;i++){
 	    $scope.canvassers.push(data.data[i]);
 	}
@@ -75,8 +63,6 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 
     $scope.changeCnvsr = function(cnvsrId){
 	$scope.canvId=cnvsrId;
-	selectCanvsr();
-
 	$state.go("bookkeeper.reports.c2w",{ 'year': $scope.year, 'period':$scope.period, 'canvId':cnvsrId });	
     }
     
@@ -89,24 +75,23 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 	    return true;
 	}
     };
-
     
     $scope.goToPrev = function(){
 	if ($scope.period > 1){
 	    $scope.period--;
-	
+	    
 	    $state.go("bookkeeper.reports.c2w",{ 'year': $scope.year, 'period':$scope.period, 'canvId':$scope.cavnId });
 	}else{
 	    $scope.year--;
-	    $scope.period= 26;
-	
+	    $scope.period = 26;
+	    
 	    $state.go("bookkeeper.reports.c2w",{ 'year': $scope.year, 'period':$scope.period, 'canvId':$scope.canvId });
 	}
     };
 
     $scope.goToNext = function(){
 	if ($scope.endOfPeriod.format("YYYY") > $scope.startOfPeriod.format("YYYY")){
-	    $scope.period =1 ;
+	    $scope.period = 1 ;
 	    $scope.year++;
 	
 	    $state.go("bookkeeper.reports.c2w",{ 'year': $scope.year, 'period':$scope.period, 'canvId':$scope.canvId });
@@ -163,14 +148,63 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 	    $scope.gridApi = gridApi; //Don't use it...
 	}
     };
-    
+
+
+    $scope.hoursGridOptions={
+	showColumnFooter:true,
+	enableGridMenu: true,
+	exporterCsvFilename: 'C2WHours-'+$scope.year+'-'+$scope.period+'-Data.csv',
+	exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
+	columnDefs:[{name:'Date',
+		     field:'date',
+		     width:'20%'},
+		    {name:"Hours",
+		     field:'canvassingHours',
+		     aggregationType: uiGridConstants.aggregationTypes.sum ,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() }} Hours</div>',
+		     width:'12%'},
+		    {name:"Travl",
+		     field:'travelHours',
+		     aggregationType: uiGridConstants.aggregationTypes.sum ,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() }} Hours</div>',
+		     width:'12%' },
+		    {name:"Admin",
+		     field:'adminHours',
+		     aggregationType: uiGridConstants.aggregationTypes.sum ,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() }} Hours</div>',
+		     width:'11%' },
+		    {name:"Donations",
+		     field:"donations",
+		     width:'10%'},
+		    {name:'Value',
+		     cellFilter:'currency',
+		     field:'Value',		    
+		     aggregationType: uiGridConstants.aggregationTypes.sum ,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
+		     width:'12%' },
+		    {name:'Cnvsr Take',
+		     cellFilter:'currency',
+		     field:"canvasserTake",
+		     aggregationType: uiGridConstants.aggregationTypes.sum,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
+		     width:'12%' },
+		    {name:'Org Take',
+		     cellFilter:'currency',
+		     field:"orgTake",
+		     aggregationType: uiGridConstants.aggregationTypes.sum,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
+		     width:'11%'}
+		   ],
+	onRegisterApi: function(gridApi){  // this is for exposing api to other controllers...
+	    $scope.hoursGridApi = gridApi; //Don't use it...
+	}
+    };
     
     function addDataToGrid(){
 	for(var i =0;i<$scope.rawData.length; i++){
 	    var d = $scope.rawData[i];
 	    if ($scope.canvId==0 || $scope.canvId==d.user.pk){
 		
-	
 		var dRow = {}
 		dRow["canvasser"] = d.user.first_name+" "+d.user.last_name;
 		dRow["donor"] =d.donor.name;
@@ -210,15 +244,21 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 	    }
 	}	
     }
+
+    function addDataToHoursGrid(){
+	$log.log($scope.rawHours);
+    }
     
     $scope.loadData = function(){
 	$scope.gridData = [];
 
 	$http.get('/api/rest/c2wReport/'+$scope.orgId+'/'+$scope.startOfPeriod.format("YYYY-MM-DD")+"/"+$scope.endOfPeriod.format("YYYY-MM-DD")).then(function(data){
-	    $scope.rawData= data.data;
-
+	    $scope.rawData= data.data.donations;
+	    $scope.rawHours = data.data.hours;
+	    
 	    addDataToGrid();
-
+	    addDataToHoursGrid();
+	    
 	    //refresh grid
 	    $scope.gridOptions.data= $scope.gridData;
 	    if(typeof($scope.gridApi)!='undefined'){

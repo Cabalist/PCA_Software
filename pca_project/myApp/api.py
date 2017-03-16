@@ -384,10 +384,18 @@ def c2wReport(request,orgId=None,start=None,end=None):
     myEDate = datetime.date(int(myEnd[0]),int(myEnd[1]),int(myEnd[2]))
 
     #TODO, check that start and end dates are reasonable...
-    
-    
     donations1 = Donation.objects.filter(org=org).filter(formDate__gte=mySDate).filter(formDate__lt=myEDate).all()
 
-    serialized = Donations1Serializer(donations1,many=True)
-    return JsonResponse(serialized.data, safe=False)
+    #Get hours
+    hours = Hours.objects.filter(org=org).filter(date__gte=mySDate).filter(date__lt = myEDate).all()
+        
+    
+    
+
+    serializedDonations = Donations1Serializer(donations1,many=True)
+    serializedHours = HoursSerializer(hours,many=True)
+
+    
+        
+    return JsonResponse({"donations":serializedDonations.data,"hours":serializedHours.data}, safe=False)
     

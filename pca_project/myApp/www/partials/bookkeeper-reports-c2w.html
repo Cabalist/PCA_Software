@@ -1,8 +1,8 @@
 <div>
   <div class="input-group">
     <span class="input-group-addon btn" ng-click="goToPrev()"> 
-	<i class="glyphicon glyphicon-chevron-left"></i>
-	Prev</span>    
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Prev</span>    
     <span class="input-group-addon">From:</span>
     <input class="form-control" ng-model="startOfPeriodStr" />
     <span class="input-group-addon">To:</span>
@@ -18,10 +18,21 @@
     <br>
   </div>
 
-  <br>
+  <div ng-show="selectedCnvsr.userInfo.pk">
 
+
+  <label>Hours:</label>
+  <div id="grid2" style="width:100%" ui-grid="hoursGridOptions" class="grid" ui-grid-exporter>
+  </div>
+  
+  </div>  
+  
+  <label>Donations:</label>
   <div id="grid1" style="width:100%" ui-grid="gridOptions" class="grid" ui-grid-exporter>
   </div>
+
+ 
+
   
 </div>
 
