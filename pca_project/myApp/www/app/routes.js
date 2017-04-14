@@ -20,6 +20,11 @@ myApp.config(function($stateProvider){
 	    templateUrl: '/www/partials/bookkeeper-payterms.html',
 	    controller: 'BkprPaytermsController'
 	})
+        .state('bookkeeper.adjustments',{
+	    url:"/adjustments",
+	    templateUrl: '/www/partials/bookkeeper-adjustments.html',
+	    controller: 'BkprAdjustmentsController'
+	})
         .state('bookkeeper.reports',{
 	    url:'/reports',
 	    templateUrl: '/www/partials/bookkeeper-reports.html',

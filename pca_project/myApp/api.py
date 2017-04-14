@@ -364,8 +364,8 @@ def orgYTDDonations(request,orgId=None,year=None):
 
             
         #TODO Handle Credid Card transactions if recurring... DonationType = 2.
-        transactionLi = CCTransaction.objects.filter(proccessedOn__year = year).all()
-        donations2 = Donation.objects.filter(org=org).filter(donationType = 2).filter(ccTransaction__in = transactionLi).all()
+        #transactionLi = CCTransaction.objects.filter(proccessedOn__year = year).all()
+        #donations2 = Donation.objects.filter(org=org).filter(donationType = 2).filter(ccTransaction__in = transactionLi).all()
 
         ##TODO Need a way to enter CCtransactions first...
 

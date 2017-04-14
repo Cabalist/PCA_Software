@@ -84,15 +84,18 @@ class CreditCard(models.Model):
     last4 = models.IntegerField()
     exp = models.CharField(max_length=7)
     recurring = models.BooleanField()
-    
-class CCTransaction(models.Model):
-    creditCard = models.ForeignKey(CreditCard)
+
+
+class DonationAdjustment(models.Model): #This is transaction status... and fee if successful.
+    donation = models.ForeignKey(Donation)
     proccessedBy = models.ForeignKey(settings.AUTH_USER_MODEL)
     proccessedOn = models.DateTimeField()
+    
     status = models.IntegerField() #0 - pending processing, 1- success, 2 - fail
+    fee = models.FloatField()
     notes = models.CharField(max_length=128)
+    
 
-    donation = models.ForeignKey(Donation,related_name="ccTransaction")
     
 #class UserOrgJoinRequest(models.Model):
 #    user = models.ForeignKey(settings.AUTH_USER_MODEL)
