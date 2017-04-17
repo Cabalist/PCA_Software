@@ -349,8 +349,17 @@ def newcomerShare(request,orgId=None):
         newVal.save()
         
         return JsonResponse({'newcomerShare':settingValue}, safe=False)
-    
 
+
+@csrf_exempt
+def adjustments(request,orgId=None,year=None):
+    if request.method =="GET":
+        org = Organization.objects.get(id=orgId)
+        donations = Donation.objects.filter(org=org).filter(donationType__in=[2,3]).filter(formDate__year=year).all()
+
+        serialized = AdjustmentsReportSerializer(donations,many=True)
+
+        return JsonResponse(serialized.data ,safe=False)
 
 #Reports
 @csrf_exempt

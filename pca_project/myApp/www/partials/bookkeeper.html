@@ -11,7 +11,8 @@
     <div class="list-group">
       <button ui-sref="bookkeeper.userMgmt" class="btn list-group-item" ng-class="isFormActive(1);">User management</button>
       <button ui-sref="bookkeeper.payterms" class="btn list-group-item" ng-class="isFormActive(2);">Pay Terms</button>
-      <button ui-sref="bookkeeper.adjustments" class="btn list-group-item" ng-class="isFormActive(3);">Adjustments</button>
+      <!--TODO: make redirect year dynamic -->
+      <button ui-sref="bookkeeper.adjustments({year:2017,canvId:0})" class="btn list-group-item" ng-class="isFormActive(3);">Adjustments</button>
     </div>
     <br>
     <button ng-click="goToReports()" class="btn list-group-item" ng-class="isFormActive(4);">Reports</button>

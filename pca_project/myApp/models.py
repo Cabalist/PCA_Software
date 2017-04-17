@@ -94,7 +94,6 @@ class DonationAdjustment(models.Model): #This is transaction status... and fee i
     status = models.IntegerField() #0 - pending processing, 1- success, 2 - fail
     fee = models.FloatField()
     notes = models.CharField(max_length=128)
-    
 
     
 #class UserOrgJoinRequest(models.Model):

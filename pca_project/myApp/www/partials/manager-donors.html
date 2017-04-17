@@ -5,7 +5,7 @@
 
     <p ng-show="dForm.user.$invalid">Please select a Recruiter:</p>
     <div class="input-group">
-      <span class="input-group-addon">Recruiter:</span>
+      <span class="input-group-addon">Worker:</span>
       <select name="user" class="form-control" ng-model="selectedWorker" ng-options="worker.userInfo.first_name+' '+worker.userInfo.last_name for worker in workers track by worker.userInfo.pk" ng-change="recruiterChange(selectedWorker.userInfo.pk)" required>
       </select>
 

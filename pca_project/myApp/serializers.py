@@ -39,6 +39,21 @@ class DonationSerializer(serializers.ModelSerializer):
         model = Donation
         fields= ['id','formDate','donor','donationType','value','addedOn']
 
+
+class AdjustmentsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DonationAdjustment
+        fields = '__all__'
+    
+class AdjustmentsReportSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    adjustments = AdjustmentsSerializer(source='donationadjustment_set',many=True)
+    donor = DonorSerializer()
+    
+    class Meta:
+        model = Donation
+        fields = ['id', 'user', 'donor','donationType','value','adjustments']
+        
 class HoursSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hours
