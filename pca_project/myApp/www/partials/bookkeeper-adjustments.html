@@ -18,13 +18,13 @@
   <h4><u>Credit Cards</u></h4>
   <!-- inputs area-->
 
-  <div class="input-group">
-    <span class="input-group-addon"><b>Cnvsr:</b>Alexander Gilman</span>
-    <span class="input-group-addon"><b>Donor:</b>Donald J Simpthomson</span>
-    <span class="input-group-addon"><b>Date:</b> 04/16/2017</span>
+  <div class="input-group" ng-repeat="unproccessedCC in unproccessedCCs">
+    <span class="input-group-addon"><b>Cnvsr:</b>{{ unproccessedCC.user.username }}</span>
+    <span class="input-group-addon"><b>Donor:</b>{{ unproccessedCC.donor.name }}</span>
+    <span class="input-group-addon"><b>Date:</b>{{ unproccessedCC.formDate }}</span>
     
-    <span class="input-group-addon"><b>Last 4:</b>3132</span>
-    <span class="input-group-addon"><b>Value:</b>$100.00</span>
+    <span class="input-group-addon"><b>Last 4:</b> {{ unproccessedCC.cc.last4 }}</span>
+    <span class="input-group-addon"><b>Value:</b>{{ unproccessedCC.value | currency }} </span>
     <span class="input-group-addon">
       <button class="btn btn-default" ng-click="markAccepted($index)">Accepted</button>
       <button class="btn btn-default" ng-click="markDeclined($index)">Declined</button>

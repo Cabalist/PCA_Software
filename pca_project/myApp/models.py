@@ -79,7 +79,7 @@ class Check(models.Model):
     processedOn = models.DateTimeField(null=True)
 
 class CreditCard(models.Model):
-    donation = models.ForeignKey(Donation)
+    donation = models.OneToOneField(Donation)
     nameOnCard = models.CharField(max_length=32)
     last4 = models.IntegerField()
     exp = models.CharField(max_length=7)

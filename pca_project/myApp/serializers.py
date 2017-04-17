@@ -44,15 +44,21 @@ class AdjustmentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = DonationAdjustment
         fields = '__all__'
-    
+
+class CreditCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =CreditCard
+        fields= '__all__'
+        
 class AdjustmentsReportSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     adjustments = AdjustmentsSerializer(source='donationadjustment_set',many=True)
     donor = DonorSerializer()
+    cc = CreditCardSerializer(source='creditcard')
     
     class Meta:
         model = Donation
-        fields = ['id', 'user', 'donor','donationType','value','adjustments']
+        fields = ['id', 'user', 'donor', 'formDate', 'donationType','value','adjustments','cc']
         
 class HoursSerializer(serializers.ModelSerializer):
     class Meta:
