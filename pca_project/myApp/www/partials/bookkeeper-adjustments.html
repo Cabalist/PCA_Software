@@ -26,14 +26,16 @@
     <span class="input-group-addon"><b>Last 4:</b> {{ unproccessedCC.cc.last4 }}</span>
     <span class="input-group-addon"><b>Value:</b>{{ unproccessedCC.value | currency }} </span>
     <span class="input-group-addon">
-      <button class="btn btn-default" ng-click="markAccepted($index)">Accepted</button>
-      <button class="btn btn-default" ng-click="markDeclined($index)">Declined</button>
+      <button class="btn btn-default" ng-class="{'btn-success': unproccessedCC.adjustments.status}" ng-click="unproccessedCC.adjustments.status=1">Accepted</button>
+      <button class="btn btn-default" ng-class="{'btn-danger': unproccessedCC.adjustments.status==0}" ng-click="unproccessedCC.adjustments.status=0">Declined</button>
     </span>
     <span class="input-group-addon">
-      <b>Fee:</b><input class="form-control" type="text"  size="5" ng-value="fee" disabled>
+      <div class="inut-group">
+	$  <input class="form-control-inline" type="text" size="5" ng-disabled="!unproccessedCC.adjustments.status" ng-model="fee" placeholder="fee">
+      </div>
     </span>
     <span class="input-group-addon">
-      <button class="btn btn-default" ng-click="saveAdjustment($index)" disabled>Save</button>
+      <button class="btn btn-primary" ng-disabled="(unproccessedCC.adjustments.status==null) || (fee==null)" ng-click="saveAdjustment($index)">Save</button>
     </span>
   </div>
   

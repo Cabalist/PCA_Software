@@ -13,6 +13,8 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
     $scope.recurringCCs = [];
     $scope.unproccessedChecks = [];
     $scope.proccessedChecks = [];
+
+    $scope.fee= null;
     
     function selectCanvsr(){
 	for(var i=0; i<$scope.canvassers.length; i++){
@@ -37,7 +39,12 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	//select canvasser
 	selectCanvsr();
     });
-    
+
+    function addUnproccessedCC(donation){
+	var x = donation;
+	x.adjustments.push({'status':null});
+	$scope.unproccessedCCs.push(x);
+    }
 
     function sortRawAdjs(){
 	for(var i=0;i<$scope.rawAdjData.length;i++){
@@ -47,7 +54,8 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 
 		//else 
 		if (donation.adjustments.length==0){
-		    $scope.unproccessedCCs.push(donation);
+		    addUnproccessedCC(donation);
+		    
 		}else{
 		    $scope.proccessedCCs.push(donation);
 		}
@@ -71,7 +79,7 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	$log.log($scope.unproccessedChecks);
     });
     
-    $log.log("CanvId:",$scope.canvId,"year:",$scope.selectedYear);
+
 
     $log.log("Hello from Bookkeeper Adjustmentss  controller");
 }]);
