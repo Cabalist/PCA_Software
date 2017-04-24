@@ -2,7 +2,8 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
     $scope.$emit("selectForm",3);
 
     $scope.canvId = $stateParams.canvId;
-
+    $scope.canvassers = [];
+    
     var y = moment().format("YYYY");
     $scope.yearOptions = [y,y-1,y-2,y-3];
     $scope.selectedYear = $stateParams.year;
@@ -11,8 +12,8 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
     $scope.unproccessedCCs = [];
     $scope.processedCCs = [];
     $scope.recurringCCs = [];
-    $scope.unproccessedChecks = [];
-    $scope.proccessedChecks = [];
+    $scope.unproccessedCKs = [];
+    $scope.proccessedCKs = [];
 
     $scope.fee= null;
     
@@ -81,8 +82,6 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	
 	sortRawAdjs();
 
-	$log.log($scope.unproccessedCCs);
-	$log.log($scope.unproccessedChecks);
     });
     
 

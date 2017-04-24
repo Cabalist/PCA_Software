@@ -45,25 +45,25 @@
 
   <h4><u>Checks</u></h4>
 
-    <div class="input-group" ng-repeat="unproccessedCheck in unproccessedChecks">
-    <span class="input-group-addon"><b>Cnvsr:</b>{{ unproccessedCheck.user.username }}</span>
-    <span class="input-group-addon"><b>Donor:</b>{{ unproccessedCheck.donor.name }}</span>
-    <span class="input-group-addon"><b>Date:</b>{{ unproccessedCheck.formDate }}</span>
+    <div class="input-group" ng-repeat="unproccessedCK in unproccessedCKs">
+    <span class="input-group-addon"><b>Cnvsr:</b>{{ unproccessedCK.user.username }}</span>
+    <span class="input-group-addon"><b>Donor:</b>{{ unproccessedCK.donor.name }}</span>
+    <span class="input-group-addon"><b>Date:</b>{{ unproccessedCJ.formDate }}</span>
     
-    <span class="input-group-addon"><b>CK Num:</b> {{ unproccessedCheck.ck[0].checkNum }}</span>
-    <span class="input-group-addon"><b>CK Date:</b> {{ unproccessedCheck.ck[0].checkDate }}</span>
-    <span class="input-group-addon"><b>Value:</b>{{ unproccessedCheck.value | currency }} </span>
+    <span class="input-group-addon"><b>Check Num:</b> {{ unproccessedCK.ck[0].checkNum }}</span>
+    <span class="input-group-addon"><b>Check Date:</b> {{ unproccessedCK.ck[0].checkDate }}</span>
+    <span class="input-group-addon"><b>Value:</b>{{ unproccessedCJ.value | currency }} </span>
     <span class="input-group-addon">
-      <button class="btn btn-default" ng-class="{'btn-success': unproccessedCheck.adjustments.status}" ng-click="unproccessedCheck.adjustments.status=1">Accepted</button>
-      <button class="btn btn-default" ng-class="{'btn-danger': unproccessedCheck.adjustments.status==0}" ng-click="unproccessedCheck.adjustments.status=0">Declined</button>
+      <button class="btn btn-default" ng-class="{'btn-success': unproccessedCK.adjustments.status}" ng-click="unproccessedCK.adjustments.status=1">Accepted</button>
+      <button class="btn btn-default" ng-class="{'btn-danger': unproccessedCK.adjustments.status==0}" ng-click="unproccessedCK.adjustments.status=0">Declined</button>
     </span>
     <span class="input-group-addon">
       <div class="inut-group">
-	$  <input class="form-control-inline" type="text" size="5" ng-disabled="!unproccessedCheck.adjustments.status" ng-model="fee" placeholder="fee">
+	$  <input class="form-control-inline" type="text" size="5" ng-disabled="!unproccessedCK.adjustments.status" ng-model="fee" placeholder="fee">
       </div>
     </span>
     <span class="input-group-addon">
-      <button class="btn btn-primary" ng-disabled="(unproccessedCheck.adjustments.status==null) && (fee==null)" ng-click="saveCKAdjustment($index)">Save</button>
+      <button class="btn btn-primary" ng-disabled="(unproccessedCK.adjustments.status==null) && (fee==null)" ng-click="saveCKAdjustment($index)">Save</button>
     </span>
   </div>
   
