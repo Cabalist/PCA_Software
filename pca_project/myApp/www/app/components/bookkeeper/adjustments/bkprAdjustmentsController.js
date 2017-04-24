@@ -46,6 +46,12 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	$scope.unproccessedCCs.push(x);
     }
 
+    function addUnproccessedCK(donation){
+	var x = donation;
+	x.adjustments.push({'status':null});
+	$scope.unproccessedCKs.push(x);
+    }
+
     function sortRawAdjs(){
 	for(var i=0;i<$scope.rawAdjData.length;i++){
 	    var donation = $scope.rawAdjData[i];
@@ -61,7 +67,7 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 		}
 	    } else if (donation.donationType==3){
 		if (donation.adjustments.length==0){
-		    $scope.unproccessedChecks.push(donation);
+		    addUnproccessedCK(donation);
 		}else{
 		    $scope.proccessedChecks.push(donation);
 		}
@@ -72,7 +78,7 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
     //get all credit card and check transactions for the year
     $http.get('/api/rest/orgAdjustments/' + $scope.orgId+"/"+ $scope.selectedYear).then(function(data){
 	$scope.rawAdjData = data.data;
-
+	
 	sortRawAdjs();
 
 	$log.log($scope.unproccessedCCs);

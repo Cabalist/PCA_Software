@@ -45,6 +45,11 @@ class AdjustmentsSerializer(serializers.ModelSerializer):
         model = DonationAdjustment
         fields = '__all__'
 
+class CheckSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Check
+        fields = '__all__'
+        
 class CreditCardSerializer(serializers.ModelSerializer):
     class Meta:
         model =CreditCard
@@ -54,11 +59,12 @@ class AdjustmentsReportSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     adjustments = AdjustmentsSerializer(source='donationadjustment_set',many=True)
     donor = DonorSerializer()
-    cc = CreditCardSerializer(source='creditcard')
+    cc = CreditCardSerializer(source='creditcard_set',many=True)
+    ck = CheckSerializer(source='check_set',many=True)
     
     class Meta:
         model = Donation
-        fields = ['id', 'user', 'donor', 'formDate', 'donationType','value','adjustments','cc']
+        fields = ['id', 'user', 'donor', 'formDate', 'donationType','value','adjustments','cc','ck']
         
 class HoursSerializer(serializers.ModelSerializer):
     class Meta:

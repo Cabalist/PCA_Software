@@ -229,7 +229,7 @@ def donation(request,orgId=None):
             dateLi = donation["checkDate"].split()
             checkDate = datetime.date(int(dateLi[0]),int(dateLi[1]),int(dateLi[2]))
             
-            checkObj = Check(donation=donationObj,checkNum=checkNum,checkDate=checkDate,status=0)
+            checkObj = Check(donation=donationObj,checkNum=checkNum,checkDate=checkDate)
             checkObj.save()
 
 
@@ -370,14 +370,6 @@ def orgYTDDonations(request,orgId=None,year=None):
         
         org = Organization.objects.get(id=orgId)
         donations1 = Donation.objects.filter(org=org).filter(formDate__year=year).all()
-
-            
-        #TODO Handle Credid Card transactions if recurring... DonationType = 2.
-        #transactionLi = CCTransaction.objects.filter(proccessedOn__year = year).all()
-        #donations2 = Donation.objects.filter(org=org).filter(donationType = 2).filter(ccTransaction__in = transactionLi).all()
-
-        ##TODO Need a way to enter CCtransactions first...
-
     
         serialized = Donations1Serializer(donations1,many=True)
         return JsonResponse(serialized.data, safe=False)
@@ -397,14 +389,9 @@ def c2wReport(request,orgId=None,start=None,end=None):
 
     #Get hours
     hours = Hours.objects.filter(org=org).filter(date__gte=mySDate).filter(date__lt = myEDate).all()
-        
-    
-    
 
     serializedDonations = Donations1Serializer(donations1,many=True)
     serializedHours = HoursSerializer(hours,many=True)
 
-    
-        
     return JsonResponse({"donations":serializedDonations.data,"hours":serializedHours.data}, safe=False)
     
