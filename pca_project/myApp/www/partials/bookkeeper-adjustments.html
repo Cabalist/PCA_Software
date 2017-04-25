@@ -26,8 +26,8 @@
     <span class="input-group-addon"><b>Last 4:</b> {{ unproccessedCC.cc[0].last4 }}</span>
     <span class="input-group-addon"><b>Value:</b>{{ unproccessedCC.value | currency }} </span>
     <span class="input-group-addon">
-      <button class="btn btn-default" ng-class="{'btn-success': unproccessedCC.adjustments.status}" ng-click="unproccessedCC.adjustments.status=1">Accepted</button>
-      <button class="btn btn-default" ng-class="{'btn-danger': unproccessedCC.adjustments.status==0}" ng-click="unproccessedCC.adjustments.status=0">Declined</button>
+      <button class="btn btn-default" ng-class="{'btn-success': unproccessedCC.adjustments.status}" ng-click="unproccessedCCs[{{ index }}].adjustments.status=1">Accepted</button>
+      <button class="btn btn-default" ng-class="{'btn-danger': unproccessedCC.adjustments.status==0}" ng-click="unproccessedCCs[{{ index }}].adjustments.status=0">Declined</button>
     </span>
     <span class="input-group-addon">
       <div class="inut-group">

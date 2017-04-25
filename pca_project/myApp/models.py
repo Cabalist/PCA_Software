@@ -91,7 +91,7 @@ class DonationAdjustment(models.Model): #This is transaction status... and fee i
     proccessedOn = models.DateTimeField()
     
     status = models.IntegerField() #0 - pending processing, 1- success, 2 - fail
-    fee = models.FloatField()
+    fee = models.FloatField(null=True)
     notes = models.CharField(max_length=128)
 
     

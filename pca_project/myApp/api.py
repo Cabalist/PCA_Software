@@ -361,6 +361,23 @@ def adjustments(request,orgId=None,year=None):
 
         return JsonResponse(serialized.data ,safe=False)
 
+    elif request.method =="POST":
+        data = JSONParser().parse(request)
+
+        donation = Donation.objects.get(id=data["donationId"])
+        status = data["status"]
+        fee = data["fee"]
+        notes = ""
+        
+        addedBy = User.objects.get(pk=request.user.id)
+        now = datetime.datetime.now(pytz.timezone('US/Pacific'))
+        
+        newAdjustment = DonationAdjustment(donation=donation,status=status,fee=fee,notes=notes, proccessedBy=addedBy, proccessedOn=now)
+        newAdjustment.save()
+
+        serialized = AdjustmentsSerializer(newAdjustment)
+        return JsonResponse(serialized.data, safe=False)
+        
 #Reports
 @csrf_exempt
 def orgYTDDonations(request,orgId=None,year=None):

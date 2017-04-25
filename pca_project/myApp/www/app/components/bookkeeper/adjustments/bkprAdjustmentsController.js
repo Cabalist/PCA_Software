@@ -64,13 +64,13 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 		    addUnproccessedCC(donation);
 		    
 		}else{
-		    $scope.proccessedCCs.push(donation);
+		    //$scope.proccessedCCs.push(donation);
 		}
 	    } else if (donation.donationType==3){
 		if (donation.adjustments.length==0){
 		    addUnproccessedCK(donation);
 		}else{
-		    $scope.proccessedChecks.push(donation);
+		    //$scope.proccessedChecks.push(donation);
 		}
 	    }
 	}
@@ -85,6 +85,25 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
     });
     
 
+    $scope.saveCCAdjustment = function(index){
+	var donation = $scope.unproccessedCCs[index];
+	$log.log(donation);
+	var data = {'donationId': donation.id,
+		    'status': donation.adjustments.status,
+		    'fee': $scope.fee
+		   };
+	$log.log(data);
+	$http.post('/api/rest/orgAdjustments/',JSON.stringify(data)).then(function(data){
+	    //addAdjustments([data.data]);
+	    $scope.unproccessedCCs.splice(index,1);
+	});
 
+	
+	
+	
+	//$log.log($scope.unproccessedCCs[indx]);
+	
+    }
+    
     $log.log("Hello from Bookkeeper Adjustmentss  controller");
 }]);
