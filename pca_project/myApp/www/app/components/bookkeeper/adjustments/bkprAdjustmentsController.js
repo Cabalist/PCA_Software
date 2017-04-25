@@ -15,7 +15,7 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
     $scope.unproccessedCKs = [];
     $scope.proccessedCKs = [];
 
-    $scope.fee= null;
+    $scope.fee = parseFloat(1.0);
     
     function selectCanvsr(){
 	for(var i=0; i<$scope.canvassers.length; i++){
@@ -90,8 +90,8 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	$log.log(donation);
 	var data = {'donationId': donation.id,
 		    'status': donation.adjustments.status,
-		    'fee': $scope.fee
-		   };
+		    'fee': $scope.fee};
+	
 	$log.log(data);
 	$http.post('/api/rest/orgAdjustments/',JSON.stringify(data)).then(function(data){
 	    //addAdjustments([data.data]);
