@@ -81,7 +81,6 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	$scope.rawAdjData = data.data;
 	
 	sortRawAdjs();
-
     });
 
     $scope.saveCCAdjustment = function(index){

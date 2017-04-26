@@ -370,7 +370,7 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 
     $scope.getDonationsTotal = function(){
 	var total = 0;
-	$log.log($scope.hoursGridData);
+	
 	for(var i = 0; i<$scope.hoursGridData.length;i++){
 	    total += parseInt($scope.hoursGridData[i].donations);
 	}
@@ -380,7 +380,7 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 
     $scope.getTravelTotal = function(){
 	var total = 0;
-	$log.log($scope.hoursGridData);
+	
 	for(var i = 0; i<$scope.hoursGridData.length;i++){
 	    total += parseFloat($scope.hoursGridData[i].travelHours);
 	}
@@ -390,7 +390,7 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 
     $scope.getAdminTotal = function(){
 	var total = 0;
-	$log.log($scope.hoursGridData);
+	
 	for(var i = 0; i<$scope.hoursGridData.length;i++){
 	    total += parseFloat($scope.hoursGridData[i].adminHours);
 	}
@@ -401,7 +401,7 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 
     $scope.getCanvassingTotal = function(){
 	var total = 0;
-	$log.log($scope.hoursGridData);
+	
 	for(var i = 0; i<$scope.hoursGridData.length;i++){
 	    total += parseFloat($scope.hoursGridData[i].canvassingHours);
 	}

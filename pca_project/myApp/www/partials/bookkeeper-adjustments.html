@@ -52,7 +52,7 @@
     
     <span class="input-group-addon"><b>Check Num:</b> {{ unproccessedCK.ck[0].checkNum }}</span>
     <span class="input-group-addon"><b>Check Date:</b> {{ unproccessedCK.ck[0].checkDate }}</span>
-    <span class="input-group-addon"><b>Value:</b>{{ unproccessedCJ.ck[0].value | currency }} </span>
+    <span class="input-group-addon"><b>Value:</b>{{ unproccessedCK.value | currency }} </span>
     <span class="input-group-addon">
       <button class="btn btn-default" ng-class="{'btn-success': unproccessedCK.adjustments.status}" ng-click="unproccessedCK.adjustments.status=1">Accepted</button>
       <button class="btn btn-default" ng-class="{'btn-danger': unproccessedCK.adjustments.status==0}" ng-click="unproccessedCK.adjustments.status=0">Declined</button>
