@@ -83,26 +83,33 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	sortRawAdjs();
 
     });
-    
 
     $scope.saveCCAdjustment = function(index){
 	var donation = $scope.unproccessedCCs[index];
-	$log.log(donation);
+	
+	var data = {'donationId': donation.id,
+		    'status': donation.adjustments.status,
+		    'fee': $scope.fee};	
+
+	$http.post('/api/rest/orgAdjustments/',JSON.stringify(data)).then(function(data){
+	    //addAdjustments([data.data]);
+	    $scope.unproccessedCCs.splice(index,1);
+	});	
+		
+    }
+
+    $scope.saveCKAdjustment = function(index){
+	var donation = $scope.unproccessedCKs[index];
+
 	var data = {'donationId': donation.id,
 		    'status': donation.adjustments.status,
 		    'fee': $scope.fee};
 	
-	$log.log(data);
-	$http.post('/api/rest/orgAdjustments/',JSON.stringify(data)).then(function(data){
-	    //addAdjustments([data.data]);
-	    $scope.unproccessedCCs.splice(index,1);
-	});
 
 	
-	
-	
-	//$log.log($scope.unproccessedCCs[indx]);
-	
+	$http.post('/api/rest/orgAdjustments/',JSON.stringify(data)).then(function(data){
+	    $scope.unproccessedCKs.splice(index,1);
+	});		
     }
     
     $log.log("Hello from Bookkeeper Adjustmentss  controller");

@@ -31,7 +31,7 @@
     </span>
     <span class="input-group-addon">
       <div class="inut-group">
-	$  <input class="form-control-inline" type="number" style="width:40px" ng-disabled="!unproccessedCC.adjustments.status" ng-model="fee">
+	$  <input class="form-control-inline" type="number" style="width:60px" ng-disabled="!unproccessedCC.adjustments.status" ng-model="fee">
       </div>
     </span>
     <span class="input-group-addon">
@@ -45,14 +45,14 @@
 
   <h4><u>Checks</u></h4>
 
-    <div class="input-group" ng-repeat="unproccessedCK in unproccessedCKs">
+  <div class="input-group" ng-repeat="unproccessedCK in unproccessedCKs">
     <span class="input-group-addon"><b>Cnvsr:</b>{{ unproccessedCK.user.username }}</span>
     <span class="input-group-addon"><b>Donor:</b>{{ unproccessedCK.donor.name }}</span>
     <span class="input-group-addon"><b>Date:</b>{{ unproccessedCJ.formDate }}</span>
     
     <span class="input-group-addon"><b>Check Num:</b> {{ unproccessedCK.ck[0].checkNum }}</span>
     <span class="input-group-addon"><b>Check Date:</b> {{ unproccessedCK.ck[0].checkDate }}</span>
-    <span class="input-group-addon"><b>Value:</b>{{ unproccessedCJ.value | currency }} </span>
+    <span class="input-group-addon"><b>Value:</b>{{ unproccessedCJ.ck[0].value | currency }} </span>
     <span class="input-group-addon">
       <button class="btn btn-default" ng-class="{'btn-success': unproccessedCK.adjustments.status}" ng-click="unproccessedCK.adjustments.status=1">Accepted</button>
       <button class="btn btn-default" ng-class="{'btn-danger': unproccessedCK.adjustments.status==0}" ng-click="unproccessedCK.adjustments.status=0">Declined</button>
