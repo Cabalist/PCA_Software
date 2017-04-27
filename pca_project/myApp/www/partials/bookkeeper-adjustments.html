@@ -1,4 +1,4 @@
-<div class="col-lg-8">
+<div class="col-lg-9">
   <h3>Adjustments</h3>
 
   <div class="input-group">
@@ -38,8 +38,6 @@
       <button class="btn btn-primary" ng-disabled="(unproccessedCC.adjustments.status==null) && (fee==null)" ng-click="saveCCAdjustment($index)">Save</button>
     </span>
   </div>
-
-  <!-- history area-->
   
   <br>
 
@@ -48,7 +46,7 @@
   <div class="input-group" ng-repeat="unproccessedCK in unproccessedCKs">
     <span class="input-group-addon"><b>Cnvsr:</b>{{ unproccessedCK.user.username }}</span>
     <span class="input-group-addon"><b>Donor:</b>{{ unproccessedCK.donor.name }}</span>
-    <span class="input-group-addon"><b>Date:</b>{{ unproccessedCJ.formDate }}</span>
+    <span class="input-group-addon"><b>Date:</b>{{ unproccessedCK.formDate }}</span>
     
     <span class="input-group-addon"><b>Check Num:</b> {{ unproccessedCK.ck[0].checkNum }}</span>
     <span class="input-group-addon"><b>Check Date:</b> {{ unproccessedCK.ck[0].checkDate }}</span>
@@ -66,5 +64,13 @@
       <button class="btn btn-primary" ng-disabled="(unproccessedCK.adjustments.status==null) && (fee==null)" ng-click="saveCKAdjustment($index)">Save</button>
     </span>
   </div>
+  
+  <br>
+
+  <h5><u>History:</u></h5>
+
+  <div id="grid1" style="width:100%" ui-grid="gridOptions" class="grid" ui-grid-exporter>
+  </div>
+  
   
 </div>

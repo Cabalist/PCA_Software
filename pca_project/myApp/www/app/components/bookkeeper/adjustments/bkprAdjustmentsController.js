@@ -1,4 +1,4 @@
-myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$stateParams','uiGridConstants', function($scope,$http,$log,$stateParams,uiGridConstants) {
     $scope.$emit("selectForm",3);
 
     $scope.canvId = $stateParams.canvId;
@@ -10,10 +10,11 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 
     $scope.rawAdjData = null;
     $scope.unproccessedCCs = [];
-    $scope.processedCCs = [];
+    
     $scope.recurringCCs = [];
     $scope.unproccessedCKs = [];
-    $scope.proccessedCKs = [];
+
+    $scope.proccessedDonations = [];
 
     $scope.fee = parseFloat(1.0);
     
@@ -53,6 +54,30 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	$scope.unproccessedCKs.push(x);
     }
 
+    function addProccessed(donation){
+	var temp = donation;
+	if (donation.donationType==3){
+	    temp.donationType='Check';
+	}else if (donation.donationType==2){
+	    temp.donationType='CC';
+	}
+
+	if (donation.adjustments[0].status==1){
+	    temp.adjustments[0].status="Accepted";
+	} else {
+	    temp.adjustments[0].status="Declined";
+	}
+
+	if (!isNaN(donation.adjustments[0].fee)){
+	    temp.adjustments[0].fee = parseFloat(donation.adjustments[0].fee).toFixed(2);
+	} else{
+	    temp.adjustments[0].fee='';
+	}
+	
+	$scope.proccessedDonations.push(temp);
+	
+    }
+    
     function sortRawAdjs(){
 	for(var i=0;i<$scope.rawAdjData.length;i++){
 	    var donation = $scope.rawAdjData[i];
@@ -62,7 +87,7 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 		//else 
 		if (donation.adjustments.length==0){
 		    addUnproccessedCC(donation);
-		    
+		    addProccessed(donation);
 		}else{
 		    //$scope.proccessedCCs.push(donation);
 		}
@@ -70,7 +95,7 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 		if (donation.adjustments.length==0){
 		    addUnproccessedCK(donation);
 		}else{
-		    //$scope.proccessedChecks.push(donation);
+		    addProccessed(donation);	    
 		}
 	    }
 	}
@@ -81,6 +106,8 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	$scope.rawAdjData = data.data;
 	
 	sortRawAdjs();
+	$log.log($scope.proccessedDonations);
+	$scope.gridOptions.data = $scope.proccessedDonations;
     });
 
     $scope.saveCCAdjustment = function(index){
@@ -110,6 +137,33 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	    $scope.unproccessedCKs.splice(index,1);
 	});		
     }
+
+    
+    $scope.gridOptions={
+	showColumnFooter:true,
+	enableGridMenu: true,
+	exporterCsvFilename: 'ytdData.csv',
+	exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
+	columnDefs:[{name:"Name",
+		     field:'user.username',
+		     aggregationType: uiGridConstants.aggregationTypes.count ,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >Count: {{col.getAggregationValue()}}</div>',
+		     width:'18%'},
+		    {name:"Donor", field:'donor.name', width:'15%'},
+		    {name:"Date", field:'formDate', width:'11%' },
+		    {name:"Value",cellFilter:'currency', field:'value',
+		     aggregationType: uiGridConstants.aggregationTypes.sum ,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
+		     width:'10%' },
+		    {name:"Type", field:"donationType",width:'10%'},
+		    {name:"Status",field:"adjustments[0].status",width:'10%'},
+		    {name:"Fee",field:"adjustments[0].fee",width:'10%'},
+		   ],
+	onRegisterApi: function(gridApi){  // this is for exposing api to other controllers...
+	    $scope.gridApi = gridApi; //Don't use it...
+	}
+    }
+    
     
     $log.log("Hello from Bookkeeper Adjustmentss  controller");
 }]);
