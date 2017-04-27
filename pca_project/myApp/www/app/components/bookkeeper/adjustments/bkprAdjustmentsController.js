@@ -112,10 +112,16 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 
     $scope.saveCCAdjustment = function(index){
 	var donation = $scope.unproccessedCCs[index];
+	var fee = $scope.fee;
+
+	//fee applies only when transaction aceepted
+	if (donation.adjustments.status==0){
+	    fee=null;
+	}
 	
 	var data = {'donationId': donation.id,
 		    'status': donation.adjustments.status,
-		    'fee': $scope.fee};	
+		    'fee': fee};	
 
 	$http.post('/api/rest/orgAdjustments/',JSON.stringify(data)).then(function(data){
 	    //addAdjustments([data.data]);
@@ -126,18 +132,21 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 
     $scope.saveCKAdjustment = function(index){
 	var donation = $scope.unproccessedCKs[index];
-
+	
+	var fee = $scope.fee;
+	//fee applies only when transaction aceepted
+	if (donation.adjustments.status==0){
+	    fee=null;
+	}
+	
 	var data = {'donationId': donation.id,
 		    'status': donation.adjustments.status,
-		    'fee': $scope.fee};
-	
-
+		    'fee': fee};
 	
 	$http.post('/api/rest/orgAdjustments/',JSON.stringify(data)).then(function(data){
 	    $scope.unproccessedCKs.splice(index,1);
-	});		
+	});
     }
-
     
     $scope.gridOptions={
 	showColumnFooter:true,
@@ -162,8 +171,7 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	onRegisterApi: function(gridApi){  // this is for exposing api to other controllers...
 	    $scope.gridApi = gridApi; //Don't use it...
 	}
-    }
-    
+    }    
     
     $log.log("Hello from Bookkeeper Adjustmentss  controller");
 }]);
