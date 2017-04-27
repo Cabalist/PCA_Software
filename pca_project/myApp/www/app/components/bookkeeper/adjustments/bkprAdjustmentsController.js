@@ -87,9 +87,8 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 		//else 
 		if (donation.adjustments.length==0){
 		    addUnproccessedCC(donation);
-		    addProccessed(donation);
 		}else{
-		    //$scope.proccessedCCs.push(donation);
+		    addProccessed(donation);
 		}
 	    } else if (donation.donationType==3){
 		if (donation.adjustments.length==0){
