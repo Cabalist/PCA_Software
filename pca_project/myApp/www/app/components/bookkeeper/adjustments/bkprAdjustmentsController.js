@@ -16,7 +16,7 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 
     $scope.proccessedDonations = [];
 
-    $scope.fee = parseFloat(1.0);
+    $scope.fee = { value:1};
     
     function selectCanvsr(){
 	for(var i=0; i<$scope.canvassers.length; i++){
@@ -75,7 +75,6 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	}
 	
 	$scope.proccessedDonations.push(temp);
-	
     }
     
     function sortRawAdjs(){
@@ -105,13 +104,12 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	$scope.rawAdjData = data.data;
 	
 	sortRawAdjs();
-	$log.log($scope.proccessedDonations);
 	$scope.gridOptions.data = $scope.proccessedDonations;
     });
 
     $scope.saveCCAdjustment = function(index){
 	var donation = $scope.unproccessedCCs[index];
-	var fee = $scope.fee;
+	var fee= $scope.fee.value;
 
 	//fee applies only when transaction aceepted
 	if (donation.adjustments.status==0){
@@ -120,19 +118,19 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	
 	var data = {'donationId': donation.id,
 		    'status': donation.adjustments.status,
-		    'fee': fee};	
-
+		    'fee': fee};
+	
 	$http.post('/api/rest/orgAdjustments/',JSON.stringify(data)).then(function(data){
 	    //addAdjustments([data.data]);
 	    $scope.unproccessedCCs.splice(index,1);
-	});	
+	});
 		
     }
 
     $scope.saveCKAdjustment = function(index){
 	var donation = $scope.unproccessedCKs[index];
 	
-	var fee = $scope.fee;
+	var fee = $scope.fee.value;
 	//fee applies only when transaction aceepted
 	if (donation.adjustments.status==0){
 	    fee=null;
