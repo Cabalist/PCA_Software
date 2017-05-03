@@ -26,12 +26,12 @@
     <span class="input-group-addon"><b>Last 4:</b> {{ unproccessedCC.cc[0].last4 }}</span>
     <span class="input-group-addon"><b>Value:</b>{{ unproccessedCC.value | currency }} </span>
     <span class="input-group-addon">
-      <button class="btn btn-default" ng-class="{'btn-success': unproccessedCC.adjustments.status}" ng-click="unproccessedCC.adjustments.status=1">Accepted</button>
+      <button class="btn btn-default" ng-class="{'btn-success': unproccessedCC.adjustments.status}" ng-click="unproccessedCC.adjustments.status=1">Approved</button>
       <button class="btn btn-default" ng-class="{'btn-danger': unproccessedCC.adjustments.status==0}" ng-click="unproccessedCC.adjustments.status=0">Declined</button>
     </span>
     <span class="input-group-addon">
       <div class="inut-group">
-	$<input class="form-control-inline" type="number" style="width:60px" ng-disabled="!unproccessedCC.adjustments.status" ng-model="fee.value">
+	$<input class="form-control-inline" type="number" style="width:60px" ng-disabled="!unproccessedCC.adjustments.status" ng-model="fee.value" min="0">
       </div>
     </span>
     <span class="input-group-addon">
@@ -52,12 +52,12 @@
     <span class="input-group-addon"><b>Check Date:</b> {{ unproccessedCK.ck[0].checkDate }}</span>
     <span class="input-group-addon"><b>Value:</b>{{ unproccessedCK.value | currency }} </span>
     <span class="input-group-addon">
-      <button class="btn btn-default" ng-class="{'btn-success': unproccessedCK.adjustments.status}" ng-click="unproccessedCK.adjustments.status=1">Accepted</button>
+      <button class="btn btn-default" ng-class="{'btn-success': unproccessedCK.adjustments.status}" ng-click="unproccessedCK.adjustments.status=1">Approved</button>
       <button class="btn btn-default" ng-class="{'btn-danger': unproccessedCK.adjustments.status==0}" ng-click="unproccessedCK.adjustments.status=0">Declined</button>
     </span>
     <span class="input-group-addon">
       <div class="inut-group">
-	$<input class="form-control-inline" type="text" size="5" ng-disabled="!unproccessedCK.adjustments.status" ng-model="fee.value" placeholder="fee">
+	$<input class="form-control-inline" type="number" style="width:60px" ng-disabled="!unproccessedCK.adjustments.status" ng-model="fee.value" min="0">
       </div>
     </span>
     <span class="input-group-addon">
@@ -66,9 +66,7 @@
   </div>
   
   <br>
-
   <h5><u>History:</u></h5>
-
   <div id="grid1" style="width:100%" ui-grid="gridOptions" class="grid" ui-grid-exporter>
   </div>
   

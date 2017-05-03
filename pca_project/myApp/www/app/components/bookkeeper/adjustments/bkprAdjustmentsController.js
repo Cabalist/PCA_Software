@@ -63,17 +63,17 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	}
 
 	if (donation.adjustments[0].status==1){
-	    temp.adjustments[0].status="Accepted";
+	    temp.adjustments[0].status="Approved";
 	} else {
 	    temp.adjustments[0].status="Declined";
 	}
 
-	if (!isNaN(donation.adjustments[0].fee)){
-	    temp.adjustments[0].fee = parseFloat(donation.adjustments[0].fee).toFixed(2);
+	if (temp.adjustments[0].fee==null) {
+	    temp.adjustments[0].fee = parseFloat(0.00).toFixed(2);
 	} else{
-	    temp.adjustments[0].fee='';
+	    temp.adjustments[0].fee = parseFloat(donation.adjustments[0].fee).toFixed(2);
 	}
-	
+
 	$scope.proccessedDonations.push(temp);
     }
     
@@ -154,16 +154,19 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 		     field:'user.username',
 		     aggregationType: uiGridConstants.aggregationTypes.count ,
 		     footerCellTemplate: '<div class="ui-grid-cell-contents" >Count: {{col.getAggregationValue()}}</div>',
-		     width:'18%'},
-		    {name:"Donor", field:'donor.name', width:'15%'},
-		    {name:"Date", field:'formDate', width:'11%' },
+		     width:'17%'},
+		    {name:"Donor", field:'donor.name', width:'17%'},
+		    {name:"Date", field:'formDate', width:'16%' },
 		    {name:"Value",cellFilter:'currency', field:'value',
 		     aggregationType: uiGridConstants.aggregationTypes.sum ,
 		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
-		     width:'10%' },
-		    {name:"Type", field:"donationType",width:'10%'},
-		    {name:"Status",field:"adjustments[0].status",width:'10%'},
-		    {name:"Fee",field:"adjustments[0].fee",width:'10%'},
+		     width:'14%' },
+		    {name:"Type", field:"donationType",width:'12%'},
+		    {name:"Status",field:"adjustments[0].status",width:'14%'},
+		    {name:"Fee",field:"adjustments[0].fee",
+		     aggregationType: uiGridConstants.aggregationTypes.sum ,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
+		     width:'8%'},
 		   ],
 	onRegisterApi: function(gridApi){  // this is for exposing api to other controllers...
 	    $scope.gridApi = gridApi; //Don't use it...
