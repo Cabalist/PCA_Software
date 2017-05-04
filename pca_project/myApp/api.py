@@ -375,7 +375,7 @@ def adjustments(request,orgId=None,year=None):
         newAdjustment = DonationAdjustment(donation=donation,status=status,fee=fee,notes=notes, proccessedBy=addedBy, proccessedOn=now)
         newAdjustment.save()
 
-        serialized = AdjustmentsSerializer(newAdjustment)
+        serialized = AdjustmentsReportSerializer(donation)
         return JsonResponse(serialized.data, safe=False)
         
 #Reports

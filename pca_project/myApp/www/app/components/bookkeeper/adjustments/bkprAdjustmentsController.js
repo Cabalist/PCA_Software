@@ -93,7 +93,7 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 		if (donation.adjustments.length==0){
 		    addUnproccessedCK(donation);
 		}else{
-		    addProccessed(donation);	    
+		    addProccessed(donation);
 		}
 	    }
 	}
@@ -121,8 +121,17 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 		    'fee': fee};
 	
 	$http.post('/api/rest/orgAdjustments/',JSON.stringify(data)).then(function(data){
-	    //addAdjustments([data.data]);
+	    //remove from unproccessed list
 	    $scope.unproccessedCCs.splice(index,1);
+
+	    ///add to processedDonations
+	    addProccessed(data.data);
+	    
+	    //refresh grid;
+	    if(typeof($scope.gridApi)!='undefined'){
+		$scope.gridApi.core.refresh();
+	    }
+	    
 	});
 		
     }
@@ -141,7 +150,16 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 		    'fee': fee};
 	
 	$http.post('/api/rest/orgAdjustments/',JSON.stringify(data)).then(function(data){
+	    //remove from unproccessed list
 	    $scope.unproccessedCKs.splice(index,1);
+
+	    //add to proccessed grid
+	    addProccessed(data.data);
+
+	    //refresh grid;
+	    if(typeof($scope.gridApi)!='undefined'){
+		$scope.gridApi.core.refresh();
+	    }
 	});
     }
     
