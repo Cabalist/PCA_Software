@@ -27,6 +27,11 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
     $scope.period = $stateParams.period;
     $scope.canvId = $stateParams.canvId;
 
+    $scope.canvassers =[{'userInfo':
+			 {'pk':0,
+			  'first_name':"All",
+			  'last_name':""}}];
+    
     $scope.gridData = [];
     $scope.hoursGridData = [] ;
     
@@ -39,7 +44,7 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 
     function selectCanvsr(){
 	for(var i=0; i<$scope.canvassers.length; i++){
-	    if($scope.canvId==$scope.canvassers[i].userInfo.pk){
+	    if($scope.canvassers[i].userInfo.pk==parseInt($scope.canvId)){
 		$scope.selectedCnvsr=$scope.canvassers[i];
 	    }
 	}
@@ -47,12 +52,7 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 
     //get canvassers list
     $http.get('/api/rest/orgWorkers/' + $scope.orgId).then(function(data){
-	$scope.canvassers =[{'userInfo':
-			     {'pk':0,
-			      'first_name':"All",
-			      'last_name':""}}];
-
-	//push
+	//populate canvassers selection
 	for (var i=0;i<data.data.length;i++){
 	    $scope.canvassers.push(data.data[i]);
 	}
@@ -63,7 +63,7 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
 
     $scope.changeCnvsr = function(cnvsrId){
 	$scope.canvId=cnvsrId;
-	$state.go("bookkeeper.reports.c2w",{ 'year': $scope.year, 'period':$scope.period, 'canvId':cnvsrId });	
+	$state.go("bookkeeper.reports.c2w",{ 'year': $scope.year, 'period':String($scope.period), 'canvId':String(cnvsrId) });	
     }
     
     $scope.showNext = function(){
@@ -78,14 +78,12 @@ myApp.controller('c2wController', ['$scope','$http','$log','$state','$stateParam
     
     $scope.goToPrev = function(){
 	if ($scope.period > 1){
-	    $scope.period--;
-	    
-	    $state.go("bookkeeper.reports.c2w",{ 'year': $scope.year, 'period':$scope.period, 'canvId':$scope.cavnId });
+	    $state.go("bookkeeper.reports.c2w",{ 'year': $scope.year, 'period':String($scope.period-1), 'canvId':String($scope.canvId) });
 	}else{
 	    $scope.year--;
 	    $scope.period = 26;
 	    
-	    $state.go("bookkeeper.reports.c2w",{ 'year': $scope.year, 'period':$scope.period, 'canvId':$scope.canvId });
+	    $state.go("bookkeeper.reports.c2w",{ 'year': $scope.year, 'period':String($scope.period), 'canvId':String($scope.canvId) });
 	}
     };
 
