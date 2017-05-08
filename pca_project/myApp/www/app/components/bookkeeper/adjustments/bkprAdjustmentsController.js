@@ -27,6 +27,9 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	$state.go('bookkeeper.adjustments',{'canvId':$scope.canvId,'year':String(year)});
     };
 
+    $scope.changeCnvsr = function(cnvsrId){
+	$state.go('bookkeeper.adjustments',{'canvId':String(cnvsrId),'year':String($scope.selectedYear)});
+    };
 
     function selectCanvsr(){
 	for(var i=0; i<$scope.canvassers.length; i++){
@@ -89,22 +92,26 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
     }
     
     function sortRawAdjs(){
-	for(var i=0;i<$scope.rawAdjData.length;i++){
+	for(var i=0;i<$scope.rawAdjData.length;i++){	    
 	    var donation = $scope.rawAdjData[i];
-	    if (donation.donationType==2){
-		//check recurring
-
-		//else 
-		if (donation.adjustments.length==0){
-		    addUnproccessedCC(donation);
-		}else{
-		    addProccessed(donation);
-		}
-	    } else if (donation.donationType==3){
-		if (donation.adjustments.length==0){
-		    addUnproccessedCK(donation);
-		}else{
-		    addProccessed(donation);
+	   
+	    if(($scope.canvId==0 ) || ($scope.canvId==donation.user.pk)){//FILTER BY USER
+	    
+		if (donation.donationType==2){
+		    //check recurring
+		    
+		    //else 
+		    if (donation.adjustments.length==0){
+			addUnproccessedCC(donation);
+		    }else{
+			addProccessed(donation);
+		    }
+		} else if (donation.donationType==3){
+		    if (donation.adjustments.length==0){
+			addUnproccessedCK(donation);
+		    }else{
+			addProccessed(donation);
+		    }
 		}
 	    }
 	}
