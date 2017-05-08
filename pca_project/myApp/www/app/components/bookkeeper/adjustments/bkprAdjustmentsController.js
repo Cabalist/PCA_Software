@@ -1,11 +1,14 @@
-myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$stateParams','uiGridConstants', function($scope,$http,$log,$stateParams,uiGridConstants) {
+myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$stateParams','uiGridConstants','$state', function($scope,$http,$log,$stateParams,uiGridConstants,$state) {
     $scope.$emit("selectForm",3);
 
     $scope.canvId = $stateParams.canvId;
+    
+    
     $scope.canvassers = [];
     
     var y = moment().format("YYYY");
-    $scope.yearOptions = [y,y-1,y-2,y-3];
+    
+    $scope.yearOptions = [y,String(y-1),String(y-2),String(y-3)];
     $scope.selectedYear = $stateParams.year;
 
     $scope.rawAdjData = null;
@@ -18,6 +21,13 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 
     $scope.fee = { value:1};
     
+
+    $scope.changeYear = function(year){	
+	$scope.selectedYear=String(year);
+	$state.go('bookkeeper.adjustments',{'canvId':$scope.canvId,'year':String(year)});
+    };
+
+
     function selectCanvsr(){
 	for(var i=0; i<$scope.canvassers.length; i++){
 	    if($scope.canvId==$scope.canvassers[i].userInfo.pk){
@@ -26,6 +36,7 @@ myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$statePa
 	}
     }
 
+    
     //get canvassers list
     $http.get('/api/rest/orgWorkers/' + $scope.orgId).then(function(data){
 	$scope.canvassers =[{'userInfo':

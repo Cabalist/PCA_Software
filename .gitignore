@@ -1,7 +1,7 @@
 # Byte-compiled / optimized / DLL files
 # db
 pca_project/db.sqlite3
-
+pca_project/myApp/www/js/profile.min.js
 
 __pycache__/
 *.py[cod]
