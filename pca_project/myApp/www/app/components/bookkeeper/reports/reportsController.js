@@ -1,5 +1,5 @@
 myApp.controller('reportsController', ['$scope','$http','$log', function($scope,$http,$log) {
-    $scope.$emit("selectForm",4); // this sets "reports" button as selected
+    $scope.$emit("selectForm",5); // this sets "reports" button as selected
     $scope.selectedReport = null;
 
     $scope.isReportActive = function(index){

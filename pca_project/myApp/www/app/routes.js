@@ -25,7 +25,12 @@ myApp.config(function($stateProvider){
 	    templateUrl: '/www/partials/bookkeeper-adjustments.html',
 	    controller: 'BkprAdjustmentsController'
 	})
-        .state('bookkeeper.reports',{
+        .state('bookkeeper.reimbursements',{
+	    url:"/reimbursements/:canvId/:year",
+	    templateUrl: '/www/partials/bookkeeper-reimbursements.html',
+	    controller: 'BkprReimbursementsController'
+	})
+	.state('bookkeeper.reports',{
 	    url:'/reports',
 	    templateUrl: '/www/partials/bookkeeper-reports.html',
 	    controller: 'reportsController'

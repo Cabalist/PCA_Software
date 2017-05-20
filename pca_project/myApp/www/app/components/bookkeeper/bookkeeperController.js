@@ -1,6 +1,6 @@
 myApp.controller('BookkeeperController', ['$scope','$http','$log','$state','$stateParams', function($scope,$http,$log,$state,$stateParams) {
     $scope.orgId = $stateParams.orgId;
-    $scope.orgName= null;
+    $scope.orgName = null;
 
     //Set org name
     for(var i=0;i<$scope.orgList.length;i++){
@@ -22,12 +22,6 @@ myApp.controller('BookkeeperController', ['$scope','$http','$log','$state','$sta
     $scope.$on("selectForm",function(event,formIndex){
 	$scope.selectedForm = formIndex;
     });
-
-
-    //Why not do ui-sref in HTML?
-    $scope.goToReports = function (){
-	$state.go('bookkeeper.reports');
-    };
     
     $log.log("hello from Bookkeeper controller");
 
