@@ -1,9 +1,7 @@
 myApp.controller('BkprAdjustmentsController', ['$scope','$http','$log','$stateParams','uiGridConstants','$state', function($scope,$http,$log,$stateParams,uiGridConstants,$state) {
     $scope.$emit("selectForm",3);
 
-    $scope.canvId = $stateParams.canvId;
-    
-    
+    $scope.canvId = $stateParams.canvId;    
     $scope.canvassers = [];
     
     var y = moment().format("YYYY");
