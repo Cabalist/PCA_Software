@@ -91,3 +91,9 @@ class Donations1Serializer(serializers.ModelSerializer):
     class Meta:
         model = Donation
         fields=['id','user','formDate','donor','donationType','value','addedOn','payTerms']
+
+
+class ReimbursementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reimbursement
+        fields = '__all__'

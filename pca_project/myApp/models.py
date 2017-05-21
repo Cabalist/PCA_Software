@@ -94,6 +94,17 @@ class DonationAdjustment(models.Model): #This is transaction status... and fee i
     fee = models.FloatField(null=True)
     notes = models.CharField(max_length=128)
 
+class Reimbursement(models.Model):
+    org = models.ForeignKey(Organization)
+    worker = models.ForeignKey(settings.AUTH_USER_MODEL)    
+    year = models.IntegerField()
+    period = models.IntegerField()
+    startDate = models.DateField()
+    endDate = models.DateField()
+    
+    value = models.FloatField()
+    addedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="reimburser")
+    addedOn = models.DateTimeField()
     
 #class UserOrgJoinRequest(models.Model):
 #    user = models.ForeignKey(settings.AUTH_USER_MODEL)

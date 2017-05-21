@@ -35,14 +35,11 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 
     $scope.reimbValue=0;
     
-    //TODO move this into the partial template...
-
+    //TODO move this into the html
     $scope.getSaveClass = function(){
 	if ($scope.reimbValue>0){
-	    $log.log("setting active");
 	    return "btn-primary";
 	}else{
-	    $log.log("setting default");
 	    return "btn-default";
 	}
     };
@@ -81,6 +78,19 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	//select canvasser
 	selectCanvsr();
     });
-    
+
+    $scope.saveReimbursement = function(){
+	var myData = {'worker' : $scope.selectedCnvsr.userInfo.pk,
+		    'year' : $scope.selectedYear,
+		    'period' : $scope.period,
+		    'startDate' : $scope.startOfPeriod,
+		    'endDate' : $scope.endOfPeriod,
+		    'value' : $scope.reimbValue }
+
+	$http.post('/api/rest/reimbursements/'+$scope.orgId+"/"+$scope.selectedYear,JSON.stringify(myData)).then(function(data){
+	    $log.log(data.data);
+	});
+	
+    };
     $log.log("Hello from Bookkeeper Reimbursements controller");
 }]);
