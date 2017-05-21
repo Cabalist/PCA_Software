@@ -36,9 +36,18 @@
 
       <span class="input-group-addon">
 	<span class="btn" ng-class="getSaveClass()" ng-click="saveReimbursement()">Save</span>
-	
       </span>
-    
+  
+  
   </div>
+  <br>
+  <br>
+  <div ng-show="gridData.length">
+    <br>
+    <h5><b>History:</b></h5>
+    <div  style="width:100%" ui-grid="gridOptions" class="grid" ui-grid-exporter>
+    </div>
+  </div>
+  
   
 </div>

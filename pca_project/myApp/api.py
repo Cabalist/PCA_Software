@@ -381,7 +381,11 @@ def adjustments(request,orgId=None,year=None):
 @csrf_exempt
 def reimbursements(request,orgId=None,year=None):
     if request.method =="GET":
-        return JsonResponse([], safe=False)        
+        org = Organization.objects.get(id=orgId)
+        query = Reimbursement.objects.filter(org=org).filter(year=year).all()
+
+        serialized= ReimbursementSerializer(query,many=True)
+        return JsonResponse(serialized.data, safe=False)        
 
     if request.method =="POST":
         data = JSONParser().parse(request)

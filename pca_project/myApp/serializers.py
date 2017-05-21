@@ -94,6 +94,7 @@ class Donations1Serializer(serializers.ModelSerializer):
 
 
 class ReimbursementSerializer(serializers.ModelSerializer):
+    user  = UserSerializer(source='worker')
     class Meta:
         model = Reimbursement
-        fields = '__all__'
+        fields = ['id','org', 'user','year','period', 'startDate','endDate','value','addedBy']

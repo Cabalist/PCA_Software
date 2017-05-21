@@ -1,8 +1,7 @@
-myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stateParams','$state', function($scope,$http,$log,$stateParams,$state) {
+myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stateParams','$state','uiGridConstants', function($scope,$http,$log,$stateParams,$state,uiGridConstants) {
     $scope.$emit("selectForm",4);
 
     $scope.canvId = $stateParams.canvId;
-    $scope.canvassers = [];
     $scope.selectedCnvsr=false;
     
     var y = moment().format("YYYY");
@@ -18,7 +17,6 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	var curWeek = now.week();
 	$scope.period = null;
 	
-
 	//if odd, get start of previous week.
 	if (curWeek%2!=0){
 	    $scope.period = (curWeek-1)/2;
@@ -34,6 +32,7 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
     $scope.endOfPeriodStr = $scope.endOfPeriod.format("MMMM Do, YYYY");
 
     $scope.reimbValue=0;
+    $scope.gridData=[];
     
     //TODO move this into the html
     $scope.getSaveClass = function(){
@@ -44,7 +43,6 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	}
     };
     
-
     //Why not just ui-sref?
     $scope.changeYear = function(year){
 	$scope.selectedYear=String(year);
@@ -55,6 +53,35 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	$state.go('bookkeeper.reimbursements',{'canvId':String(cnvsrId),'year':String($scope.selectedYear)});
     };
 
+
+    $scope.gridOptions={
+	showColumnFooter:true,
+	enableGridMenu: true,
+	exporterCsvFilename: 'C2W-'+$scope.year+'-'+$scope.period+'-Data.csv',
+	exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
+	columnDefs:[{field:'worker',
+		     width:'20%'},
+		    {field:'year',
+		     width:'16%'},
+		    {field:'period',
+		     width:'16%'},
+		    {field:'startDate',
+		     width:'16%'},
+		    {name:"endDate",
+		     field:'endDate',
+		     width:'16%'},
+		    {field:'value',
+		     name:'$',
+		     cellFilter:'currency',
+		     aggregationType: uiGridConstants.aggregationTypes.sum ,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
+		     width:'16%'}],
+	onRegisterApi: function(gridApi){  // this is for exposing api to other controllers...
+	    $scope.hoursGridApi = gridApi; //Don't use it...
+	}
+    };
+
+    
     function selectCanvsr(){
 	for(var i=0; i<$scope.canvassers.length; i++){
 	    if($scope.canvId==$scope.canvassers[i].userInfo.pk){
@@ -65,20 +92,49 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 
     //get canvassers list
     $http.get('/api/rest/orgWorkers/' + $scope.orgId).then(function(data){
-	$scope.canvassers =[{'userInfo':
-			     {'pk':0,
-			      'first_name':"All",
-			      'last_name':""}}];
-
-	//push
+	var cnvsrs = [{'userInfo':
+		       {'pk':0,
+			'first_name':"All",
+			'last_name':""}}];
+	
 	for (var i=0;i<data.data.length;i++){
-	    $scope.canvassers.push(data.data[i]);
+	    cnvsrs.push(data.data[i]);
 	}
+	
+	$scope.canvassers = cnvsrs;
 
 	//select canvasser
 	selectCanvsr();
     });
 
+    function filterReimbursements(){
+	var results = [] ;
+	for (var i=0;i<$scope.rawReimbursements.length;i++){
+	    if(($scope.selectedCnvsr.userInfo.pk == 0 )|| ($scope.selectedCnvsr.userInfo.pk==$scope.rawReimbursements[i].user.pk)){
+		var temp = $scope.rawReimbursements[i];
+
+		var worker = temp.user.first_name+" " +temp.user.last_name;
+
+		temp.worker = worker;
+		results.push(temp);
+	    }
+	}
+
+	return results;
+    };
+
+
+    $http.get('/api/rest/reimbursements/' + $scope.orgId+"/"+$scope.selectedYear).then(function(data){
+	$scope.rawReimbursements = data.data;
+	
+	$scope.gridData = filterReimbursements();
+	
+	$scope.gridOptions.data = $scope.gridData ;
+	
+    });
+
+
+    
     $scope.saveReimbursement = function(){
 	var myData = {'worker' : $scope.selectedCnvsr.userInfo.pk,
 		    'year' : $scope.selectedYear,
