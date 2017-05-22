@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.views.decorators.cache import never_cache
 
 from django.contrib.auth import login
 
@@ -13,7 +14,8 @@ def landing(request):
         html = render(request,'landing.html')
 
     return html
-                        
+
+@never_cache
 def profileViewer(request):
     
     html = ""
