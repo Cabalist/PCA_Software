@@ -126,7 +126,7 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
     function filterReimbursements(reimbData){
 	var results = [] ;
 	for (var i=0;i<reimbData.length;i++){
-	    if(($scope.selectedCnvsr.userInfo.pk == 0 )|| ($scope.selectedCnvsr.userInfo.pk==reimbData[i].user.pk)){
+	    if(($scope.canvId == 0 )|| ($scope.canvId==reimbData[i].user.pk)){
 		var temp = reimbData[i];
 
 		var worker = temp.user.first_name+" " +temp.user.last_name;
