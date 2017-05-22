@@ -1,4 +1,4 @@
-myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stateParams','$state','uiGridConstants', function($scope,$http,$log,$stateParams,$state,uiGridConstants) {
+myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stateParams','$state','uiGridConstants','$timeout', function($scope,$http,$log,$stateParams,$state,uiGridConstants,$timeout) {
     $scope.$emit("selectForm",4);
 
     $scope.canvId = $stateParams.canvId;
@@ -145,9 +145,11 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	$scope.gridOptions.data = $scope.gridData;
 
 	//refresh grid;
-	if(typeof($scope.gridApi)!='undefined'){
-	    $scope.gridApi.core.refresh();
-	}
+	$timeout(function(){
+	    if(typeof($scope.gridApi)!='undefined'){
+		$scope.gridApi.core.refresh();
+	    }
+	},500);
     });
     
     $scope.saveReimbursement = function(){
