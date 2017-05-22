@@ -6,6 +6,7 @@ from django.contrib.auth import login
 from myApp import forms
 
 # Create your views here.
+@never_cache
 def landing(request):
     html = ""
     if request.user.is_authenticated():
