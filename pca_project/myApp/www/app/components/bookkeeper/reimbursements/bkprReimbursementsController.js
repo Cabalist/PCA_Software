@@ -142,7 +142,12 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
     $http.get('/api/rest/reimbursements/' + $scope.orgId+"/"+$scope.selectedYear).then(function(data){
 	$scope.gridData = filterReimbursements(data.data);
 	
-	$scope.gridOptions.data = $scope.gridData ;	
+	$scope.gridOptions.data = $scope.gridData;
+
+	//refresh grid;
+	if(typeof($scope.gridApi)!='undefined'){
+	    $scope.gridApi.core.refresh();
+	}
     });
     
     $scope.saveReimbursement = function(){
