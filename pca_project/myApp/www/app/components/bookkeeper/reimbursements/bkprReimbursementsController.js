@@ -143,13 +143,6 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	$scope.gridData = filterReimbursements(data.data);
 	
 	$scope.gridOptions.data = $scope.gridData;
-
-	//refresh grid;
-	$timeout(function(){
-	    if(typeof($scope.gridApi)!='undefined'){
-		$scope.gridApi.core.refresh();
-	    }
-	},500);
     });
     
     $scope.saveReimbursement = function(){
