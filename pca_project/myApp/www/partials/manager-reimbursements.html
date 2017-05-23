@@ -1,0 +1,51 @@
+<div class="col-lg-6">
+  <h3>Reimbursement Requests</h3>
+
+  <div class="input-group">
+    <span class="input-group-addon">Year:</span>
+    <select class="form-control" ng-options="item as item for item in yearOptions track by item" ng-model="selectedYear" ng-change="loadYear(selectedYear)">
+    </select>
+  </div>
+
+  <div class="input-group">
+    <span class="input-group-addon">Worker:</span>
+    <select class="form-control" ng-model="selectedWorker" ng-options="worker.userInfo.first_name+' '+worker.userInfo.last_name for worker in workers track by worker.userInfo.pk" ng-change="workerChange(selectedWorker.userInfo.pk)"></select>
+  </div>
+
+  <br>
+  <br>
+  <div ng-show="selectedWorker.userInfo.pk">
+    <div class="input-group">
+      <span class="input-group-addon">Date:</span>
+      <input type="text" class="form-control" uib-datepicker-popup ng-model="dt" is-open="popup1.opened" ng-required="true" />
+      <span class="input-group-btn">
+	<button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+      </span>
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon">Contributor/Payee:</span>
+      <input type="text" class="form-control" ng-model="payee" />
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon">Type:</span>
+      <select class="form-control" ng-options="item.name for item in typeOptions track by item.id" ng-model="selectedType" ng-change="changeType(selectedType)">
+      </select>
+    </div>
+    
+    <div class="input-group">
+      <span class="input-group-addon">Amount:</span>
+      <input type="number" class="form-control" ng-model="amount" />
+    </div>
+    
+    <button type="button" class="btn" data-toggle="tooltip" data-placement="left" title="Send Reimbursement Request" ng-click="addRequest()" \
+	    ng-class="addRequestClass()">
+      <span class="glyphicon glyphicon-plus"></span>
+    </button>
+    <span>
+      {{ errorMsg }}
+    </span>
+    
+  </div>
+</div>

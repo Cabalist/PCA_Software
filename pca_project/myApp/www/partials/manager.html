@@ -3,13 +3,16 @@
 <a ui-sref="profile"><-- Back</a>
 <br>
 <div class="row">
-  <div class="col-lg-2">
+  <div class="col-lg-3">
     <div class="list-group">
       <button ui-sref="manager.donors" class="btn list-group-item" ng-class="isFormActive(1);">
 	Donors Form
       </button>
       <button ui-sref="manager.hours" class="btn list-group-item" ng-class="isFormActive(2);">
 	Hours Form
+      </button>
+      <button ng-click="goToReimbursements()" class="btn list-group-item" ng-class="isFormActive(3);">
+	Reimbursement Requests
       </button>
     </div>
     

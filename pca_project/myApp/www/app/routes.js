@@ -74,6 +74,11 @@ myApp.config(function($stateProvider){
 	    templateUrl: '/www/partials/manager-hours.html',
 	    controller: 'ManagerHoursController'
 	})
+        .state('manager.reimbursements',{
+	    url:"/reimbursements/:year/:canvId",
+	    templateUrl: '/www/partials/manager-reimbursements.html',
+	    controller: 'ManagerReimbursementsController'
+	})
         .state('worker',{
 	    url:"/org/:orgId/worker",
 	    templateUrl: '/www/partials/worker.html',

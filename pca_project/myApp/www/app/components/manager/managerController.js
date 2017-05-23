@@ -1,4 +1,4 @@
-myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', function($scope,$http,$log,$stateParams) {
+myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams','$state', function($scope,$http,$log,$stateParams,$state) {
     $scope.orgId = $stateParams.orgId;
     $scope.orgName= null;
     $scope.selectedForm = null;
@@ -11,6 +11,10 @@ myApp.controller('ManagerController', ['$scope','$http','$log','$stateParams', f
     $scope.$on("selectForm",function(event,formIndex){
 	$scope.selectedForm = formIndex;
     });
+
+    $scope.goToReimbursements = function(){
+	$state.go('manager.reimbursements',{'canvId':0,'year':moment().format("YYYY")});
+    };
 
     //Set org name
     for(var i=0;i<$scope.orgList.length;i++){

@@ -13,5 +13,6 @@
 	 ./app/components/manager/managerController.js  \
 	 ./app/components/manager/donors/managerDonorsController.js  \
 	 ./app/components/manager/hours/managerHoursController.js  \
+	 ./app/components/manager/reimbursements/managerReimbursementsController.js  \
 	 ./app/components/profile/profileController.js  \
 	 ./app/components/worker/workerController.js  -o ./js/profile.min.js
