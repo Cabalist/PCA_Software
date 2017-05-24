@@ -99,7 +99,15 @@ class ReimbursementSerializer(serializers.ModelSerializer):
         model = Reimbursement
         fields = ['id','org', 'user','year','period', 'startDate','endDate','value','addedBy']
 
+class ReimbursementResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReimbursementResponse
+        fields = '__all__'
+        
 class ReimbursementRequestSerializer(serializers.ModelSerializer):
+    response = ReimbursementResponseSerializer(source="reimbursementresponse")
+    
     class Meta:
         model = ReimbursementRequest
-        fields = '__all__'
+        fields = ['id','org','date','worker','payee','purpose','reimType','amount','requestedOn','requestedBy','response']
+

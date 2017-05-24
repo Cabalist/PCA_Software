@@ -118,6 +118,18 @@ class ReimbursementRequest(models.Model):
     requestedOn = models.DateTimeField()
     
 
+class ReimbursementResponse(models.Model):
+    request = models.OneToOneField(ReimbursementRequest)
+
+    status = models.IntegerField()
+    reviewedBy = models.ForeignKey(settings.AUTH_USER_MODEL)
+    reviewedOn = models.DateField()
+
+    respondedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="reimbursementResponder")
+    respondedOn = models.DateTimeField()
+
+
+    
 
 #class UserOrgJoinRequest(models.Model):
 #    user = models.ForeignKey(settings.AUTH_USER_MODEL)

@@ -412,7 +412,21 @@ def reimbursements(request,orgId=None,year=None):
 
 @csrf_exempt
 def reimbursementRequests(request,orgId=None,year=None,canvId=None):
-    if request.method== "POST":
+    if request.method == "GET":
+        org = Organization.objects.get(id=orgId)
+        
+        query = ReimbursementRequest.objects.filter(org=org).filter(date__year=year)
+           
+        if int(canvId)!=0:
+            worker = User.objects.get(pk=int(canvId))
+            query = query.filter(worker=worker)
+
+        objs = query.all()
+        serialized = ReimbursementRequestSerializer(objs,many=True)
+            
+        return JsonResponse(serialized.data,safe=False)
+        
+    if request.method == "POST":
         data = JSONParser().parse(request)
 
         org = Organization.objects.get(id=orgId)
@@ -434,6 +448,12 @@ def reimbursementRequests(request,orgId=None,year=None,canvId=None):
 
         return JsonResponse(serialized.data,safe=False)
 
+
+@csrf_exempt
+def reimbursementResponses(request,requestId=None):
+    if request.method=="POST":
+        return JsonResponse([],safe=False)
+        
     
 #Reports
 @csrf_exempt
