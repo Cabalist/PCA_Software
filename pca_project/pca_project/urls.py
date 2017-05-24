@@ -44,8 +44,6 @@ urlpatterns = [
     url(r'^api/rest/hours/(?P<userId>\d+)/(?P<orgId>\d+)$', api.hours),
     url(r'^api/rest/orgAdjustments/(?P<orgId>\d+)/(?P<year>\d+)$', api.adjustments),
     url(r'^api/rest/orgAdjustments/$', api.adjustments),
-    url(r'^api/rest/reimbursements/(?P<orgId>\d+)/(?P<year>\d+)$', api.reimbursements),  #This was first attempt, needs to be removed.
-
     url(r'^api/rest/reimbursementRequests/(?P<orgId>\d+)/(?P<year>\d+)/(?P<canvId>\d+)$', api.reimbursementRequests),
 
     #reports

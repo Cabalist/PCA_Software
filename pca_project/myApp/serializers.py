@@ -106,8 +106,10 @@ class ReimbursementResponseSerializer(serializers.ModelSerializer):
         
 class ReimbursementRequestSerializer(serializers.ModelSerializer):
     response = ReimbursementResponseSerializer(source="reimbursementresponse")
+    worker = UserSerializer(source='workerId')
+    requester = UserSerializer(source='requestedBy')
     
     class Meta:
         model = ReimbursementRequest
-        fields = ['id','org','date','worker','payee','purpose','reimType','amount','requestedOn','requestedBy','response']
+        fields = ['id','org','date','worker','payee','purpose','reimType','amount','requester','requestedOn','response']
 

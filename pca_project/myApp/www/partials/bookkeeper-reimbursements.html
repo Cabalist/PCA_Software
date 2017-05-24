@@ -12,9 +12,49 @@
 
   <br>
   <h5><b>Incoming requests</b></h5>
-  <p>
-    list
-  </p>
+  <div ng-show="incomingRequests.length" cloak>
+    <div class="input-group" ng-repeat="request in incomingRequests">
+      <span class="input-group-addon">Name: <b>{{ request.worker.first_name }} {{ request.worker.last_name }}</b></span>
+      <span class="input-group-addon">Payee: <b>{{ request.payee }}</b></span>
+      <span class="input-group-addon">Request By: <b>{{ request.requester.first_name }} {{ request.requester.last_name }}</b></span>
+      <span class="input-group-addon">Request On: <b>{{ request.requestedOn }}</b></span>
+      <span class="input-group-addon">Amount: <b>{{ request.amount | currency}}</b></span>
+      
+      <span class="input-group-addon">
+	ReviewedBy:
+	<select class="form-control" ng-model="request.reviewer" ng-options="reviewer.userInfo.first_name+' ' + reviewer.userInfo.last_name for reviewer in reviewers track by reviewer.userInfo.pk">
+	</select>
+      </span>
+
+      <span class="input-group-addon">
+	ReviewedOn:
+	<input type="text" class="form-control" size="12" uib-datepicker-popup ng-model="request.reviewedOn" is-open="request.opened" ng-required="true" ng-click="open($index)"/>
+	
+      </span>      
+      
+      <span class="input-group-addon">	
+	<button class="btn" data-toggle="tooltip" data-placement="left" title="Approve" ng-class="setApproveBtn($index)" ng-click="approveRequest($index)">
+	  <span class="glyphicon glyphicon-ok"></span>
+	</button>
+	
+	<button class="btn" data-toggle="tooltip" data-placement="left" title="Reject" ng-class="setRejectBtn($index)" ng-click="rejectRequest($index)">
+	  <span class="glyphicon glyphicon-remove"></span>	  
+	</button>
+	
+      </span>
+      <span class="input-group-addon">
+	<button class="btn" ng-click="saveRequestResponse($index)" ng-class="saveBtnClass($index)" >Save</button>
+      </span>
+    </div>
+  </div>
+
+  <div ng-show="!incomingRequests.length">
+    No new reimbursement requests
+  </div>
+
+
+  
+  
   <br>
   <h5><b>History</b></h5>
   <p>

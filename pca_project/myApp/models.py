@@ -108,7 +108,7 @@ class Reimbursement(models.Model):
 
 class ReimbursementRequest(models.Model):
     org = models.ForeignKey(Organization)
-    worker = models.ForeignKey(settings.AUTH_USER_MODEL)
+    workerId = models.ForeignKey(settings.AUTH_USER_MODEL)
     date = models.DateField()
     payee = models.CharField(max_length=16)
     reimType = models.IntegerField()

@@ -378,37 +378,6 @@ def adjustments(request,orgId=None,year=None):
         serialized = AdjustmentsReportSerializer(donation)
         return JsonResponse(serialized.data, safe=False)
 
-@csrf_exempt
-def reimbursements(request,orgId=None,year=None):
-    if request.method =="GET":
-        org = Organization.objects.get(id=orgId)
-        query = Reimbursement.objects.filter(org=org).filter(year=year).all()
-
-        serialized= ReimbursementSerializer(query,many=True)
-        return JsonResponse(serialized.data, safe=False)        
-
-    if request.method =="POST":
-        data = JSONParser().parse(request)
-        org = Organization.objects.get(id=orgId)
-        worker = User.objects.get(pk=int(data["worker"]))
-        period = data['period']
-        value = data['value']
-
-        myStart = data['startDate'].split("-")
-        startDate = datetime.date(int(myStart[0]),int(myStart[1]),int(myStart[2][:2]))
-        
-        myEnd = data['endDate'].split("-")
-        endDate = datetime.date(int(myEnd[0]),int(myEnd[1]),int(myEnd[2][:2]))
-        
-        addedBy = User.objects.get(pk=request.user.id)
-        now = datetime.datetime.now(pytz.timezone('US/Pacific'))
-
-        reimb = Reimbursement(org=org,worker=worker,year=year,period=period,startDate=startDate,endDate=endDate,value=value,addedBy=addedBy,addedOn=now)
-        reimb.save()
-
-        serialized = ReimbursementSerializer(reimb)
-        return JsonResponse(serialized.data, safe=False)
-
 
 @csrf_exempt
 def reimbursementRequests(request,orgId=None,year=None,canvId=None):
@@ -418,8 +387,8 @@ def reimbursementRequests(request,orgId=None,year=None,canvId=None):
         query = ReimbursementRequest.objects.filter(org=org).filter(date__year=year)
            
         if int(canvId)!=0:
-            worker = User.objects.get(pk=int(canvId))
-            query = query.filter(worker=worker)
+            canv = User.objects.get(pk=int(canvId))
+            query = query.filter(workerId=canv)
 
         objs = query.all()
         serialized = ReimbursementRequestSerializer(objs,many=True)
@@ -441,7 +410,7 @@ def reimbursementRequests(request,orgId=None,year=None,canvId=None):
         requestedBy = User.objects.get(pk=request.user.id)
         now = datetime.datetime.now(pytz.timezone('US/Pacific'))
 
-        newRequest = ReimbursementRequest(org=org,worker=worker,date=date,payee=payee,reimType=reimType,purpose=purpose,amount=amount,requestedBy=requestedBy, requestedOn = now)
+        newRequest = ReimbursementRequest(org=org,workerId=worker,date=date,payee=payee,reimType=reimType,purpose=purpose,amount=amount,requestedBy=requestedBy, requestedOn = now)
         newRequest.save()
         
         serialized = ReimbursementRequestSerializer(newRequest)

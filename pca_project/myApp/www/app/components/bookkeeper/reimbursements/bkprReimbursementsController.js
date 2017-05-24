@@ -9,9 +9,9 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
     $scope.yearOptions = [y,String(y-1),String(y-2),String(y-3)];
     $scope.selectedYear = $stateParams.year;
 
-        
-    $scope.gridData=[];
-
+    $scope.incomingRequests = [];
+    $scope.gridData = [];
+    
     //WHy not use ui-sref in HTML?
     $scope.changeYear = function(year){
 	$state.go('bookkeeper.reimbursements',{'canvId':$scope.canvId,'year':String(year)});
@@ -35,23 +35,76 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 		       {'pk':0,
 			'first_name':"All",
 			'last_name':""}}];
-	
+
+	var revs = [];
 	for (var i=0;i<data.data.length;i++){
 	    cnvsrs.push(data.data[i]);
+	    revs.push(data.data[i]);
 	}
-	
+	$scope.reviewers = revs;
 	$scope.canvassers = cnvsrs;
 
 	//select canvasser
 	selectCanvsr();
     });
 
-    var reimbUrl = "/api/rest/reimbursementRequests/"+$scope.orgId+"/"+$scope.selectedYear+"/"+$scope.canvId;
-    $log.log(reimbUrl);
-    $http.get(reimbUrl).then(function(data){
-	$log.log(data.data);
+    function sortRequests(data){
+	//sort requests, appending them to either grid to show processed requests, or to incomig list if there is no resposne.
+	for(var i =0;i<data.length;i++){
+	    if (data.response==null){
+		var temp = data[i];
+		temp["reviewer"] = null;
+		temp["requestedOn"]= moment(new Date(temp.requestedOn)).format("YYYY-MM-DD");
+		temp["reviewedOn"]= new Date();
+		temp["opened"] = false;
+		temp["status"] = 1;
+		$scope.incomingRequests.push(temp);
+	    }
+	}
+    };
 
-	//Need to sort responded from pending response.
+    
+    $scope.setRejectBtn = function(index){
+	if ($scope.incomingRequests[index].status==3){
+	    return "btn-danger";
+	}else{
+	    return "btn-default";
+	}
+    };
+
+    
+    $scope.setApproveBtn = function(index){	
+	if ($scope.incomingRequests[index].status==2){
+	    return "btn-success";
+	}else{
+	    return "btn-default";
+	}
+    };
+
+    $scope.approveRequest = function(index){
+	$scope.incomingRequests[index].status=2;
+    };
+    
+    $scope.rejectRequest = function(index){
+	$scope.incomingRequests[index].status=3;
+    };
+    
+    $scope.open = function(index){
+	$scope.incomingRequests[index].opened=true;
+    };
+    $scope.saveBtnClass = function(index){
+	if (($scope.incomingRequests[index].reviewer!=null) && ($scope.incomingRequests[index].status!=1) ){
+	    return "btn-primary";
+	}else{
+	    return "btn-default";
+	}
+    }
+    
+    var reimbUrl = "/api/rest/reimbursementRequests/"+$scope.orgId+"/"+$scope.selectedYear+"/"+$scope.canvId;
+    
+    $http.get(reimbUrl).then(function(data){
+	sortRequests(data.data);
+	
     });
 
     
