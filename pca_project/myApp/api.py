@@ -408,7 +408,33 @@ def reimbursements(request,orgId=None,year=None):
 
         serialized = ReimbursementSerializer(reimb)
         return JsonResponse(serialized.data, safe=False)
+
+
+@csrf_exempt
+def reimbursementRequests(request,orgId=None,year=None,canvId=None):
+    if request.method== "POST":
+        data = JSONParser().parse(request)
+
+        org = Organization.objects.get(id=orgId)
+        worker = User.objects.get(pk=canvId)
+
+        date = data["date"]
+        payee = data["payee"]
+        reimType = data["type"]
+        purpose = data["purpose"]
+        amount = str(float(data["amount"]))
+
+        requestedBy = User.objects.get(pk=request.user.id)
+        now = datetime.datetime.now(pytz.timezone('US/Pacific'))
+
+        newRequest = ReimbursementRequest(org=org,worker=worker,date=date,payee=payee,reimType=reimType,purpose=purpose,amount=amount,requestedBy=requestedBy, requestedOn = now)
+        newRequest.save()
         
+        serialized = ReimbursementRequestSerializer(newRequest)
+
+        return JsonResponse(serialized.data,safe=False)
+
+    
 #Reports
 @csrf_exempt
 def orgYTDDonations(request,orgId=None,year=None):

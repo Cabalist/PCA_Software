@@ -98,3 +98,8 @@ class ReimbursementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reimbursement
         fields = ['id','org', 'user','year','period', 'startDate','endDate','value','addedBy']
+
+class ReimbursementRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReimbursementRequest
+        fields = '__all__'

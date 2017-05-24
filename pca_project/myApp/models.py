@@ -105,7 +105,20 @@ class Reimbursement(models.Model):
     value = models.FloatField()
     addedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="reimburser")
     addedOn = models.DateTimeField()
+
+class ReimbursementRequest(models.Model):
+    org = models.ForeignKey(Organization)
+    worker = models.ForeignKey(settings.AUTH_USER_MODEL)
+    date = models.DateField()
+    payee = models.CharField(max_length=16)
+    reimType = models.IntegerField()
+    purpose = models.CharField(max_length=32)
+    amount = models.DecimalField(max_digits=6, decimal_places=2)
+    requestedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="reimbursementRequester")
+    requestedOn = models.DateTimeField()
     
+
+
 #class UserOrgJoinRequest(models.Model):
 #    user = models.ForeignKey(settings.AUTH_USER_MODEL)
 #    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)

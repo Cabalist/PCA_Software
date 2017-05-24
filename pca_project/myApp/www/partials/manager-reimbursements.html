@@ -33,6 +33,11 @@
       <select class="form-control" ng-options="item.name for item in typeOptions track by item.id" ng-model="selectedType" ng-change="changeType(selectedType)">
       </select>
     </div>
+
+    <div class="input-group">
+      <span class="input-group-addon">Purpose Desc:</span>
+      <input type="text" class="form-control" ng-model="purpose" />
+    </div>
     
     <div class="input-group">
       <span class="input-group-addon">Amount:</span>

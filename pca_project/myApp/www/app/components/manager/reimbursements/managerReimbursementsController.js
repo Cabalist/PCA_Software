@@ -22,6 +22,7 @@ myApp.controller('ManagerReimbursementsController', ['$scope','$http','$log','$s
 	$scope.popup1.opened = true;
     };
     $scope.payee = null;
+    $scope.purpose = null;
     $scope.amount = 0.0;
     
     function selectWorker(){
@@ -57,6 +58,11 @@ myApp.controller('ManagerReimbursementsController', ['$scope','$http','$log','$s
 	    form.status = 0;
 	    form.errorMsg = "Must select worker.";
 	}
+
+	//TODO..validate date
+	form.date=moment($scope.dt).format("YYYY-MM-DD");
+
+	form.type = $scope.selectedType.id;
 	
 	if ($scope.payee != null){
 	    form.payee = $scope.payee;
@@ -65,9 +71,20 @@ myApp.controller('ManagerReimbursementsController', ['$scope','$http','$log','$s
 	    form.errorMsg = "Must specify Contributor/Payee.";
 	}
 
+	if ($scope.purpose !=null){
+	    form.purpose = $scope.purpose;
+	}else{
+	    form.status=0;
+	    form.erroMsg = "Must specify purpose";
+	}
+	
 	if ($scope.amount>0){
 	    form.amount=$scope.amount;
-	}else{
+	    if ($scope.amount>9999){
+		form.status = 0;
+		form.errorMsg = "Amount can not be over $9999.";
+	    }
+	}else {
 	    form.status = 0;
 	    form.errorMsg = "Amount must be greater than 0";
 	}
@@ -77,14 +94,14 @@ myApp.controller('ManagerReimbursementsController', ['$scope','$http','$log','$s
     $scope.addRequest = function(){
 	var form = validateForm();
 	if (form.status){
-	    $http.post("/api/rest/reimbursements/",JSON.stringify(form)).then(function(data){
-		
+	    var url = "/api/rest/reimbursementRequests/"+$scope.orgId+"/"+$scope.selectedYear+"/"+$scope.canvId;
+	    $http.post(url,JSON.stringify(form)).then(function(data){
+		$log.log(data.data);
 		$scope.errorMsg = null;
 	    });
 	}else{
 	    //set message here...
 	    $scope.errorMsg = form.errorMsg;
-	    $log.log(form.errorMsg);
 	}
     };
 
