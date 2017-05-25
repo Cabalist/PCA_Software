@@ -1,4 +1,4 @@
-myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stateParams','$state','uiGridConstants','$timeout', function($scope,$http,$log,$stateParams,$state,uiGridConstants,$timeout) {
+myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stateParams','$state','uiGridConstants','$timeout','uiGridConstants', function($scope,$http,$log,$stateParams,$state,uiGridConstants,$timeout,uiGridConstants) {
     $scope.$emit("selectForm",4);
 
     $scope.canvId = $stateParams.canvId;
@@ -10,7 +10,9 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
     $scope.selectedYear = $stateParams.year;
 
     $scope.incomingRequests = [];
-    $scope.gridData = [];
+    $scope.reimbursementsHistory = [];
+    $scope.showSpinner=true;
+    
     
     //WHy not use ui-sref in HTML?
     $scope.changeYear = function(year){
@@ -21,6 +23,11 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	$state.go('bookkeeper.reimbursements',{'canvId':String(cnvsrId),'year':String($scope.selectedYear)});
     };
 
+    //init spinner
+    var target = document.getElementById('spinner')
+    var spinner = new Spinner().spin(target);
+
+    
     function selectCanvsr(){
 	for(var i=0; i<$scope.canvassers.length; i++){
 	    if($scope.canvId==$scope.canvassers[i].userInfo.pk){
@@ -48,20 +55,47 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	selectCanvsr();
     });
 
+    function prepareIncomingRequest(request){	
+	var temp = request;
+	temp["reviewer"] = null;
+	temp["requestedOn"] = moment(new Date(temp.requestedOn)).format("YYYY-MM-DD");
+	temp["reviewedOn"] = new Date();
+	temp["opened"] = false;
+	temp["status"] = 1;
+	return temp;	
+    };
+
+    function prepareRequestHistory(request){
+	temp = {};
+
+	temp.worker= request.worker.first_name+" " + request.worker.last_name;
+	temp.date = request.date;
+	temp.payee = request.payee;
+	temp.amount = request.amount;
+	temp.requestedBy = request.requester.first_name+" " + request.requester.last_name;
+	temp.requestedOn = moment(request.requestedOn).format("YYYY-MM-DD");
+	temp.reviewer = request.response.reviewer.first_name + ' '+ request.response.reviewer.last_name;
+	temp.reviewedOn = request.response.reviewedOn;
+	temp.responder = request.response.responder.first_name + " " + request.response.responder.last_name;
+	temp.respondedOn = moment(request.response.respondedOn).format("YYYY-MM-DD");
+
+	if (request.response.status==2){
+	    temp.status="approved";
+	}else if (request.response.status==3){
+	    temp.status="rejected";
+	}
+	
+	return temp;
+    };
     function sortRequests(data){
 	//sort requests, appending them to either grid to show processed requests, or to incomig list if there is no resposne.
 	for(var i =0;i<data.length;i++){
 	    if (data[i].response==null){
-		var temp = data[i];
-		temp["reviewer"] = null;
-		temp["requestedOn"] = moment(new Date(temp.requestedOn)).format("YYYY-MM-DD");
-		temp["reviewedOn"] = new Date();
-		temp["opened"] = false;
-		temp["status"] = 1;
-
+		var temp = prepareIncomingRequest(data[i]);
 		$scope.incomingRequests.push(temp);
 	    }else{
-		$log.log("request with response found!");
+		var temp = prepareRequestHistory(data[i]);
+		$scope.reimbursementsHistory.push(temp);
 	    }
 	}
     };
@@ -121,11 +155,13 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	    return "btn-default";
 	}
     }
-
     
     var reimbUrl = "/api/rest/reimbursementRequests/"+$scope.orgId+"/"+$scope.selectedYear+"/"+$scope.canvId;
     $http.get(reimbUrl).then(function(data){
-	sortRequests(data.data);	
+	sortRequests(data.data);
+	$scope.showSpinner=false;
+	$scope.gridOptions.data=$scope.reimbursementsHistory;
+	//possibly need to refresh.
     });
 
 
@@ -136,11 +172,52 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 		sortRequests([data.data]);
 		$scope.incomingRequests.splice(index,1);
 	    });
-		
 	}
     };
 
-    
+    $scope.gridOptions={
+	showColumnFooter:true,
+	enableGridMenu: true,
+	exporterCsvFilename: 'reimbursements.csv',
+	exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
+	columnDefs:[{field:'worker',
+		     name:'Worker',
+		     width:'14%'},
+		    {field:"date",
+		     name:'Date',
+		     width:'10%' },
+		    {field:'payee',
+		     name:'Payee',
+		     width:'10%'},
+		    {field:'amount',
+		     cellFilter:'currency',
+		     aggregationType: uiGridConstants.aggregationTypes.sum ,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
+		     name:'Amount',
+		     width:'10%'},
+		    {field:'requestedBy',
+		     name:'Requested By',
+		     width:'11%'},
+		    {field:'requestedOn',
+		     name:'Request Date',
+		     width:'12%'},
+		    {field:'reviewer',
+		     name:'Reviewer',
+		     width:'12%'},
+		    {field:'reviewedOn',
+		     name:'Review Date',
+		     width:'12%'},
+		    {field:'responder',
+		     name:"Responder",
+		     width:'10%'},
+		    {field:'status',
+		     name:"Status",
+		     width:"8%"}
+		   ],
+	onRegisterApi: function(gridApi){  // this is for exposing api to other controllers...
+	    $scope.gridApi = gridApi; //Don't use it...
+	}
+    };
     
     $log.log("Hello from Bookkeeper Reimbursements controller");
 }]);

@@ -143,9 +143,9 @@ myApp.controller('ytdController', ['$scope','$http','$log','uiGridConstants', fu
 	    
 	    $scope.myData.push(dRow);
 	    addUserShares(d.user,dRow["canvasserTake"],dRow["orgTake"]);
-
-	    $scope.showSpinner=false;
 	}
+	
+	$scope.showSpinner=false;
 
     };
     
