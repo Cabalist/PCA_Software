@@ -45,6 +45,7 @@ urlpatterns = [
     url(r'^api/rest/orgAdjustments/(?P<orgId>\d+)/(?P<year>\d+)$', api.adjustments),
     url(r'^api/rest/orgAdjustments/$', api.adjustments),
     url(r'^api/rest/reimbursementRequests/(?P<orgId>\d+)/(?P<year>\d+)/(?P<canvId>\d+)$', api.reimbursementRequests),
+    url(r'^api/rest/reimbursementResponses/(?P<requestId>\d+)$', api.reimbursementResponses),
 
     #reports
     url(r'^api/rest/orgYTDDonations/(?P<orgId>\d+)/(?P<year>\d+)$',api.orgYTDDonations),

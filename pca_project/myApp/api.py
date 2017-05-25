@@ -421,8 +421,25 @@ def reimbursementRequests(request,orgId=None,year=None,canvId=None):
 @csrf_exempt
 def reimbursementResponses(request,requestId=None):
     if request.method=="POST":
-        return JsonResponse([],safe=False)
+        raw= JSONParser().parse(request)
+        data = raw["request"]
+        reimbRequest = ReimbursementRequest.objects.get(id=requestId)
+
+        status = data["status"]
+        reviewedBy = User.objects.get(pk=data["reviewer"]["userInfo"]["pk"])
         
+        dateLi = raw["simpleDate"].split('-')
+        reviewedOn = datetime.date(int(dateLi[0]),int(dateLi[1]),int(dateLi[2]))
+
+        responder = User.objects.get(pk=request.user.id)
+        now = datetime.datetime.now(pytz.timezone('US/Pacific'))
+
+        newResponse = ReimbursementResponse(request=reimbRequest,status=status,reviewedBy=reviewedBy,reviewedOn=reviewedOn,respondedBy=responder,respondedOn=now)
+        newResponse.save()
+
+        serialized = ReimbursementRequestSerializer(reimbRequest)
+        
+        return JsonResponse(serialized.data,safe=False)
     
 #Reports
 @csrf_exempt
