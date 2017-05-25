@@ -1,4 +1,4 @@
-myApp.controller('ManagerReimbursementsController', ['$scope','$http','$log','$stateParams','$state', function($scope,$http,$log,$stateParams,$state) {
+myApp.controller('ManagerReimbursementsController', ['$scope','$http','$log','$stateParams','$state','uiGridConstants', function($scope,$http,$log,$stateParams,$state,uiGridConstants) {
     $scope.$emit("selectForm",3);
 
     $scope.selectedYear = $stateParams.year;
@@ -24,6 +24,9 @@ myApp.controller('ManagerReimbursementsController', ['$scope','$http','$log','$s
     $scope.payee = null;
     $scope.purpose = null;
     $scope.amount = 0.0;
+
+    $scope.showSpinner = true;
+    $scope.reimbursementsHistory = [];
     
     function selectWorker(){
 	for(var i=0; i<$scope.workers.length; i++){
@@ -32,6 +35,11 @@ myApp.controller('ManagerReimbursementsController', ['$scope','$http','$log','$s
 	    }
 	}
     }
+
+    //init spinner
+    var target = document.getElementById('spinner')
+    var spinner = new Spinner().spin(target);
+
     
     //Get org workers list.
     $http.get('/api/rest/orgWorkers/' + $scope.orgId).then(function(data){
@@ -48,6 +56,50 @@ myApp.controller('ManagerReimbursementsController', ['$scope','$http','$log','$s
 	selectWorker();
     });
 
+    function sortRequests(data){
+	//There is no sorting... all requests are history...
+	for(var i =0;i<data.length;i++){
+	    var row = {};
+	    
+	    row.worker = data[i].worker.first_name +' '+ data[i].worker.last_name;
+	    row.date = data[i].date;
+	    row.payee= data[i].payee;
+	    row.amount =data[i].amount;
+	    row.requestedBy = data[i].requester.first_name + ' ' + data[i].requester.last_name;
+
+	    row.requestedOn = moment(data[i].requestedOn).format("YYYY-MM-DD");
+	    
+	    
+	    if (data[i].response==null){		
+		row.reviewer="";
+		row.reviewedOn="";
+		row.responder ="";
+		row.respondedOn ="";
+		row.status="pending";		
+	    }else{		
+		row.reviewer = data[i].response.reviewer.first_name+' '+data[i].response.reviewer.last_name;
+		row.reviewedOn = data[i].response.reviewedOn;
+		row.responder = data[i].response.responder.first_name+' '+data[i].response.responder.last_name;
+		row.respondedOn = moment(data[i].response.respondedOn).format("YYYY-MM-DD");
+		if (data[i].response.status==2){
+		    row.status="approved";
+		}else if (data[i].response.status==3){
+		    row.status="rejected";
+		}
+	    }
+	    
+	    $scope.reimbursementsHistory.push(row);
+	}
+    };
+    
+    //Get reimbursement History
+    var reimbUrl = "/api/rest/reimbursementRequests/"+$scope.orgId+"/"+$scope.selectedYear+"/"+$scope.canvId;
+    $http.get(reimbUrl).then(function(data){
+	sortRequests(data.data);
+	$scope.showSpinner=false;
+	$scope.gridOptions.data=$scope.reimbursementsHistory;
+    });
+        
 
     function validateForm(){
 	var form = {'status':1};
@@ -95,9 +147,20 @@ myApp.controller('ManagerReimbursementsController', ['$scope','$http','$log','$s
 	var form = validateForm();
 	if (form.status){
 	    var url = "/api/rest/reimbursementRequests/"+$scope.orgId+"/"+$scope.selectedYear+"/"+$scope.canvId;
+	    
 	    $http.post(url,JSON.stringify(form)).then(function(data){
-		$log.log(data.data);
-		$scope.errorMsg = null;
+		sortRequests([data.data]);
+		
+		//refresh grid data
+		if(typeof($scope.gridApi)!='undefined'){
+		    $scope.gridApi.core.refresh();
+		}
+
+		//unset all the items
+		$scope.payee = null;
+		$scope.purpose = null;
+		$scope.amount = 0.0;
+		
 	    });
 	}else{
 	    //set message here...
@@ -110,6 +173,50 @@ myApp.controller('ManagerReimbursementsController', ['$scope','$http','$log','$s
 	$state.go("manager.reimbursements",{'canvId':String(userId),'year':String($scope.selectedYear)});
     };
 
+    $scope.gridOptions={
+	showColumnFooter:true,
+	enableGridMenu: true,
+	exporterCsvFilename: 'reimbursements.csv',
+	exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
+	columnDefs:[{field:'worker',
+		     name:'Worker',
+		     width:'14%'},
+		    {field:"date",
+		     name:'Date',
+		     width:'10%' },
+		    {field:'payee',
+		     name:'Payee',
+		     width:'10%'},
+		    {field:'amount',
+		     cellFilter:'currency',
+		     aggregationType: uiGridConstants.aggregationTypes.sum ,
+		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
+		     name:'Amount',
+		     width:'10%'},
+		    {field:'requestedBy',
+		     name:'Requested By',
+		     width:'11%'},
+		    {field:'requestedOn',
+		     name:'Request Date',
+		     width:'12%'},
+		    {field:'reviewer',
+		     name:'Reviewer',
+		     width:'12%'},
+		    {field:'reviewedOn',
+		     name:'Review Date',
+		     width:'12%'},
+		    {field:'responder',
+		     name:"Responder",
+		     width:'10%'},
+		    {field:'status',
+		     name:"Status",
+		     width:"8%"}
+		   ],
+	onRegisterApi: function(gridApi){  // this is for exposing api to other controllers...
+	    $scope.gridApi = gridApi; //Don't use it...
+	}
+    };
+    
     $scope.addRequestClass = function(){
 	//This checks if 'add request' button should be active
 	if (validateForm().status){

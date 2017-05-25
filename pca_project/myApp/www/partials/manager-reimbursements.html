@@ -1,4 +1,4 @@
-<div class="col-lg-6">
+<div class="col-lg-9">
   <h3>Reimbursement Requests</h3>
 
   <div class="input-group">
@@ -53,4 +53,19 @@
     </span>
     
   </div>
+
+  <br>
+  <h5><b>History</b></h5>
+  <div ng-show="showSpinner" id="spinner" ng-hide="!showSpinner"></div>
+
+  <div ng-if="!showSpinner">
+    <div id="grid1" style="width:100%" ui-grid="gridOptions" class="grid" ui-grid-exporter>
+    </div>
+  </div>
+
+  <div ng-show="!reimbursementsHistory.length">
+    No Reimbursements History
+  </div>
+  
+  
 </div>
