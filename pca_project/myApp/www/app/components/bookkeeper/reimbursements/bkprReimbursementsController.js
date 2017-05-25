@@ -2,8 +2,7 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
     $scope.$emit("selectForm",4);
 
     $scope.canvId = $stateParams.canvId;
-
-    $scope.selectedCnvsr=false;
+    $scope.selectedCnvsr = false;
     
     var y = moment().format("YYYY");
     $scope.yearOptions = [y,String(y-1),String(y-2),String(y-3)];
@@ -11,8 +10,7 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 
     $scope.incomingRequests = [];
     $scope.reimbursementsHistory = [];
-    $scope.showSpinner=true;
-    
+    $scope.showSpinner = true;    
     
     //WHy not use ui-sref in HTML?
     $scope.changeYear = function(year){
@@ -26,12 +24,11 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
     //init spinner
     var target = document.getElementById('spinner')
     var spinner = new Spinner().spin(target);
-
     
     function selectCanvsr(){
-	for(var i=0; i<$scope.canvassers.length; i++){
+	for(var i = 0; i < $scope.canvassers.length; i++){
 	    if($scope.canvId==$scope.canvassers[i].userInfo.pk){
-		$scope.selectedCnvsr=$scope.canvassers[i];
+		$scope.selectedCnvsr = $scope.canvassers[i];
 	    }
 	}
     }
@@ -44,10 +41,11 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 			'last_name':""}}];
 
 	var revs = [];
-	for (var i=0;i<data.data.length;i++){
+	for (var i = 0; i<data.data.length; i++){
 	    cnvsrs.push(data.data[i]);
 	    revs.push(data.data[i]);
 	}
+	
 	$scope.reviewers = revs;
 	$scope.canvassers = cnvsrs;
 
@@ -67,7 +65,6 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 
     function prepareRequestHistory(request){
 	temp = {};
-
 	temp.worker = request.worker.first_name+" " + request.worker.last_name;
 	temp.date = request.date;
 	temp.payee = request.payee;
@@ -88,6 +85,7 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	
 	return temp;
     };
+    
     function sortRequests(data){
 	//sort requests, appending them to either grid to show processed requests, or to incomig list if there is no resposne.
 	for(var i =0;i<data.length;i++){
@@ -181,37 +179,37 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
 	columnDefs:[{field:'worker',
 		     name:'Worker',
-		     width:'14%'},
+		     width:'12%'},
 		    {field:"date",
 		     name:'Date',
-		     width:'11%' },
+		     width:'10%' },
 		    {field:'payee',
 		     name:'Payee',
 		     width:'10%'},
 		    {field:'purpose',
 		     name:'Purpose',
-		     width:'14%'},
+		     width:'10%'},
 		    {field:'amount',
 		     cellFilter:'currency',
 		     aggregationType: uiGridConstants.aggregationTypes.sum ,
 		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
 		     name:'Amount',
-		     width:'10%'},
+		     width:'8%'},
 		    {field:'requestedBy',
 		     name:'Requested By',
-		     width:'12%'},
+		     width:'10%'},
 		    {field:'requestedOn',
 		     name:'Request Date',
 		     width:'12%'},
 		    {field:'reviewer',
 		     name:'Reviewer',
-		     width:'12%'},
+		     width:'9%'},
 		    {field:'reviewedOn',
 		     name:'Review Date',
-		     width:'12%'},
+		     width:'10%'},
 		    {field:'responder',
 		     name:"Responder",
-		     width:'11%'},
+		     width:'9%'},
 		    {field:'status',
 		     name:"Status",
 		     width:"9%"}
