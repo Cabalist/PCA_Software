@@ -68,9 +68,10 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
     function prepareRequestHistory(request){
 	temp = {};
 
-	temp.worker= request.worker.first_name+" " + request.worker.last_name;
+	temp.worker = request.worker.first_name+" " + request.worker.last_name;
 	temp.date = request.date;
 	temp.payee = request.payee;
+	temp.purpose = request.purpose;
 	temp.amount = request.amount;
 	temp.requestedBy = request.requester.first_name+" " + request.requester.last_name;
 	temp.requestedOn = moment(request.requestedOn).format("YYYY-MM-DD");
@@ -80,9 +81,9 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	temp.respondedOn = moment(request.response.respondedOn).format("YYYY-MM-DD");
 
 	if (request.response.status==2){
-	    temp.status="approved";
+	    temp.status = "approved";
 	}else if (request.response.status==3){
-	    temp.status="rejected";
+	    temp.status = "rejected";
 	}
 	
 	return temp;
@@ -99,7 +100,6 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	    }
 	}
     };
-
     
     $scope.setRejectBtn = function(index){
 	if ($scope.incomingRequests[index].status==3){
@@ -116,7 +116,7 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	    return "btn-default";
 	}
     };
-
+    
     $scope.approveRequest = function(index){
 	$scope.incomingRequests[index].status=2;
     };
@@ -163,8 +163,7 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	$scope.gridOptions.data=$scope.reimbursementsHistory;
 	//possibly need to refresh.
     });
-
-
+    
     $scope.saveRequestResponse = function(index){
 	var response = validateResponse(index);
 	if (response.isValid){
@@ -174,7 +173,7 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	    });
 	}
     };
-
+    
     $scope.gridOptions={
 	showColumnFooter:true,
 	enableGridMenu: true,
@@ -185,10 +184,13 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 		     width:'14%'},
 		    {field:"date",
 		     name:'Date',
-		     width:'10%' },
+		     width:'11%' },
 		    {field:'payee',
 		     name:'Payee',
 		     width:'10%'},
+		    {field:'purpose',
+		     name:'Purpose',
+		     width:'14%'},
 		    {field:'amount',
 		     cellFilter:'currency',
 		     aggregationType: uiGridConstants.aggregationTypes.sum ,
@@ -197,7 +199,7 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 		     width:'10%'},
 		    {field:'requestedBy',
 		     name:'Requested By',
-		     width:'11%'},
+		     width:'12%'},
 		    {field:'requestedOn',
 		     name:'Request Date',
 		     width:'12%'},
@@ -209,10 +211,10 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 		     width:'12%'},
 		    {field:'responder',
 		     name:"Responder",
-		     width:'10%'},
+		     width:'11%'},
 		    {field:'status',
 		     name:"Status",
-		     width:"8%"}
+		     width:"9%"}
 		   ],
 	onRegisterApi: function(gridApi){  // this is for exposing api to other controllers...
 	    $scope.gridApi = gridApi; //Don't use it...

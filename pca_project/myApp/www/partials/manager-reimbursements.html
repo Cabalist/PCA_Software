@@ -3,7 +3,7 @@
 
   <div class="input-group">
     <span class="input-group-addon">Year:</span>
-    <select class="form-control" ng-options="item as item for item in yearOptions track by item" ng-model="selectedYear" ng-change="loadYear(selectedYear)">
+    <select class="form-control" ng-options="item as item for item in yearOptions track by item" ng-model="selectedYear" ng-change="yearChange(selectedYear)">
     </select>
   </div>
 

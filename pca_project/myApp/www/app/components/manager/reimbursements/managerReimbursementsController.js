@@ -60,15 +60,14 @@ myApp.controller('ManagerReimbursementsController', ['$scope','$http','$log','$s
 	//There is no sorting... all requests are history...
 	for(var i =0;i<data.length;i++){
 	    var row = {};
-	    
+
 	    row.worker = data[i].worker.first_name +' '+ data[i].worker.last_name;
 	    row.date = data[i].date;
 	    row.payee= data[i].payee;
 	    row.amount =data[i].amount;
 	    row.requestedBy = data[i].requester.first_name + ' ' + data[i].requester.last_name;
-
+	    row.purpose = data[i].purpose;
 	    row.requestedOn = moment(data[i].requestedOn).format("YYYY-MM-DD");
-	    
 	    
 	    if (data[i].response==null){		
 		row.reviewer="";
@@ -173,6 +172,10 @@ myApp.controller('ManagerReimbursementsController', ['$scope','$http','$log','$s
 	$state.go("manager.reimbursements",{'canvId':String(userId),'year':String($scope.selectedYear)});
     };
 
+    $scope.yearChange = function(year){
+	$state.go("manager.reimbursements",{'canvId':String($scope.canvId),'year':String(year)});
+    };
+
     $scope.gridOptions={
 	showColumnFooter:true,
 	enableGridMenu: true,
@@ -180,14 +183,17 @@ myApp.controller('ManagerReimbursementsController', ['$scope','$http','$log','$s
 	exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
 	columnDefs:[{field:'worker',
 		     name:'Worker',
-		     width:'14%'},
+		     width:'12%'},
 		    {field:"date",
 		     name:'Date',
-		     width:'10%' },
+		     width:'12%' },
 		    {field:'payee',
 		     name:'Payee',
-		     width:'10%'},
-		    {field:'amount',
+		     width:'9%'},
+		    {field:'purpose',
+		     name:"Purpose",
+		     width:'14%',},
+		     {field:'amount',
 		     cellFilter:'currency',
 		     aggregationType: uiGridConstants.aggregationTypes.sum ,
 		     footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue() | currency}}</div>',
@@ -207,10 +213,10 @@ myApp.controller('ManagerReimbursementsController', ['$scope','$http','$log','$s
 		     width:'12%'},
 		    {field:'responder',
 		     name:"Responder",
-		     width:'10%'},
+		     width:'12%'},
 		    {field:'status',
 		     name:"Status",
-		     width:"8%"}
+		     width:"10%"}
 		   ],
 	onRegisterApi: function(gridApi){  // this is for exposing api to other controllers...
 	    $scope.gridApi = gridApi; //Don't use it...
