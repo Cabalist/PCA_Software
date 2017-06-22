@@ -36,7 +36,7 @@ myApp.config(function($stateProvider){
 	    controller: 'BkprInvoicesController'
 	})
         .state('bookkeeper.newInvoice',{
-	    url:"/new",
+	    url:"/newInvoice",
 	    templateUrl: '/www/partials/bookkeeper-invoices-new.html',
 	    controller: 'BkprNewInvoicesController'
 	})
