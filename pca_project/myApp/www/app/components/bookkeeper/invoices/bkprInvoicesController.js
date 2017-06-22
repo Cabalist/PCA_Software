@@ -1,6 +1,7 @@
-myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stateParams','$state','uiGridConstants','$timeout', function($scope,$http,$log,$stateParams,$state,uiGridConstants,$timeout) {
-    $scope.$emit("selectForm",4);
+myApp.controller('BkprInvoicesController', ['$scope','$http','$log','$stateParams','$state', function($scope,$http,$log,$stateParams,$state) {
+    $scope.$emit("selectForm",5);
 
+    /*
     $scope.canvId = $stateParams.canvId;
     $scope.selectedCnvsr = false;
     
@@ -218,6 +219,6 @@ myApp.controller('BkprReimbursementsController', ['$scope','$http','$log','$stat
 	    $scope.gridApi = gridApi; //Don't use it...
 	}
     };
-    
-    $log.log("Hello from Bookkeeper Reimbursements controller");
+    */
+    $log.log("Hello from Bookkeeper invoices controller");
 }]);

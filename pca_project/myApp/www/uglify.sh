@@ -7,6 +7,8 @@
 	 ./app/components/bookkeeper/userMngmnt/bkprUsrMgmtController.js \
 	 ./app/components/bookkeeper/adjustments/bkprAdjustmentsController.js \
 	 ./app/components/bookkeeper/reimbursements/bkprReimbursementsController.js \
+	 ./app/components/bookkeeper/invoices/bkprInvoicesController.js \
+	 ./app/components/bookkeeper/invoices/bkprNewInvoicesController.js \
 	 ./app/components/bookkeeper/reports/reportsController.js \
 	 ./app/components/bookkeeper/reports/ytdController.js \
 	 ./app/components/bookkeeper/reports/c2wController.js \

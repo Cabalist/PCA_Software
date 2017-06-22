@@ -30,6 +30,16 @@ myApp.config(function($stateProvider){
 	    templateUrl: '/www/partials/bookkeeper-reimbursements.html',
 	    controller: 'BkprReimbursementsController'
 	})
+        .state('bookkeeper.invoices',{
+	    url:"/invoices",
+	    templateUrl: '/www/partials/bookkeeper-invoices.html',
+	    controller: 'BkprInvoicesController'
+	})
+        .state('bookkeeper.newInvoice',{
+	    url:"/new",
+	    templateUrl: '/www/partials/bookkeeper-invoices-new.html',
+	    controller: 'BkprNewInvoicesController'
+	})
 	.state('bookkeeper.reports',{
 	    url:'/reports',
 	    templateUrl: '/www/partials/bookkeeper-reports.html',
