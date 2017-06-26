@@ -440,6 +440,32 @@ def reimbursementResponses(request,requestId=None):
         serialized = ReimbursementRequestSerializer(reimbRequest)
         
         return JsonResponse(serialized.data,safe=False)
+
+@csrf_exempt
+def nextInvoiceNum(request,orgId=None):
+    if request.method=="GET":
+        org = Organization.objects.get(id=orgId)
+        lastInvoice = Invoice.objects.filter(org=org).last()
+
+        if lastInvoice==None:
+            return JsonResponse({'nextNum':1},safe=False)
+
+        else:
+            nextNum = lastInvoice["invNum"]+1
+            
+        return JsonResponse({'nextNum':nextNum},safe=False)
+
+@csrf_exempt
+def invoices(request,orgId=None):
+    if request.method=="GET":
+        org = Organization.objects.get(id=orgId)
+        invoices = Invoice.objects.filter(org=org).all()
+
+        #serialize
+        return JsonResponse({},safe=False)
+        
+    if request.method=="POST":
+        return JsonResponse({},safe=False)
     
 #Reports
 @csrf_exempt
@@ -456,22 +482,23 @@ def orgYTDDonations(request,orgId=None,year=None):
 
 @csrf_exempt
 def c2wReport(request,orgId=None,start=None,end=None):
-    org = Organization.objects.get(id=orgId)
-
-    myStart = start.split("-")
-    mySDate = datetime.date(int(myStart[0]),int(myStart[1]),int(myStart[2]))
-
-    myEnd = end.split("-")
-    myEDate = datetime.date(int(myEnd[0]),int(myEnd[1]),int(myEnd[2]))
-
-    #TODO, check that start and end dates are reasonable...
-    donations1 = Donation.objects.filter(org=org).filter(formDate__gte=mySDate).filter(formDate__lt=myEDate).all()
-
-    #Get hours
-    hours = Hours.objects.filter(org=org).filter(date__gte=mySDate).filter(date__lt = myEDate).all()
-
-    serializedDonations = Donations1Serializer(donations1,many=True)
-    serializedHours = HoursSerializer(hours,many=True)
-
-    return JsonResponse({"donations":serializedDonations.data,"hours":serializedHours.data}, safe=False)
+    if request.method=="GET":
+        org = Organization.objects.get(id=orgId)
+        
+        myStart = start.split("-")
+        mySDate = datetime.date(int(myStart[0]),int(myStart[1]),int(myStart[2]))
+        
+        myEnd = end.split("-")
+        myEDate = datetime.date(int(myEnd[0]),int(myEnd[1]),int(myEnd[2]))
+        
+        #TODO, check that start and end dates are reasonable...
+        donations1 = Donation.objects.filter(org=org).filter(formDate__gte=mySDate).filter(formDate__lt=myEDate).all()
+        
+        #Get hours
+        hours = Hours.objects.filter(org=org).filter(date__gte=mySDate).filter(date__lt = myEDate).all()
+        
+        serializedDonations = Donations1Serializer(donations1,many=True)
+        serializedHours = HoursSerializer(hours,many=True)
+        
+        return JsonResponse({"donations":serializedDonations.data,"hours":serializedHours.data}, safe=False)
     

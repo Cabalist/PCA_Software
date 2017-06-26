@@ -76,14 +76,12 @@ class Check(models.Model):
     checkNum = models.CharField(max_length=10)
     checkDate = models.DateField()
 
-
 class CreditCard(models.Model):
     donation = models.ForeignKey(Donation)
     nameOnCard = models.CharField(max_length=32)
     last4 = models.IntegerField()
     exp = models.CharField(max_length=7)
     recurring = models.BooleanField()
-
 
 class DonationAdjustment(models.Model): #This is transaction status... and fee if successful.
     donation = models.ForeignKey(Donation)
@@ -117,19 +115,26 @@ class ReimbursementRequest(models.Model):
     requestedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="reimbursementRequester")
     requestedOn = models.DateTimeField()
     
-
 class ReimbursementResponse(models.Model):
     request = models.OneToOneField(ReimbursementRequest)
-
     status = models.IntegerField()
     reviewedBy = models.ForeignKey(settings.AUTH_USER_MODEL)
     reviewedOn = models.DateField()
-
     respondedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="reimbursementResponder")
     respondedOn = models.DateTimeField()
 
+class Invoice(models.Model):
+    org = models.ForeignKey(Organization)
+    invNum = models.IntegerField()
+    billFrom = models.CharField(max_length=32)
+    billTo = models.CharField(max_length=32)
+    date = models.DateField()
 
-    
+class InvoiceItem(models.Model):
+    invoice = models.ForeignKey(Invoice)
+    description = models.CharField(max_length=512)
+    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    tax = models.DecimalField(max_digits=5, decimal_places=2)   
 
 #class UserOrgJoinRequest(models.Model):
 #    user = models.ForeignKey(settings.AUTH_USER_MODEL)

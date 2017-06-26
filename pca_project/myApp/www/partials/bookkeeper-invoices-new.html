@@ -1,17 +1,31 @@
-<div class="col-lg-10">
+<div class="col-lg-6">
   <h3>New Invoice</h3>
-  <br>
-  Invoice #:
-  <br>
-  From:
-  <br>
-  Bill To:
-  <br>
-  Invoice Date:
+
+  <div class="form-group">
+    <label for="invNum">Invoice #:</label>
+    <input ng-model="invoiceNum" type="text" class="form-control" id="invNum" disabled>
+  </div>
+  
+  <div class="form-group">
+    <label for="from">From:</label>
+    <input type="text" class="form-control" id="from">
+  </div>
+
+  <div class="form-group">
+    <label for="billTo">Bill To:</label>
+    <input type="text" class="form-control" id="billTo">
+  </div>
+  
+  <label for="date">Date:</label>
+  <div class="input-group" id="date">
+    <input type="text" class="form-control" uib-datepicker-popup ng-model="dt" is-open="popup1.opened" ng-required="true" />
+    <span class="input-group-btn">
+      <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+    </span>
+  </div>
   
   <hr>
   
-  <br>
   Description
   <br>
   
