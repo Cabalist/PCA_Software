@@ -1,6 +1,6 @@
 <div class="col-lg-6">
   <h3>New Invoice</h3>
-
+  
   <div class="form-group">
     <label for="invNum">Invoice #:</label>
     <input ng-model="invoiceNum" type="text" class="form-control" id="invNum" disabled>
@@ -10,7 +10,7 @@
     <label for="from">From:</label>
     <input type="text" class="form-control" id="from">
   </div>
-
+  
   <div class="form-group">
     <label for="billTo">Bill To:</label>
     <input type="text" class="form-control" id="billTo">
@@ -25,22 +25,58 @@
   </div>
   
   <hr>
-  
-  Description
-  <br>
-  
-  Amount
-  <br>
-  
-  Tax
 
-  <br>
-  Add
-  <br>
+  <div ng-show="items.length>0">
+    <ul class="list-group" >
+      <li class="list-group-item" ng-repeat="item in items">
+	{{ item.description }}
+	<span class="pull-right"> {{ item.amount | currency }}</span>
+      </li>
+    </ul>
 
-
+    <ul class="list-group" >
+      <li class="list-group-item clearfix">
+	<span class="pull-left"><h5><b>Total:</b></h5></span>
+	<span class="pull-right"><b>{{ total | currency }}</b></span>
+      </li>
+    </ul>
+    
+    <hr>
+  </div>  
+  
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">  
+	<div class="form-group">
+	  <label for="desc">Description:</label>
+	  <input ng-model="description" type="text" class="form-control" id="desc">
+	</div>
+      </div>
+      
+      <div class="col-lg-2">  
+	<div class="form-group">
+	  <label for="amount">Amount:</label>
+	  <input type="number" name="value" class="form-control" ng-model="amount" min=1 step=1 required/>
+	  
+	</div>
+      </div>      
+      
+      <div class="col-lg-2">
+	<div class="form-group">
+	  <br>
+	  <button type="button" class="btn btn-default"  data-toggle="tooltip" data-placement="left" title="Add Item" ng-click="addItem()" id="addBtn">
+	    <i class="glyphicon glyphicon-plus"></i>
+	  </button>	  
+	</div>	
+      </div>
+      
+    </div>
+  </div>
   <br>
-  <button class="btn btn-primary">Save Invoice</button>
+  
+  <div class="form-group">
+    <button class="btn btn-primary">Save Invoice</button>
+  </div>
   
 </div>
     

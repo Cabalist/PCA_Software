@@ -3,6 +3,11 @@ myApp.controller('BkprNewInvoicesController', ['$scope','$http','$log','$statePa
 
     $scope.dt = new Date();
 
+    $scope.items = [];
+    $scope.description= null;
+    $scope.amount = 0.0;
+    $scope.total = 0;
+    
     $scope.popup1 = {
 	opened: false
     };
@@ -14,8 +19,21 @@ myApp.controller('BkprNewInvoicesController', ['$scope','$http','$log','$statePa
     //Get org workers list.
     $http.get('/api/rest/nextInvoiceNum/' + $scope.orgId).then(function(data){
 	$scope.invoiceNum = data.data.nextNum;
-	$log.log(data.data);
     });
+
+    $scope.addItem = function(){
+	$scope.total += $scope.amount;
+	
+	var item = {'description':$scope.description,
+		    'amount': $scope.amount};
+
+
+	$scope.items.push(item);
+
+	//clear data
+	$scope.description = '';
+	$scope.amount = 0.0;
+    }
     
     
     $log.log("Hello from Bookkeeper new invoices controller");
