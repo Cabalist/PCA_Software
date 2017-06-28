@@ -4,9 +4,10 @@ myApp.controller('BkprNewInvoicesController', ['$scope','$http','$log','$statePa
     $scope.dt = new Date();
 
     $scope.items = [];
-    $scope.description= null;
+    $scope.description = null;
     $scope.amount = 0.0;
     $scope.total = 0;
+    $scope.billTo = null;
     
     $scope.popup1 = {
 	opened: false
@@ -16,11 +17,15 @@ myApp.controller('BkprNewInvoicesController', ['$scope','$http','$log','$statePa
 	$scope.popup1.opened = true;
     };
 
+    //populate org name
+    $scope.from = $scope.orgName;
+    
     //Get org workers list.
     $http.get('/api/rest/nextInvoiceNum/' + $scope.orgId).then(function(data){
 	$scope.invoiceNum = data.data.nextNum;
     });
 
+    
     $scope.addItem = function(){
 	$scope.total += $scope.amount;
 	
@@ -34,7 +39,39 @@ myApp.controller('BkprNewInvoicesController', ['$scope','$http','$log','$statePa
 	$scope.description = '';
 	$scope.amount = 0.0;
     }
+
+    function validateInvoice(data){
+	//TODO: check input...
+	
+	return {'valid':true};
+    };
     
+    $scope.saveInvoice = function(){
+	var invoiceData = {'from':$scope.from,
+		    'billTo':$scope.billTo,
+		    'date': moment($scope.dt).format('YYYY-MM-DD'),
+		    'items': $scope.items };
+
+	var validate = validateInvoice(invoiceData);
+	if (validate.valid){
+	    $http.post("/api/rest/invoices/"+$scope.orgId,JSON.stringify(invoiceData)).then(function(data){
+		$log.log(data.data);
+		$scope.errorMsg = null;
+
+		//show success message...
+
+		//wait a sec
+
+
+		//go back
+		$state.go('bookkeeper.invoices');
+	    });
+	    
+	}else{
+	    //set message here...
+	    $scope.errorMsg = validate.errorMsg;
+	}	
+    }
     
     $log.log("Hello from Bookkeeper new invoices controller");
 }]);

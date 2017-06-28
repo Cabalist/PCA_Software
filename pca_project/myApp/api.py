@@ -441,19 +441,21 @@ def reimbursementResponses(request,requestId=None):
         
         return JsonResponse(serialized.data,safe=False)
 
+def getNextInvoiceNum(org):
+    lastInvoice = Invoice.objects.filter(org=org).last()
+    
+    if lastInvoice==None:
+        return 1
+    
+    else:
+        return lastInvoice.invNum+1
+
 @csrf_exempt
 def nextInvoiceNum(request,orgId=None):
-    if request.method=="GET":
-        org = Organization.objects.get(id=orgId)
-        lastInvoice = Invoice.objects.filter(org=org).last()
-
-        if lastInvoice==None:
-            return JsonResponse({'nextNum':1},safe=False)
-
-        else:
-            nextNum = lastInvoice["invNum"]+1
-            
-        return JsonResponse({'nextNum':nextNum},safe=False)
+    org = Organization.objects.get(id=orgId)     
+    nextNum = getNextInvoiceNum(org)
+    
+    return JsonResponse({'nextNum':nextNum},safe=False)
 
 @csrf_exempt
 def invoices(request,orgId=None):
@@ -465,8 +467,28 @@ def invoices(request,orgId=None):
         return JsonResponse({},safe=False)
         
     if request.method=="POST":
-        return JsonResponse({},safe=False)
-    
+        data = JSONParser().parse(request)
+        
+        org = Organization.objects.get(id = orgId)
+        invNum = getNextInvoiceNum(org)
+        billFrom = data["from"]
+        billTo = data["billTo"]
+        date = data["date"]
+
+        newInvoice = Invoice(org=org, invNum=invNum, billFrom=billFrom, billTo=billTo, date=date)
+        newInvoice.save()
+
+        #save invoice items
+        for item in data["items"]:
+            description = item["description"]
+            amount = item["amount"]
+            tax = 0
+            newItem = InvoiceItem(invoice=newInvoice,description=description,amount=amount,tax=tax)
+            newItem.save()
+
+        serialized = InvoiceSerializer(newInvoice)
+        return JsonResponse(serialized.data, safe=False)
+
 #Reports
 @csrf_exempt
 def orgYTDDonations(request,orgId=None,year=None):
@@ -501,4 +523,4 @@ def c2wReport(request,orgId=None,start=None,end=None):
         serializedHours = HoursSerializer(hours,many=True)
         
         return JsonResponse({"donations":serializedDonations.data,"hours":serializedHours.data}, safe=False)
-    
+

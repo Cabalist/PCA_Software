@@ -8,12 +8,12 @@
   
   <div class="form-group">
     <label for="from">From:</label>
-    <input type="text" class="form-control" id="from">
+    <input type="text" class="form-control" id="from" ng-model="from">
   </div>
   
   <div class="form-group">
     <label for="billTo">Bill To:</label>
-    <input type="text" class="form-control" id="billTo">
+    <input type="text" class="form-control" id="billTo" ng-model="billTo">
   </div>
   
   <label for="date">Date:</label>
@@ -75,7 +75,7 @@
   <br>
   
   <div class="form-group">
-    <button class="btn btn-primary">Save Invoice</button>
+    <button class="btn btn-primary" ng-click="saveInvoice()">Save Invoice</button>
   </div>
   
 </div>

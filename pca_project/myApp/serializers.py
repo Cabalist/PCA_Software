@@ -115,3 +115,17 @@ class ReimbursementRequestSerializer(serializers.ModelSerializer):
         model = ReimbursementRequest
         fields = ['id','org','date','worker','payee','purpose','reimType','amount','requester','requestedOn','response']
 
+
+class InvoiceItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InvoiceItem
+        fields = '__all__'
+
+class InvoiceSerializer(serializers.ModelSerializer):
+    items = InvoiceItemSerializer(source="invoiceitem_set",many=True)
+
+    class Meta:
+        model = Invoice
+        fields = ['org','invNum','billFrom','billTo','date','items']
+
+        
