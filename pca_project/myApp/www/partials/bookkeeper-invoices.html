@@ -1,8 +1,17 @@
-<div class="col-lg-10">
+<div class="col-lg-4">
   <h3>Invoices</h3>
   <button class="btn btn-primary" ui-sref="bookkeeper.newInvoice">Create an Invoice</button>
-  
-  <hr>
-  <h4>History</h4>
-  
+
+  <div ng-show="invoices.length>0">
+    <hr>
+    <h4>History</h4>
+    <div class="list-group">
+      <a href="#" class="list-group-item list-group-action"  ng-repeat="invoice in invoices">
+	<span class="pull-left">{{invoice.billTo}}  --  </span>
+	<span>  {{ invoice.date }}</span>
+	<span class="pull-right">{{sumOfItems(invoice) | currency}}</span>
+      </a>
+    </div>
+     
+  </div>
 </div>

@@ -463,8 +463,8 @@ def invoices(request,orgId=None):
         org = Organization.objects.get(id=orgId)
         invoices = Invoice.objects.filter(org=org).all()
 
-        #serialize
-        return JsonResponse({},safe=False)
+        serialized = InvoiceSerializer(invoices,many=True)
+        return JsonResponse(serialized.data,safe=False)
         
     if request.method=="POST":
         data = JSONParser().parse(request)
