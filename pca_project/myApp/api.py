@@ -473,9 +473,12 @@ def invoices(request,orgId=None):
         invNum = getNextInvoiceNum(org)
         billFrom = data["from"]
         billTo = data["billTo"]
+        addr = data["addr"]
+        state = data["state"]
+        zip = data["zip"]
         date = data["date"]
-
-        newInvoice = Invoice(org=org, invNum=invNum, billFrom=billFrom, billTo=billTo, date=date)
+        
+        newInvoice = Invoice(org=org, invNum=invNum, billFrom=billFrom, billTo=billTo,addr=addr,state=state,zip=zip, date=date)
         newInvoice.save()
 
         #save invoice items

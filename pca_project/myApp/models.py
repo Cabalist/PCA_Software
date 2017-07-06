@@ -128,6 +128,9 @@ class Invoice(models.Model):
     invNum = models.IntegerField()
     billFrom = models.CharField(max_length=32)
     billTo = models.CharField(max_length=32)
+    addr = models.CharField(max_length=64,null=True)
+    state = models.CharField(max_length=2,null=True)
+    zip = models.CharField(max_length=10,null=True)
     date = models.DateField()
 
 class InvoiceItem(models.Model):

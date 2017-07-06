@@ -8,7 +8,9 @@ myApp.controller('BkprNewInvoicesController', ['$scope','$http','$log','$statePa
     $scope.amount = 0.0;
     $scope.total = 0;
     $scope.billTo = null;
-    
+    $scope.addr = null;
+    $scope.state = null;
+    $scope.zip = null;
     $scope.popup1 = {
 	opened: false
     };
@@ -48,14 +50,19 @@ myApp.controller('BkprNewInvoicesController', ['$scope','$http','$log','$statePa
     
     $scope.saveInvoice = function(){
 	var invoiceData = {'from':$scope.from,
-		    'billTo':$scope.billTo,
-		    'date': moment($scope.dt).format('YYYY-MM-DD'),
-		    'items': $scope.items };
+			   'billTo':$scope.billTo,
+			   'date': moment($scope.dt).format('YYYY-MM-DD'),
+			   'items': $scope.items,
+			   'addr': $scope.addr,
+			   'state': $scope.state,
+			   'zip': $scope.zip};
+	
+
 
 	var validate = validateInvoice(invoiceData);
 	if (validate.valid){
 	    $http.post("/api/rest/invoices/"+$scope.orgId,JSON.stringify(invoiceData)).then(function(data){
-		$log.log(data.data);
+		
 		$scope.errorMsg = null;
 
 		//show success message...

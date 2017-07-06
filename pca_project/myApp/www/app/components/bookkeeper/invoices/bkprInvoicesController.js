@@ -7,7 +7,6 @@ myApp.controller('BkprInvoicesController', ['$scope','$http','$log','$stateParam
     });
 
     $scope.sumOfItems = function(invoice){
-	$log.log(invoice);
 	var sum = 0.0;
 	for(var i = 0;i<invoice.items.length;i++){
 	    sum+= parseFloat(invoice.items[i].amount);
