@@ -1,5 +1,11 @@
 <div class="col-lg-8">
-  <h3>User Management</h3>
+  <div class="btn-group">
+    <button ui-sref="bookkeeper.userMgmt" type="button" class="btn btn-primary">Roles</button>
+    <button ui-sref="bookkeeper.management" type="button" class="btn btn-default">Management</button>
+  </div>
+  <br>
+  
+  <h3>User Roles</h3>
   <h4>Bookkeepers:</h4>
   <ul class="list-group">
     <li class="list-group-item clearfix" ng-repeat="bookie in bookkeepers">
@@ -63,6 +69,5 @@
     No new requests
   </div>
   <hr>
-  
   
 </div>

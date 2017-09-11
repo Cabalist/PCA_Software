@@ -11,9 +11,14 @@ myApp.config(function($stateProvider){
 	    controller: 'BookkeeperController'
 	})
         .state('bookkeeper.userMgmt',{
-	    url:"/userMgmt",
+	    url:"/userMgmt/roles",
 	    templateUrl: '/www/partials/bookkeeper-userMgmt.html',
 	    controller: 'BkprUsrMgmtController'
+	})
+        .state('bookkeeper.management',{
+	    url:"/userMgmt/management",
+	    templateUrl: '/www/partials/bookkeeper-management.html',
+	    controller: 'BkprUsrManagementController'
 	})
         .state('bookkeeper.payterms',{
 	    url:"/payterms",

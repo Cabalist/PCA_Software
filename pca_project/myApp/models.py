@@ -17,6 +17,14 @@ class UserOrganizationRoleRel(models.Model):
     approvedOrRejectedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="admin",null=True)
     approvedOrRejectDate = models.DateTimeField(null=True)
 
+class ManagerWorkerRel(models.Model):
+    manager = models.ForeignKey(settings.AUTH_USER_MODEL)
+    worker = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="worker")
+    startDate = models.DateField()
+    endDate = models.DateField(null=True)
+    assignedBy =  models.ForeignKey(settings.AUTH_USER_MODEL,related_name="managerAssigner")
+    assignmentDate = models.DateField()
+    
 class OrgSettings(models.Model):
     org = models.ForeignKey(Organization)
     settingName = models.CharField(max_length=16)
@@ -137,30 +145,4 @@ class InvoiceItem(models.Model):
     invoice = models.ForeignKey(Invoice)
     description = models.CharField(max_length=512)
     amount = models.DecimalField(max_digits=7, decimal_places=2)
-    tax = models.DecimalField(max_digits=5, decimal_places=2)   
-
-#class UserOrgJoinRequest(models.Model):
-#    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-#    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-#    requestDate = models.DateTimeField(default=0)
-#    status = models.IntegerField(default=0) #1 approved, 2 rejected
-#    approvedOrRejectedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="admin", null=True)
-    
-#class Form1(models.Model):
-#    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-#    org = models.ForeignKey(Organization,on_delete = models.CASCADE)
-#    date = models.DateField()
-#    canvassHours = models.IntegerField()
-#    otherHours = models.IntegerField()
-#    trf = models.CharField(max_length=32)
-#    status = models.IntegerField(default=0)
-
-#    def totalDonations(self):
-#        return self.donation_set.all().aggregate(models.Sum('money'))['money__sum']
-
-#class Donation(models.Model):
-#    donor = models.
-#    form = models.ForeignKey(Form1,on_delete=models.CASCADE)
-#    chk = models.CharField(max_length=12)
-#    cc = models.CharField(max_length=12)
-#    money = models.FloatField()
+    tax = models.DecimalField(max_digits=5, decimal_places=2)

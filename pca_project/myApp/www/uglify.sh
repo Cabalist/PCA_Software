@@ -5,6 +5,7 @@
 	 ./app/components/bookkeeper/bookkeeperController.js \
 	 ./app/components/bookkeeper/payTerms/bkprPayTermsController.js \
 	 ./app/components/bookkeeper/userMngmnt/bkprUsrMgmtController.js \
+ 	 ./app/components/bookkeeper/userMngmnt/bkprManagementController.js \
 	 ./app/components/bookkeeper/adjustments/bkprAdjustmentsController.js \
 	 ./app/components/bookkeeper/reimbursements/bkprReimbursementsController.js \
 	 ./app/components/bookkeeper/invoices/bkprInvoicesController.js \
