@@ -5,10 +5,54 @@
   </div>
   <br>
   
-  <h3>Management</h3>
-
-  <h4>Unamanaged Users</h4>
-  
-  <h4>Managers:</h4>
-  
+  <h3>Worker Management</h3>
+  <div class="row">
+    <h4><u><b>Unassigned Workers</b></u></h4>
+    <ul class="list-group" ng-repeat="unassignedWorker in unassignedWorkers" style="width:400px">
+      <button class="btn list-group-item" ng-click="selectUnassignedWorker($index)" ng-class="getUnassignedWorkerClass($index)">
+	{{unassignedWorker.first_name }} {{unassignedWorker.last_name }}
+      </button>
+    </ul>
+  </div>
+  <br>
+  <br>
+  <h4><u><b>Managers</b></u></h4>
+  <div class="row">
+    <div class="col-lg-4">
+      <u><b>Manager1</b></u>
+      <table class="table">
+	<thead>
+	  <tr>
+	    <th>Name</th>
+	    <th>Start Date</th>
+	  </tr>
+	</thead>
+      </table>
+    </div>
+    
+    <div class="col-lg-4">
+      <u><b>Manager2</b></u>
+      <table class="table">
+	<thead>
+	  <tr>
+	    <th>Name</th>
+	    <th>Start Date</th>
+	  </tr>
+	</thead>
+      </table>
+    </div>
+    
+    <div class="col-lg-4">
+      <u><b>Manager3</b></u>
+      <table class="table">
+	<thead>
+	  <tr>
+	    <th>Name</th>
+	    <th>Start Date</th>
+	  </tr>
+	</thead>
+      </table>
+    </div>
+      
+  </div> <!--end of row-->
 </div>

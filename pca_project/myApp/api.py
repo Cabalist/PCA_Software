@@ -42,7 +42,7 @@ def userRoles(request,userId=None):
     if request.method=='POST':
         data = JSONParser().parse(request)
 
-        user = User.objects.get(pk=int(data["userId"]))        
+        user = User.objects.get(pk=int(data["userId"]))
         org = Organization.objects.get(id = data["orgId"])
         role = data["role"]
         acceptedBy = User.objects.get(pk=int(data["acceptedBy"]))
@@ -231,8 +231,6 @@ def donation(request,orgId=None):
             
             checkObj = Check(donation=donationObj,checkNum=checkNum,checkDate=checkDate)
             checkObj.save()
-
-
         
         serialized = DonationSerializer(donationObj)
         return JsonResponse(serialized.data, safe=False)
@@ -251,7 +249,6 @@ def donationHist(request,userId=None,orgId=None):
         serialized = DonationSerializer(results,many=True)
         
         return JsonResponse(serialized.data, safe=False)
-
     
 @csrf_exempt
 def hours(request,userId=None,orgId=None):
@@ -264,7 +261,6 @@ def hours(request,userId=None,orgId=None):
 
         serialized = HoursSerializer(results,many=True)
         return JsonResponse(serialized.data,safe=False)
-                                
         
     if request.method == "POST":
         data = JSONParser().parse(request)
@@ -284,7 +280,6 @@ def hours(request,userId=None,orgId=None):
         serialized = HoursSerializer(newHours)
         
         return JsonResponse(serialized.data, safe=False)
-
     
 @csrf_exempt
 def payTerms(request, orgId=None):
@@ -319,7 +314,6 @@ def payTerms(request, orgId=None):
 
         serialized = PayTermsSerializer(pt)
         return JsonResponse(serialized.data, safe=False)
-
 
 @csrf_exempt
 def newcomerShare(request,orgId=None):
@@ -492,6 +486,44 @@ def invoices(request,orgId=None):
         serialized = InvoiceSerializer(newInvoice)
         return JsonResponse(serialized.data, safe=False)
 
+@csrf_exempt
+def workerManagement(request,orgId=None):
+    """Returns unassigned workers as well as managers with assigned workers"""
+    #unassigned workers
+
+    #all workers....
+    workers = UserOrganizationRoleRel.objects.filter(organization=orgId).filter(role=1).filter(status=1)
+    assignedWorkersLi = ManagerWorkerRel.objects.filter(endDate=None).values_list('worker',flat=True)
+
+    #Need to remove from workers the ones that have a manager
+    unassignedWorkers = workers.exclude(id__in=assignedWorkersLi)
+
+    #get data about workers from user table
+    unassignedWorkersData = User.objects.filter(pk__in=unassignedWorkers.values_list('user',flat=True))
+
+    unassignedSerialized = UserSerializer(unassignedWorkersData.all(),many=True)
+
+
+
+    
+    #get managers and their workers
+    activeManagers = UserOrganizationRoleRel.objects.filter(organization = orgId).filter(role=2).filter(status=1)
+
+    #need to select activeManagers left join managerWorkerRel
+    #managers = ManagerWorkerRel.objects.filter(endDate=None).filter(manager__in=activeManagers)
+
+    #print (managers.all())
+    #for i in managers.all():
+    #    print(i.values)
+
+    
+    #
+    #print(managers.all())
+    #for i in managers:
+    #    print(i)
+    
+    return JsonResponse({'unassigned':unassignedSerialized.data},safe=False)
+    
 #Reports
 @csrf_exempt
 def orgYTDDonations(request,orgId=None,year=None):

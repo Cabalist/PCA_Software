@@ -13,12 +13,13 @@ class UserOrganizationRoleRel(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     role = models.IntegerField()  #1 - worker, 2 - Manager , 3- Bookkeeper
     request_date = models.DateTimeField(null=True)
-    status = models.IntegerField(default=0) #0-Waiting for approval, 1-Approved, 2-Rejected
+    status = models.IntegerField(default=0) #0-Waiting for approval, 1-Approved, 2-Rejected, 3-terminated
     approvedOrRejectedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="admin",null=True)
     approvedOrRejectDate = models.DateTimeField(null=True)
 
 class ManagerWorkerRel(models.Model):
     manager = models.ForeignKey(settings.AUTH_USER_MODEL)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     worker = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="worker")
     startDate = models.DateField()
     endDate = models.DateField(null=True)

@@ -48,6 +48,7 @@ urlpatterns = [
     url(r'^api/rest/reimbursementResponses/(?P<requestId>\d+)$', api.reimbursementResponses),
     url(r'^api/rest/nextInvoiceNum/(?P<orgId>\d+)$', api.nextInvoiceNum),
     url(r'^api/rest/invoices/(?P<orgId>\d+)$', api.invoices),
+    url(r'^api/rest/workerManagement/(?P<orgId>\d+)$', api.workerManagement),
 
     #reports
     url(r'^api/rest/orgYTDDonations/(?P<orgId>\d+)/(?P<year>\d+)$',api.orgYTDDonations),
