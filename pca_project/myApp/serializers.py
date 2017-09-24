@@ -128,4 +128,14 @@ class InvoiceSerializer(serializers.ModelSerializer):
         model = Invoice
         fields = ['org','invNum','billFrom','billTo','date','items']
 
-        
+class WorkerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=  ManagerWorkerRel
+        fields ='"__all__'
+    
+class ManagerWorkerSerializer(serializers.ModelSerializer):
+    workers = WorkerSerializer(source='managerworkerrel_set',many=True)
+    
+    class Meta:
+        model = User
+        fields = ['pk','username','first_name','last_name','workers']

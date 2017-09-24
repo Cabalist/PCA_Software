@@ -500,29 +500,17 @@ def workerManagement(request,orgId=None):
 
     #get data about workers from user table
     unassignedWorkersData = User.objects.filter(pk__in=unassignedWorkers.values_list('user',flat=True))
-
     unassignedSerialized = UserSerializer(unassignedWorkersData.all(),many=True)
-
-
-
     
-    #get managers and their workers
+    #get active managers
     activeManagers = UserOrganizationRoleRel.objects.filter(organization = orgId).filter(role=2).filter(status=1)
+    managers = User.objects.filter(pk__in=activeManagers.values_list('user',flat=True))
 
-    #need to select activeManagers left join managerWorkerRel
-    #managers = ManagerWorkerRel.objects.filter(endDate=None).filter(manager__in=activeManagers)
-
-    #print (managers.all())
-    #for i in managers.all():
-    #    print(i.values)
-
+    #serilize maangers, and get list of their workers through managerWorkerRel_set
+    managersSerialized = ManagerWorkerSerializer(managers,many=True)
     
-    #
-    #print(managers.all())
-    #for i in managers:
-    #    print(i)
-    
-    return JsonResponse({'unassigned':unassignedSerialized.data},safe=False)
+    return JsonResponse({'unassigned':unassignedSerialized.data,
+                         'managers':managersSerialized.data},safe=False)
     
 #Reports
 @csrf_exempt
