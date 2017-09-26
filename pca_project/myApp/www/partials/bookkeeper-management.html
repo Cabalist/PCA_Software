@@ -7,52 +7,78 @@
   
   <h3>Worker Management</h3>
   <div class="row">
-    <h4><u><b>Unassigned Workers</b></u></h4>
-    <ul class="list-group" ng-repeat="unassignedWorker in unassignedWorkers" style="width:400px">
-      <button class="btn list-group-item" ng-click="selectUnassignedWorker($index)" ng-class="getUnassignedWorkerClass($index)">
+    <h3><u>Unassigned Workers</u></h3>
+
+    <div ng-if="unassignedWorkers.length==0">
+      There are no unassigned workers.
+    </div>
+    
+    <ul class="list-group" style="width:400px">
+      <li class="list-group-item" ng-repeat="unassignedWorker in unassignedWorkers" ng-class="getUnassignedWorkerClass($index)" ng-click="selectUnassignedWorker($index)" >
 	{{unassignedWorker.first_name }} {{unassignedWorker.last_name }}
-      </button>
+      </li>
     </ul>
   </div>
   <br>
   <br>
-  <h4><u><b>Managers</b></u></h4>
+  <h3><u>Managers</u></h3>
   <div class="row">
     <div class="col-lg-4">
-      <u><b>Manager1</b></u>
-      <table class="table">
-	<thead>
-	  <tr>
-	    <th>Name</th>
-	    <th>Start Date</th>
-	  </tr>
-	</thead>
-      </table>
-    </div>
+      <div ng-repeat="manager in managers">
+	<h4><b>Manager:{{ manager.first_name }} {{ manager.last_name }}</b> </h4>
+	<span ng-if="selectedUnassignedWorker!=null && selectedUnassignedWorker.pk!=manager.pk && assigningWorkerToMgr.length==0">
+	  <button class="btn btn-primary" ng-click="assignWorkerToManager(manager.pk)">Assign!</button>
+	</span>
+	<div ng-if="manager.workers.length==0 && assigningWorkerToMgr[0]!=manager.pk">
+	  No Assigned workers.
+	</div>
+
+	<div ng-if="assigningWorkerToMgr.length>0">
+	  <div ng-if="selectedUnassignedWorker!=null && selectedUnassignedWorker.pk != manager.pk && assigningWorkerToMgr[0]==manager.pk">
+	    <b>Worker: {{selectedUnassignedWorker.first_name }} {{ selectedUnassignedWorker.last_name }}</b>
+	    
+	    <br>
+	    <label for="datePicker" class="pull-left">Start date:</label>
+	    
+	    <div class="input-group">
+	      <input id="datePicker" type="text" class="form-control" uib-datepicker-popup ng-model="assigningWorkerToMgr[2]" is-open="popup1.opened" ng-required="true" />
+	      <span class="input-group-btn">
+		<button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+	      </span>      
+	      
+	    </div><!--end of input-group -->
+	    <button class="btn btn-success" data-toggle="tooltip" title="Save" ng-click="saveAssignment()">
+	      <i class="glyphicon glyphicon-ok"></i>
+	    </button>
+	    
+	    <button class="btn btn-danger" data-toggle="tooltip" title="Cancel" ng-click="cancelAssignment()">
+	      <i class="glyphicon glyphicon-remove"></i>
+	    </button>
+	  </div>
+	</div>
+	
+	<div ng-if="manager.workers.length>0">
+	  <table class="table">
+	    <thead>
+	      <tr>
+		<th>Worker Name</th>
+		<th>Start Date</th>
+	      </tr>
+	    </thead>
+	    
+	    <tbody ng-repeat="worker in manager.workers">
+	      <th>{{ worker.workerInfo.first_name }} {{ worker.workerInfo.last_name }}</th>
+	      <th>{{ worker.startDate }} </th>
+	    </tbody>
+	  </table>
+	</div>
+	
+	<br>
+      </div>
+
+
+    </div> <!-- end of col -->
     
-    <div class="col-lg-4">
-      <u><b>Manager2</b></u>
-      <table class="table">
-	<thead>
-	  <tr>
-	    <th>Name</th>
-	    <th>Start Date</th>
-	  </tr>
-	</thead>
-      </table>
-    </div>
-    
-    <div class="col-lg-4">
-      <u><b>Manager3</b></u>
-      <table class="table">
-	<thead>
-	  <tr>
-	    <th>Name</th>
-	    <th>Start Date</th>
-	  </tr>
-	</thead>
-      </table>
-    </div>
       
   </div> <!--end of row-->
 </div>

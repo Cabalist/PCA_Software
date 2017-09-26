@@ -488,30 +488,49 @@ def invoices(request,orgId=None):
 
 @csrf_exempt
 def workerManagement(request,orgId=None):
-    """Returns unassigned workers as well as managers with assigned workers"""
-    #unassigned workers
-
-    #all workers....
-    workers = UserOrganizationRoleRel.objects.filter(organization=orgId).filter(role=1).filter(status=1)
-    assignedWorkersLi = ManagerWorkerRel.objects.filter(endDate=None).values_list('worker',flat=True)
-
-    #Need to remove from workers the ones that have a manager
-    unassignedWorkers = workers.exclude(id__in=assignedWorkersLi)
-
-    #get data about workers from user table
-    unassignedWorkersData = User.objects.filter(pk__in=unassignedWorkers.values_list('user',flat=True))
-    unassignedSerialized = UserSerializer(unassignedWorkersData.all(),many=True)
+    if request.method == "GET":
+        """Returns unassigned workers as well as managers with assigned workers"""
+        #unassigned workers
+        
+        #all workers....
+        workers = UserOrganizationRoleRel.objects.filter(organization=orgId).filter(role=1).filter(status=1)
+        assignedWorkersLi = ManagerWorkerRel.objects.filter(endDate=None).filter(org=orgId).values_list('worker',flat=True)
+        
+        #Need to remove from workers the ones that have a manager
+        unassignedWorkers = workers.exclude(user__in=assignedWorkersLi)
+        
+        #get data about workers from user table
+        unassignedWorkersData = User.objects.filter(pk__in=unassignedWorkers.values_list('user',flat=True))
+        unassignedSerialized = UserSerializer(unassignedWorkersData.all(),many=True)
     
-    #get active managers
-    activeManagers = UserOrganizationRoleRel.objects.filter(organization = orgId).filter(role=2).filter(status=1)
-    managers = User.objects.filter(pk__in=activeManagers.values_list('user',flat=True))
-
-    #serilize maangers, and get list of their workers through managerWorkerRel_set
-    managersSerialized = ManagerWorkerSerializer(managers,many=True)
-    
-    return JsonResponse({'unassigned':unassignedSerialized.data,
+        #get active managers
+        activeManagers = UserOrganizationRoleRel.objects.filter(organization = orgId).filter(role=2).filter(status=1)
+        managers = User.objects.filter(pk__in=activeManagers.values_list('user',flat=True))
+        
+        #serilize maangers, and get list of their workers through managerWorkerRel_set
+        managersSerialized = ManagerWorkerSerializer(managers,many=True)
+        
+        return JsonResponse({'unassigned':unassignedSerialized.data,
                          'managers':managersSerialized.data},safe=False)
-    
+
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+        
+        manager = User.objects.get(pk=int(data["manager"]))
+        org = Organization.objects.get(id = data["org"])
+        worker =  User.objects.get(pk=int(data["worker"]))
+        startDate = data['startDate']
+
+        assignedBy = User.objects.get(pk=request.user.id)
+        assignedOn = datetime.datetime.now(pytz.timezone('US/Pacific'))
+
+        assignment = ManagerWorkerRel(manager=manager,org=org,worker=worker,startDate=startDate,endDate=None,assignedBy=assignedBy,assignedOn=assignedOn)
+        assignment.save()
+
+        serialized = WorkerSerializer(assignment)
+        
+        return JsonResponse(serialized.data, safe=False)
+            
 #Reports
 @csrf_exempt
 def orgYTDDonations(request,orgId=None,year=None):

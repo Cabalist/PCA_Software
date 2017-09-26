@@ -13,7 +13,6 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['pk','username','first_name','last_name','email']
-
         
 #used in bookkeeper to get all users
 class OrgUsersSerializer(serializers.ModelSerializer):
@@ -115,7 +114,6 @@ class ReimbursementRequestSerializer(serializers.ModelSerializer):
         model = ReimbursementRequest
         fields = ['id','org','date','worker','payee','purpose','reimType','amount','requester','requestedOn','response']
 
-
 class InvoiceItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvoiceItem
@@ -129,9 +127,10 @@ class InvoiceSerializer(serializers.ModelSerializer):
         fields = ['org','invNum','billFrom','billTo','date','items']
 
 class WorkerSerializer(serializers.ModelSerializer):
+    workerInfo = UserSerializer(source='worker')
     class Meta:
         model=  ManagerWorkerRel
-        fields ='"__all__'
+        fields =['id','workerInfo','startDate']
     
 class ManagerWorkerSerializer(serializers.ModelSerializer):
     workers = WorkerSerializer(source='managerworkerrel_set',many=True)

@@ -19,12 +19,12 @@ class UserOrganizationRoleRel(models.Model):
 
 class ManagerWorkerRel(models.Model):
     manager = models.ForeignKey(settings.AUTH_USER_MODEL)
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    org = models.ForeignKey(Organization, on_delete=models.CASCADE)
     worker = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="worker")
     startDate = models.DateField()
     endDate = models.DateField(null=True)
     assignedBy =  models.ForeignKey(settings.AUTH_USER_MODEL,related_name="managerAssigner")
-    assignmentDate = models.DateField()
+    assignedOn = models.DateTimeField()
     
 class OrgSettings(models.Model):
     org = models.ForeignKey(Organization)
