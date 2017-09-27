@@ -130,7 +130,7 @@ class WorkerSerializer(serializers.ModelSerializer):
     workerInfo = UserSerializer(source='worker')
     class Meta:
         model=  ManagerWorkerRel
-        fields =['id','workerInfo','startDate']
+        fields =['id','workerInfo','startDate','endDate']
     
 class ManagerWorkerSerializer(serializers.ModelSerializer):
     workers = WorkerSerializer(source='managerworkerrel_set',many=True)

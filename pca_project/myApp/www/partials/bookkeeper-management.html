@@ -23,7 +23,7 @@
   <br>
   <h3><u>Managers</u></h3>
   <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-8">
       <div ng-repeat="manager in managers">
 	<h4><b>Manager:{{ manager.first_name }} {{ manager.last_name }}</b> </h4>
 	<span ng-if="selectedUnassignedWorker!=null && selectedUnassignedWorker.pk!=manager.pk && assigningWorkerToMgr.length==0">
@@ -55,6 +55,7 @@
 	      <i class="glyphicon glyphicon-remove"></i>
 	    </button>
 	  </div>
+	  
 	</div>
 	
 	<div ng-if="manager.workers.length>0">
@@ -67,8 +68,46 @@
 	    </thead>
 	    
 	    <tbody ng-repeat="worker in manager.workers">
+	      
 	      <th>{{ worker.workerInfo.first_name }} {{ worker.workerInfo.last_name }}</th>
 	      <th>{{ worker.startDate }} </th>
+	      <th>
+		<div ng-if="unassigningWorker.length==0">
+		  <!--|| ( unassigningWorker.length>0 && unassigningWorker[0]!=manager.pk && unassigningWorker[1]!=worker.workerInfo.pk)" -->
+		  <button class="btn btn-default" ng-click="unassignWorker(manager.pk,worker.workerInfo.pk)">Unassign</button>
+		</div>
+		
+		<div ng-if="unassigningWorker.length>0 && unassigningWorker[0]==manager.pk && unassigningWorker[1]==worker.workerInfo.pk" >
+		  <div class="input-group">
+		    <span class="input-group-addon">End date:</span>
+		    
+		    <span class="input-group-addon">
+		      <span class="input-group"  style="width:150px">
+			<input id="endDatePicker" type="text" class="form-control" uib-datepicker-popup ng-model="unassigningWorker[2]" is-open="popup2.opened" ng-required="true" />
+			
+			<span class="input-group-btn">
+			  <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+			</span>
+		      </span>
+		    </span>
+		    
+		    
+		    <span class="input-group-addon">
+		      <button class="btn btn-success" data-toggle="tooltip" title="Save" ng-click="saveUnassignment(worker.id,manager.pk,worker.workerInfo.pk)">
+			<i class="glyphicon glyphicon-ok"></i>
+		      </button>
+		      
+		      <button class="btn btn-danger" data-toggle="tooltip" title="Cancel" ng-click="cancelUnassignment()">
+			<i class="glyphicon glyphicon-remove"></i>
+		      </button>
+		    </span>
+		    
+		    
+		  </div><!--end of input-group -->		  
+		</div> <!--end of ng-if -->
+		
+ 	      </th>
+	      
 	    </tbody>
 	  </table>
 	</div>

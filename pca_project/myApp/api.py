@@ -487,7 +487,7 @@ def invoices(request,orgId=None):
         return JsonResponse(serialized.data, safe=False)
 
 @csrf_exempt
-def workerManagement(request,orgId=None):
+def workerManagement(request,relId=None,orgId=None):
     if request.method == "GET":
         """Returns unassigned workers as well as managers with assigned workers"""
         #unassigned workers
@@ -502,6 +502,7 @@ def workerManagement(request,orgId=None):
         #get data about workers from user table
         unassignedWorkersData = User.objects.filter(pk__in=unassignedWorkers.values_list('user',flat=True))
         unassignedSerialized = UserSerializer(unassignedWorkersData.all(),many=True)
+
     
         #get active managers
         activeManagers = UserOrganizationRoleRel.objects.filter(organization = orgId).filter(role=2).filter(status=1)
@@ -530,7 +531,19 @@ def workerManagement(request,orgId=None):
         serialized = WorkerSerializer(assignment)
         
         return JsonResponse(serialized.data, safe=False)
-            
+
+    if request.method == "PUT":
+        data = JSONParser().parse(request)
+        
+        rel = ManagerWorkerRel.objects.get(id=relId)
+        rel.endDate = data["endDate"]
+        rel.save()
+
+        worker = User.objects.get(pk=data["workerId"])
+        serialized = UserSerializer(worker)
+        
+        return JsonResponse(serialized.data,safe=False)
+    
 #Reports
 @csrf_exempt
 def orgYTDDonations(request,orgId=None,year=None):
