@@ -25,7 +25,8 @@ class ManagerWorkerRel(models.Model):
     endDate = models.DateField(null=True)
     assignedBy =  models.ForeignKey(settings.AUTH_USER_MODEL,related_name="managerAssigner")
     assignedOn = models.DateTimeField()
-    
+
+#This table is only used to store newcomer share
 class OrgSettings(models.Model):
     org = models.ForeignKey(Organization)
     settingName = models.CharField(max_length=16)
@@ -49,11 +50,19 @@ class Hours(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     org = models.ForeignKey(Organization, on_delete=models.CASCADE)
     date = models.DateField()
-    hoursType = models.IntegerField()  #1 - canvassing, 2 - admin, 3 - travel
+    hoursType = models.IntegerField()  #1 - canvassing, 2 - admin, 3 - travel , 4 - special projects
     hours = models.FloatField()
     addedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="addedHours")
     addedOn = models.DateTimeField()
-    
+
+class PayRates(models.Model):
+    org = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    hoursType = models.IntegerField() #1 - canvassing, 2- admin, 3-travel, 4- special projects
+    rate = models.FloatField()
+    startDate = models.DateField()
+    setBy = models.ForeignKey(settings.AUTH_USER_MODEL)
+    setOn = models.DateTimeField()
+
 class Donor(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)  #This refers to recruiter 
     org = models.ForeignKey(Organization,on_delete=models.CASCADE)

@@ -315,6 +315,19 @@ def payTerms(request, orgId=None):
         serialized = PayTermsSerializer(pt)
         return JsonResponse(serialized.data, safe=False)
 
+
+@csrf_exempt
+def payRates(request, orgId=None):
+    if request.method == "GET":
+        org = Organization.objects.get(id=orgId)
+        rates = PayRates.objects.filter(org=org)
+
+        serialized = PayRatesSerializer(rates)
+
+        return JsonResponse(serialized.data, safe = False)
+    
+        
+        
 @csrf_exempt
 def newcomerShare(request,orgId=None):
     if request.method == "GET":

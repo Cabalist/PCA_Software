@@ -21,9 +21,14 @@ myApp.config(function($stateProvider){
 	    controller: 'BkprUsrManagementController'
 	})
         .state('bookkeeper.payterms',{
-	    url:"/payterms",
+	    url:"/pay/terms",
 	    templateUrl: '/www/partials/bookkeeper-payterms.html',
 	    controller: 'BkprPaytermsController'
+	})
+	.state('bookkeeper.payrates',{
+	    url:"/pay/rates",
+	    templateUrl: '/www/partials/bookkeeper-payrates.html',
+	    controller: 'BkprPayratesController'
 	})
         .state('bookkeeper.adjustments',{
 	    url:"/adjustments/:canvId/:year",

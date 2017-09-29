@@ -1,0 +1,151 @@
+
+<div class="col-lg-6">
+  <div class="btn-group">
+    <button ui-sref="bookkeeper.payterms" type="button" class="btn btn-default">Pay Terms</button>
+    <button ui-sref="bookkeeper.payrates" type="button" class="btn btn-primary">Pay Rates</button>
+  </div>
+  <br>
+  
+  <h3>PayRates</h3>
+
+  <div class="input-group">
+    <span class="input-group-addon">
+      Canvassing: 
+    </span>
+    <span class="input-group-addon">
+      $: 
+    </span>
+
+    <span class="input-group-addon">
+      <input type="number" class="form-control">
+    </span>
+    
+    <span class="input-group-addon">
+      Per Hour
+    </span>
+    
+    <span class="input-group-addon">
+      Start Date:
+    </span>
+    
+    <span class="input-group-addon">
+      <span class="input-group"  style="width:150px">
+	<input id="endDatePicker" type="text" class="form-control" uib-datepicker-popup ng-model="canvDate" is-open="popup1.opened" ng-required="true" />
+	
+	<span class="input-group-btn">
+	  <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+	</span>
+      </span>
+      
+    </span>
+    
+  </div>
+
+  <br>
+
+  <div class="input-group">
+    <span class="input-group-addon">
+      Admin: 
+    </span>
+    <span class="input-group-addon">
+      $: 
+    </span>
+    
+    <span class="input-group-addon">
+      <input type="number" class="form-control">
+    </span>
+    
+    <span class="input-group-addon">
+      Per Hour
+    </span>
+    
+    <span class="input-group-addon">
+      Start Date:
+    </span>
+    
+    <span class="input-group-addon">
+      <span class="input-group"  style="width:150px">
+	<input id="endDatePicker" type="text" class="form-control" uib-datepicker-popup ng-model="adminDate" is-open="popup2.opened" ng-required="true" />
+	
+	<span class="input-group-btn">
+	  <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+	</span>
+      </span>
+      
+    </span>
+    
+  </div>
+  
+  <br>
+  
+  <div class="input-group">
+    <span class="input-group-addon">
+      Travel: 
+    </span>
+    <span class="input-group-addon">
+      $: 
+    </span>
+    
+    <span class="input-group-addon">
+      <input type="number" class="form-control">
+    </span>
+    
+    <span class="input-group-addon">
+      Per Hour
+    </span>
+    
+    <span class="input-group-addon">
+      Start Date:
+    </span>
+    
+    <span class="input-group-addon">
+      <span class="input-group"  style="width:150px">
+	<input id="endDatePicker" type="text" class="form-control" uib-datepicker-popup ng-model="travelDate" is-open="popup3.opened" ng-required="true" />
+	
+	<span class="input-group-btn">
+	  <button type="button" class="btn btn-default" ng-click="open3()"><i class="glyphicon glyphicon-calendar"></i></button>
+	</span>
+      </span>
+      
+    </span>
+    
+  </div>
+
+  <br>
+
+  <div class="input-group">
+    <span class="input-group-addon">
+      Special Projects: 
+    </span>
+    <span class="input-group-addon">
+      $: 
+    </span>
+    
+    <span class="input-group-addon">
+      <input type="number" class="form-control">
+    </span>
+    
+    <span class="input-group-addon">
+      Per Hour
+    </span>
+    
+    <span class="input-group-addon">
+      Start Date:
+    </span>
+    
+    <span class="input-group-addon">
+      <span class="input-group"  style="width:150px">
+	<input id="endDatePicker" type="text" class="form-control" uib-datepicker-popup ng-model="travelDate" is-open="popup4.opened" ng-required="true" />
+	
+	<span class="input-group-btn">
+	  <button type="button" class="btn btn-default" ng-click="open4()"><i class="glyphicon glyphicon-calendar"></i></button>
+	</span>
+      </span>
+      
+    </span>
+    
+  </div>
+  
+</div>
+
+

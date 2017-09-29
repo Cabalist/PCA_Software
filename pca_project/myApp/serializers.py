@@ -82,6 +82,11 @@ class PayTermsLiteSerializer(serializers.ModelSerializer):
         model = PayTerms
         fields= ['id','percent','startDate', 'endDate' ,'termsType']
 
+class PayRatesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PayRates
+        fields= '__all__'
+
 class Donations1Serializer(serializers.ModelSerializer):
     user = UserSerializer()
     donor = DonorSerializer()

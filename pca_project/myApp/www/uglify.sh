@@ -4,6 +4,7 @@
          ./app/shared/mainController.js \
 	 ./app/components/bookkeeper/bookkeeperController.js \
 	 ./app/components/bookkeeper/payTerms/bkprPayTermsController.js \
+	 ./app/components/bookkeeper/payTerms/bkprPayRatesController.js \
 	 ./app/components/bookkeeper/userMngmnt/bkprUsrMgmtController.js \
  	 ./app/components/bookkeeper/userMngmnt/bkprManagementController.js \
 	 ./app/components/bookkeeper/adjustments/bkprAdjustmentsController.js \
