@@ -6,7 +6,7 @@
   </div>
   <br>
   
-  <h3>PayRates</h3>
+  <h3>Pay Rates</h3>
 
   <div class="input-group">
     <span class="input-group-addon">
@@ -17,7 +17,7 @@
     </span>
 
     <span class="input-group-addon">
-      <input type="number" class="form-control">
+      <input type="number" class="form-control" ng-model="canvassing[0]" ng-change="canvassingChange()" min="0">
     </span>
     
     <span class="input-group-addon">
@@ -30,7 +30,7 @@
     
     <span class="input-group-addon">
       <span class="input-group"  style="width:150px">
-	<input id="endDatePicker" type="text" class="form-control" uib-datepicker-popup ng-model="canvDate" is-open="popup1.opened" ng-required="true" />
+	<input id="endDatePicker" type="text" class="form-control" uib-datepicker-popup ng-model="canvassing[1]" is-open="popup1.opened" ng-required="true" />
 	
 	<span class="input-group-btn">
 	  <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -38,6 +38,12 @@
       </span>
       
     </span>
+
+    <span class="input-group-addon" ng-if="canvassingChanged">
+      <button class="btn btn-primary" ng-click="saveNewRate(1)">
+	Save
+      </button>
+    </span>
     
   </div>
 
@@ -45,14 +51,14 @@
 
   <div class="input-group">
     <span class="input-group-addon">
-      Admin: 
+      Admin:
     </span>
     <span class="input-group-addon">
-      $: 
+      $:
     </span>
     
     <span class="input-group-addon">
-      <input type="number" class="form-control">
+      <input type="number" class="form-control" ng-model="admin[0]" ng-change="adminChange()" min="0">
     </span>
     
     <span class="input-group-addon">
@@ -65,7 +71,7 @@
     
     <span class="input-group-addon">
       <span class="input-group"  style="width:150px">
-	<input id="endDatePicker" type="text" class="form-control" uib-datepicker-popup ng-model="adminDate" is-open="popup2.opened" ng-required="true" />
+	<input id="endDatePicker" type="text" class="form-control" uib-datepicker-popup ng-model="admin[1]" is-open="popup2.opened" ng-required="true" />
 	
 	<span class="input-group-btn">
 	  <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -73,6 +79,12 @@
       </span>
       
     </span>
+
+    <span class="input-group-addon" ng-if="adminChanged">
+      <button class="btn btn-primary" ng-click="saveNewRate(2)">
+	Save
+      </button>
+    </span>
     
   </div>
   
@@ -80,14 +92,14 @@
   
   <div class="input-group">
     <span class="input-group-addon">
-      Travel: 
+      Travel:
     </span>
     <span class="input-group-addon">
-      $: 
+      $:
     </span>
     
     <span class="input-group-addon">
-      <input type="number" class="form-control">
+      <input type="number" class="form-control" ng-model="travel[0]" ng-change="travelChange()" min="0">
     </span>
     
     <span class="input-group-addon">
@@ -100,13 +112,19 @@
     
     <span class="input-group-addon">
       <span class="input-group"  style="width:150px">
-	<input id="endDatePicker" type="text" class="form-control" uib-datepicker-popup ng-model="travelDate" is-open="popup3.opened" ng-required="true" />
+	<input id="endDatePicker" type="text" class="form-control" uib-datepicker-popup ng-model="travel[1]" is-open="popup3.opened" ng-required="true" />
 	
 	<span class="input-group-btn">
 	  <button type="button" class="btn btn-default" ng-click="open3()"><i class="glyphicon glyphicon-calendar"></i></button>
 	</span>
       </span>
       
+    </span>
+
+    <span class="input-group-addon" ng-if="travelChanged">
+      <button class="btn btn-primary" ng-click="saveNewRate(3)">
+	Save
+      </button>
     </span>
     
   </div>
@@ -122,7 +140,7 @@
     </span>
     
     <span class="input-group-addon">
-      <input type="number" class="form-control">
+      <input type="number" class="form-control" ng-model="special[0]" ng-change="specialChange()" min="0">
     </span>
     
     <span class="input-group-addon">
@@ -135,7 +153,7 @@
     
     <span class="input-group-addon">
       <span class="input-group"  style="width:150px">
-	<input id="endDatePicker" type="text" class="form-control" uib-datepicker-popup ng-model="travelDate" is-open="popup4.opened" ng-required="true" />
+	<input id="endDatePicker" type="text" class="form-control" uib-datepicker-popup ng-model="special[1]" is-open="popup4.opened" ng-required="true" />
 	
 	<span class="input-group-btn">
 	  <button type="button" class="btn btn-default" ng-click="open4()"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -143,7 +161,12 @@
       </span>
       
     </span>
-    
+
+    <span class="input-group-addon" ng-if="specialChanged">
+      <button class="btn btn-primary" ng-click="saveNewRate(4)">
+	Save
+      </button>
+    </span>
   </div>
   
 </div>

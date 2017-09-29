@@ -320,13 +320,30 @@ def payTerms(request, orgId=None):
 def payRates(request, orgId=None):
     if request.method == "GET":
         org = Organization.objects.get(id=orgId)
-        rates = PayRates.objects.filter(org=org)
+        rates = PayRate.objects.filter(org=org)
 
-        serialized = PayRatesSerializer(rates)
+        serialized = PayRatesSerializer(rates, many=True)
 
         return JsonResponse(serialized.data, safe = False)
-    
+
+    if request.method == "POST":
+        org = Organization.objects.get(id=orgId)
         
+        data = JSONParser().parse(request)
+
+        hoursType = data["hoursType"]
+        rate = data["rate"]
+        startDate = data["startDate"]
+
+        setBy = User.objects.get(pk=request.user.id)
+        now = datetime.datetime.now(pytz.timezone('US/Pacific'))
+        
+        newRate = PayRate(org=org, hoursType=hoursType, rate = rate, startDate = startDate, setBy = setBy, setOn = now)
+        newRate.save()
+
+        serialized = PayRatesSerializer(newRate)
+        
+        return JsonResponse(serialized.data, safe = False)
         
 @csrf_exempt
 def newcomerShare(request,orgId=None):

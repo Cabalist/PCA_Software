@@ -55,7 +55,7 @@ class Hours(models.Model):
     addedBy = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="addedHours")
     addedOn = models.DateTimeField()
 
-class PayRates(models.Model):
+class PayRate(models.Model):
     org = models.ForeignKey(Organization, on_delete=models.CASCADE)
     hoursType = models.IntegerField() #1 - canvassing, 2- admin, 3-travel, 4- special projects
     rate = models.FloatField()

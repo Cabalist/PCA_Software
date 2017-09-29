@@ -84,7 +84,7 @@ class PayTermsLiteSerializer(serializers.ModelSerializer):
 
 class PayRatesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PayRates
+        model = PayRate
         fields= '__all__'
 
 class Donations1Serializer(serializers.ModelSerializer):

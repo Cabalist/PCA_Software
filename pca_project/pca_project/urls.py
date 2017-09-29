@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'^api/rest/orgWorkers/(?P<orgId>\d+)$', api.orgWorkers),
     url(r'^api/rest/donation$', api.donation),
     url(r'^api/rest/payTerms/(?P<orgId>\d+)$', api.payTerms),
+    url(r'^api/rest/payRates/(?P<orgId>\d+)$', api.payRates),
     url(r'^api/rest/newcomerShare/(?P<orgId>\d+)$', api.newcomerShare),
 
     url(r'^api/rest/donationHist/(?P<userId>\d+)/(?P<orgId>\d+)$', api.donationHist),
